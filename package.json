@@ -6,6 +6,7 @@
     "@semaphore-protocol/data": "^3.2.0",
     "@semaphore-protocol/group": "^3.2.0",
     "@semaphore-protocol/identity": "^3.2.0",
+    "@semaphore-protocol/proof": "^3.2.3",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
@@ -18,7 +19,7 @@
     "web3": "^1.8.2"
   },
   "scripts": {
-    "start": "craco start",
+    "start": "GENERATE_SOURCEMAP=false craco start",
     "build": "craco build",
     "test": "craco test",
     "eject": "react-scripts eject"
@@ -42,6 +43,6 @@
     ]
   },
   "devDependencies": {
-    "@craco/craco": "^7.0.0"
+    "@craco/craco": "^7.1.0"
   }
 }

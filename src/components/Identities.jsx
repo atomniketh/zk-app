@@ -8,12 +8,12 @@ const Identities = () => {
   const group1 = new Group(1);
   //const commitment = identity.generateCommitment()
   group1.addMember(commitment);
-  console.log("Group1: " + group1.indexOf(commitment));
+//   console.log("Group1: " + group1.indexOf(commitment));
 
   return (
     <div>
       <h1>Identities Page</h1>
-      <Link to="/">Identities</Link> | <Link to="/Groups">On-Chain Groups</Link> | <Link to="/OffchainGroups">Off-Chain Groups</Link> | <Link to="/Messages">Messages</Link> | <Link to="/Feedback">Send Feedback</Link>
+      <Link to="/">Identities</Link> | <Link to="/Groups">On-Chain Groups</Link> | <Link to="/OffchainGroups">Off-Chain Groups</Link> | <Link to="/Messages">Messages</Link> | <Link to="/SendFeedback">Send Feedback</Link>
       <h1>Identity Information</h1>
       <table>
         <tbody>

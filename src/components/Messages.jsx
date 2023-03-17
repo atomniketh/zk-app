@@ -68,7 +68,7 @@ class ComponentPage extends React.Component {
         const { verifiedProofs } = this.state;
       return (
         <div>
-            <Link to="/">Identities</Link> | <Link to="/Groups">On-Chain Groups</Link> | <Link to="/OffchainGroups">Off-Chain Groups</Link> | <Link to="/Feedback">Send Feedback</Link>
+            <Link to="/">Identities</Link> | <Link to="/Groups">On-Chain Groups</Link> | <Link to="/OffchainGroups">Off-Chain Groups</Link> | <Link to="/SendFeedback">Send Feedback</Link>
             <table border="1">
                 <tbody>
                 <tr><td><strong>Group ID:</strong></td><td>{this.state.groupID}</td></tr>

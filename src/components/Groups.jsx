@@ -51,7 +51,7 @@ const Groups = () => {
         </li>
         <li>
           {/* Endpoint to route to Feedback component */}
-          <Link to="/Feedback">Send Feedback</Link>
+          <Link to="/SendFeedback">Send Feedback</Link>
         </li>
       </ul>
 

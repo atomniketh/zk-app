@@ -3,8 +3,8 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 import Identities from "./components/Identities";
 import Groups from "./components/Groups";
 import OffchainGroups from "./components/OffchainGroups";
-//import SendFeedback from "./components/Feedback";
-import Messages from "./components/Messages";
+// import SendFeedback from "./components/SendFeedback";
+// import Messages from "./components/Messages";
 
 
 function App() {
@@ -21,9 +21,10 @@ function App() {
           <Route path='*' element={<Identities />} />
           <Route path="/Identities" element={<Identities />} />
           <Route path='/Groups' element={<Groups/>} exact/>
-          <Route path='/OffchainGroups' element={<OffchainGroups/>} exact/>
-          {/* <Route path='/Feedback' element={<SendFeedback/>} exact/> */}
-          <Route path='/Messages' element={<Messages/>} exact/>
+          <Route path='/OffchainGroups' element={<OffchainGroups/>} />
+          {/* <Route path='/SendFeedback' element={<SendFeedback/>} exact/> */}
+          {/* <<Route path='/Messages' element={<Messages/>} /> */}
+
           {/* If any route mismatches the upper 
           route endpoints then, redirect triggers 
           and redirects app to home component with to="/" */}
