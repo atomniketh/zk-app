@@ -15,3 +15,48 @@ insert in file around line 348:
         "crypto-browserify": require.resolve('crypto-browserify'),
       }
 
+webpack.config.js:
+
+      fallback: {
+        "crypto": require.resolve('crypto-browserify'),
+        "crypto-browserify": require.resolve('crypto-browserify'),
+        "path": require.resolve("path-browserify"),
+        "os": require.resolve("os-browserify/browser"),
+        "fs": require.resolve('browserify-fs'),
+        "stream": require.resolve("stream-browserify"),
+      }
+
+
+      Craco.config.js is now:
+
+      const webpack = require('webpack');
+
+module.exports = {
+    webpack: {
+        plugins: {
+            add: [
+                // new webpack.ProvidePlugin({
+                //     process: 'process/browser.js',
+                // })
+                new webpack.ProvidePlugin({
+                    Buffer: ['buffer', 'Buffer'],
+                }),
+                new webpack.ProvidePlugin({
+                    process: 'process/browser',
+                }),
+            ]
+        },
+        configure: {
+            module: {
+                rules: [
+                    {
+                        test: /\.m?js$/,
+                        resolve: {
+                            fullySpecified: false,
+                        },
+                    },
+                ],
+            },
+        },
+    },
+};

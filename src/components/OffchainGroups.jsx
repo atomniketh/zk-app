@@ -3,7 +3,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Identity } from "@semaphore-protocol/identity";
 import { Group } from "@semaphore-protocol/group";
-// import { generateProof } from "@semaphore-protocol/proof";
+//import { generateProof } from "@semaphore-protocol/proof";
 // import { utils } from "ethers"
 
 // const externalNullifier = group.root

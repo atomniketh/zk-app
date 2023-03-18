@@ -24,10 +24,10 @@ async function test() {
   console.log("External Nullifier: " + externalNullifier);
   const signal = utils.formatBytes32String("Hello world");
   console.log("Signal: " + signal);
-  group.addMember([identity.generateCommitment()]);
+  // group.addMember([identity..generateCommitment()]);
   console.log("Members: " + group.members);
   const fullProof = await generateProof(identity, group, externalNullifier, signal);
-  console.log("FullProof: " + fullProof);
+  // console.log("FullProof: " + fullProof);
 }
 
 const Feedback = () => {
