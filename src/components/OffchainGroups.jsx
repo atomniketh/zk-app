@@ -3,7 +3,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Identity } from "@semaphore-protocol/identity";
 import { Group } from "@semaphore-protocol/group";
-// import { generateProof } from "@semaphore-protocol/proof";
+import { generateProof } from "@semaphore-protocol/proof";
 // import { utils } from "ethers"
 
 // const externalNullifier = group.root
@@ -16,8 +16,8 @@ import { Group } from "@semaphore-protocol/group";
 // uint[8] calldata proof
 
 async function test() {
-  // const identity = new Identity();
-  // console.log("Identity: " + identity);
+  const identity = new Identity();
+  console.log("Identity: " + identity);
   // const group = new Group("444");
   // console.log("Group: " + group);
   // const externalNullifier = utils.formatBytes32String("Topic");
