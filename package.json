@@ -3,22 +3,32 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@semaphore-protocol/data": "^3.2.0",
-    "@semaphore-protocol/group": "^3.2.0",
-    "@semaphore-protocol/identity": "^3.2.0",
+    "@semaphore-protocol/data": "^3.2.3",
+    "@semaphore-protocol/group": "^3.2.3",
+    "@semaphore-protocol/identity": "^3.2.3",
     "@semaphore-protocol/proof": "^3.2.3",
     "@testing-library/jest-dom": "^5.16.5",
-    "@testing-library/react": "^13.4.0",
-    "@testing-library/user-event": "^13.5.0",
+    "@testing-library/react": "^14.0.0",
+    "@testing-library/user-event": "^14.4.3",
+    "browserify-fs": "^1.0.0",
+    "buffer": "^6.0.3",
+    "crypto": "^1.0.1",
     "crypto-browserify": "^3.12.0",
+    "dotenv": "^16.0.3",
+    "env-cmd": "^10.1.0",
+    "os-browserify": "^0.3.0",
+    "path-browserify": "^1.0.1",
+    "process": "^0.11.10",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.9.0",
-    "react-scripts": "5.0.1",
-    "web-vitals": "^2.1.4",
+    "react-scripts": "^5.0.1",
+    "stream-browserify": "^3.0.0",
+    "web-vitals": "^3.3.0",
     "web3": "^1.8.2"
   },
   "scripts": {
+    "preinstall": "npx npm-force-resolutions",
     "start": "GENERATE_SOURCEMAP=false craco start",
     "build": "craco build",
     "test": "craco test",
@@ -43,6 +53,10 @@
     ]
   },
   "devDependencies": {
-    "@craco/craco": "^7.1.0"
+    "@craco/craco": "^7.1.0",
+    "react-error-overlay": "^6.0.11"
+  },
+  "overrides": {
+    "react-error-overlay": "$react-error-overlay"
   }
 }
