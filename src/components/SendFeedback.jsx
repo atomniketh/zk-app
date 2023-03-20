@@ -41,12 +41,17 @@ async function getProof() {
   console.log("idNullifier: " + idNullifier);
   console.log("proofString: " + proofString);
 
-  const txGreet = await contract.greet(signal, externalNullifier, idNullifier, proofString);
+  const gasPrice = await signer.getGasPrice();
+  console.log("gasPrice: " + gasPrice);
+  // const gasLimit = await contract.estimateGas.greet(signal, externalNullifier, idNullifier, proofString);
+  // console.log("gasLimit: " + gasLimit);
+  let nonce = 100;
+  const txGreet = await contract.greet(signal, externalNullifier, idNullifier, proofString, { gasLimit: 100000, nonce: nonce || undefined, });
   console.log(`Transaction hash: https://goerli.etherscan.io/tx/${txGreet.hash}`);
   const receiptGreet = await txGreet.wait();
   console.log(`Transaction confirmed in block ${receiptGreet.blockNumber}`);
   console.log(`Gas used: ${receiptGreet.gasUsed.toString()}`);
-}
+ }
 getProof();
 
 const Feedback = () => {
