@@ -1,9 +1,9 @@
 //import { group } from "console";
 import React from "react";
 import { Link } from "react-router-dom";
-import { Identity } from "@semaphore-protocol/identity";
-import { Group } from "@semaphore-protocol/group";
-import { generateProof } from "@semaphore-protocol/proof";
+// import { Identity } from "@semaphore-protocol/identity";
+// import { Group } from "@semaphore-protocol/group";
+// import { generateProof } from "@semaphore-protocol/proof";
 // import { utils } from "ethers"
 
 // const externalNullifier = group.root
@@ -15,21 +15,21 @@ import { generateProof } from "@semaphore-protocol/proof";
 // uint 256 nullifierHash,
 // uint[8] calldata proof
 
-async function test() {
-  const identity = new Identity();
-  console.log("Identity: " + identity);
-  // const group = new Group("444");
-  // console.log("Group: " + group);
-  // const externalNullifier = utils.formatBytes32String("Topic");
-  // console.log("External Nullifier: " + externalNullifier);
-  // const signal = utils.formatBytes32String("Hello world");
-  // console.log("Signal: " + signal);
-  // group.addMember([identity.generateCommitment()]);
-  // console.log("Members: " + group.members);
-  // const fullProof = await generateProof(identity, group, externalNullifier, signal);
-  // console.log("FullProof: " + fullProof);
-}
-test();
+// async function test() {
+//   const identity = new Identity();
+//   console.log("Identity: " + identity);
+//   // const group = new Group("444");
+//   // console.log("Group: " + group);
+//   // const externalNullifier = utils.formatBytes32String("Topic");
+//   // console.log("External Nullifier: " + externalNullifier);
+//   // const signal = utils.formatBytes32String("Hello world");
+//   // console.log("Signal: " + signal);
+//   // group.addMember([identity.generateCommitment()]);
+//   // console.log("Members: " + group.members);
+//   // const fullProof = await generateProof(identity, group, externalNullifier, signal);
+//   // console.log("FullProof: " + fullProof);
+// }
+// test();
 
 const Feedback = () => {
 
