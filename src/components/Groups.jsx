@@ -4,7 +4,8 @@ import { ethers } from 'ethers';
 import FeedbackContractABI from '../abi/Feedback.json';
 import { Identity } from "@semaphore-protocol/identity";
 
-const { trapdoor, nullifier, commitment } = new Identity();
+//const { identity, trapdoor, nullifier, commitment } = new Identity();
+const identity = new Identity()
 const feedbackAddress = "0x0C339f45aB084F48C60F82Fecb1844C72a6CcaDa"
 // block number when the smart contract was deployed
 const startBlock = 8593998;
@@ -23,13 +24,15 @@ const userName = "0x636d73746f6e650000000000000000000000000000000000000000000000
     const signer = provider.getSigner();
     //let userAddress = await signer.getAddress();
     let contract = new ethers.Contract(feedbackAddress, FeedbackContractABI.abi, signer);
-    const tx = await contract.joinGroup(commitment, userName);
+    const tx = await contract.joinGroup(identity.commitment, userName);
     console.log(`Transaction hash: https://goerli.etherscan.io/tx/${tx.hash}`);
     const receipt = await tx.wait();
     console.log(`Transaction confirmed in block ${receipt.blockNumber}`);
     console.log(`Gas used: ${receipt.gasUsed.toString()}`);
-    //localStorage.setItem(commitment);
-    localStorage.setItem('myCommitment', commitment);
+
+    localStorage.setItem('myIdentity', identity);
+    console.log("myIdentity: " + localStorage.getItem('myIdentity'));
+    localStorage.setItem('myCommitment', identity.commitment);
     console.log("myCommitment: " + localStorage.getItem('myCommitment'));
   }  
   // joinGroup();
@@ -40,24 +43,8 @@ const Groups = () => {
       <div>
         <h1>Groups Page</h1>
         <br />
-        <ul>
-        <li>
-          {/* Endpoint to route to Identities component */}
-          <Link to="/">Identities</Link>
-        </li>
-        <li>
-          {/* Endpoint to route to Groups component */}
-          <Link to="/Groups">On-Chain Groups</Link>
-        </li>
-        <li>
-          {/* Endpoint to route to Groups component */}
-          <Link to="/OffchainGroups">Off-Chain Groups</Link>
-        </li>
-        <li>
-          {/* Endpoint to route to Feedback component */}
-          <Link to="/SendFeedback">Send Feedback</Link>
-        </li>
-      </ul>
+        <Link to="/">Identities</Link> | <Link to="/Groups">On-Chain Groups</Link> | <Link to="/OffchainGroups">Off-Chain Groups</Link> | <Link to="/Messages">Messages</Link> | <Link to="/SendFeedback">Send Feedback</Link>
+        <p><button type="button" onClick= { joinGroup }></button></p>
 
       </div>
     );

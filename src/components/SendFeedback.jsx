@@ -18,16 +18,14 @@ let provider = new ethers.providers.Web3Provider(window.ethereum, "any");
 
 //const identity = new Identity();
 const { trapdoor, nullifier, commitment } = new Identity();
-console.log("Identity: " + commitment);
-console.log("localStorage: " + localStorage.getItem('myCommitment'));
+console.log("Identity: " + localStorage.getItem('myIdentity'));
+console.log("Commitment: " + localStorage.getItem('myCommitment'));
 
 async function getProof() {
-  const identity = new Identity();
-  //const group = new Group();
-  const group = new Group("444");
+  const group = new Group(groupID);
   const externalNullifier = utils.formatBytes32String("Topic");
   const signal = utils.formatBytes32String("Hello world");
-  group.addMember(localStorage.getItem('myCommitment'));
+  const identity = localStorage.getItem('myIdentity');
   const fullProof = await generateProof(identity, group, externalNullifier, signal);
   console.log("FullProof: " + fullProof);
 }
