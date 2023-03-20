@@ -26,11 +26,12 @@ async function getProof() {
   const externalNullifier = utils.formatBytes32String("Topic");
   const signal = utils.formatBytes32String("Hello world");
   const identity = localStorage.getItem('myIdentity');
+  const identity2 = new Identity(localStorage.getItem('myIdentity').toString);
   console.log("Identity: " + identity);
   console.log("group: " + group);
   console.log("externalNullifier: " + externalNullifier);
   console.log("signal: " + signal);
-  const fullProof = await generateProof(identity, group, externalNullifier, signal);
+  const fullProof = await generateProof(identity2, group, externalNullifier, signal);
   console.log("FullProof: " + fullProof);
 }
 getProof();

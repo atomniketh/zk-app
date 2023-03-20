@@ -30,7 +30,7 @@ const userName = "0x636d73746f6e650000000000000000000000000000000000000000000000
     console.log(`Transaction confirmed in block ${receipt.blockNumber}`);
     console.log(`Gas used: ${receipt.gasUsed.toString()}`);
 
-    localStorage.setItem('myIdentity', identity);
+    localStorage.setItem('myIdentity', identity.toString);
     console.log("myIdentity: " + localStorage.getItem('myIdentity'));
     localStorage.setItem('myCommitment', identity.commitment);
     console.log("myCommitment: " + localStorage.getItem('myCommitment'));
