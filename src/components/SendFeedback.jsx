@@ -13,7 +13,7 @@ const semaphoreEthers = new SemaphoreEthers();
 const feedbackAddress = "0x0C339f45aB084F48C60F82Fecb1844C72a6CcaDa";
 const userName = "0x636d73746f6e6500000000000000000000000000000000000000000000000000";
 const groupID = "444";
-
+// let merkleTreeRoot = "";
 let provider = new ethers.providers.Web3Provider(window.ethereum, "any");
 
 //const identity = new Identity();
@@ -23,16 +23,49 @@ console.log("Commitment: " + localStorage.getItem('myCommitment'));
 
 async function getProof() {
   const group = new Group(groupID);
-  const externalNullifier = utils.formatBytes32String("Topic");
+  //const externalNullifier = utils.formatBytes32String("Topic");
   const signal = utils.formatBytes32String("Hello world");
-  const identity = localStorage.getItem('myIdentity');
-  const identity2 = new Identity(localStorage.getItem('myIdentity').toString);
-  console.log("Identity: " + identity);
+//  const identity = localStorage.getItem('myIdentity');
+  const identity2 = new Identity();
+  group.addMember(identity2.commitment);
+  const externalNullifier = group.root;
+//  const identity2 = new Identity(localStorage.getItem('myIdentity').toString);
+  console.log("Identity: " + identity2);
   console.log("group: " + group);
   console.log("externalNullifier: " + externalNullifier);
   console.log("signal: " + signal);
   const fullProof = await generateProof(identity2, group, externalNullifier, signal);
-  console.log("FullProof: " + fullProof);
+  console.log("FullProof: " + fullProof.proof);
+
+  // await semaphoreEthers.getGroup(groupID).then((result) => {
+  //   let obj = result.merkleTree;
+  //   let merkleTreeRoot =  obj.root;
+  // });
+
+
+  ////////////////////////////////
+  await provider.send("eth_requestAccounts", []);
+  const signer = provider.getSigner();
+  let contract = new ethers.Contract(feedbackAddress, FeedbackContractABI.abi, signer);
+  console.log("signal: " + signal);
+  console.log("externalNullifier: " + externalNullifier);
+  console.log("identity2.nullifier: " + identity2.nullifier);
+  console.log("fullProof.proof: " + fullProof.proof);
+  const abiCoder = new utils.AbiCoder();
+  const encodedProof = abiCoder.encode(['uint256[8]'], [fullProof.proof]);
+  console.log("Encoded proof: " + encodedProof);
+  // fullProof.
+  // const params = utils.defaultAbiCoder.encode(fullProof.proof);
+// console.log("Encoded params: " + params);
+
+  const txGreet = await contract.greet(signal, externalNullifier, identity2.nullifier, fullProof.proof);
+  console.log(`Transaction hash: https://goerli.etherscan.io/tx/${txGreet.hash}`);
+  const receiptGreet = await txGreet.wait();
+  console.log(`Transaction confirmed in block ${receiptGreet.blockNumber}`);
+  console.log(`Gas used: ${receiptGreet.gasUsed.toString()}`);
+  ////////////////////////////////
+
+
 }
 getProof();
 
