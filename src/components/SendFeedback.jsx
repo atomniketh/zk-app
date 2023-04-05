@@ -64,7 +64,6 @@ async function getProof() {
   // const gasEstimated = await contract.estimateGas.greet(signal, externalNullifier, idNullifier, proofString, { gasLimit: 1000000, nonce: nonce || undefined, });
   // console.log("gasEstimated: " + gasEstimated);
 
-
   const txGreet = await contract.greet(signal, externalNullifier, idNullifier, proofString, { gasLimit: 1000000, nonce: nonce || undefined, });
   console.log(`Transaction hash: https://goerli.etherscan.io/tx/${txGreet.hash}`);
   const receiptGreet = await txGreet.wait();
