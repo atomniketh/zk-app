@@ -74,7 +74,7 @@
           "type": "uint256[8]"
         }
       ],
-      "name": "greet",
+      "name": "sendFeedback",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"

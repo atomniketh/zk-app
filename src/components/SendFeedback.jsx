@@ -56,15 +56,19 @@ async function getProof() {
   console.log("idNullifier: " + idNullifier);
   console.log("proofString: " + proofString);
 
-  // const gasPrice = await signer.getGasPrice();
-  // console.log("gasPrice: " + gasPrice);
+  const gasPrice = await signer.getGasPrice();
+  console.log("gasPrice: " + gasPrice);
 
   let nonce = await signer.getTransactionCount();
 
-  // const gasEstimated = await contract.estimateGas.greet(signal, externalNullifier, idNullifier, proofString, { gasLimit: 1000000, nonce: nonce || undefined, });
+  // const gasEstimated = await contract.estimateGas.sendFeedback(signal, externalNullifier, idNullifier, proofString, { gasLimit: 1000000, nonce: nonce || undefined, });
   // console.log("gasEstimated: " + gasEstimated);
 
+<<<<<<< Updated upstream
   const txGreet = await contract.greet(signal, externalNullifier, idNullifier, proofString, { gasLimit: 1000000, nonce: nonce || undefined, });
+=======
+  const txGreet = await contract.sendFeedback(signal, externalNullifier, idNullifier, proofString, { gasLimit: 1000000, nonce: nonce || undefined, });
+>>>>>>> Stashed changes
   console.log(`Transaction hash: https://goerli.etherscan.io/tx/${txGreet.hash}`);
   const receiptGreet = await txGreet.wait();
   console.log(`Transaction confirmed in block ${receiptGreet.blockNumber}`);
