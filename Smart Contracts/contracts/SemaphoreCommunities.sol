@@ -45,7 +45,7 @@ contract SemaphoreCommunities is SemaphoreGroups, AccessControl {
     /// @dev A struct to hold information about the entities.
     /// This is better than mappings, as it allows us to iterate over the entities.
     struct EntityInfo {
-        uint idEntitiy;
+        uint idEntity;
         string entityName;
         address entityEditor;
     }
@@ -101,7 +101,7 @@ contract SemaphoreCommunities is SemaphoreGroups, AccessControl {
         // key value mapping
         allEntities.push(
             EntityInfo({
-                idEntitiy: entityId,
+                idEntity: entityId,
                 entityName: groupName,
                 entityEditor: editor
             })
