@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@semaphore-protocol/contracts": "^3.6.0-beta.0",
     "@semaphore-protocol/data": "^3.2.3",
     "@semaphore-protocol/group": "^3.2.3",
     "@semaphore-protocol/identity": "^3.2.3",

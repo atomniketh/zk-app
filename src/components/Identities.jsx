@@ -13,7 +13,7 @@ const Identities = () => {
   return (
     <div>
       <h1>Identities Page</h1>
-      <Link to="/">Identities</Link> | <Link to="/Groups">On-Chain Groups</Link> | <Link to="/OffchainGroups">Off-Chain Groups</Link> | <Link to="/Messages">Messages</Link> | <Link to="/SendFeedback">Send Feedback</Link>
+      <Link to="/">Identities</Link> | <Link to="/Groups">On-Chain Groups</Link> | <Link to="/OffchainGroups">Off-Chain Groups</Link> | <Link to="/Messages">Messages</Link> | <Link to="/SendFeedback">Send Feedback</Link>| <Link to="/AllGroups">All Groups</Link>
       <h1>Identity Information</h1>
       <table>
         <tbody>

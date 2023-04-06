@@ -3,6 +3,10 @@ import { Link } from "react-router-dom";
 import { SemaphoreEthers } from "@semaphore-protocol/data";
 import Web3 from "web3";
 
+
+// Goerli address = 0x461ceCff5896ECDB56946f3A160cd95D368Ba697
+
+
 const semaphoreEthers = new SemaphoreEthers();
 
 class ComponentPage extends React.Component {
@@ -24,7 +28,7 @@ class ComponentPage extends React.Component {
       
     async componentDidMount() {
       try {
-         const groupIDNum = "444";
+         const groupIDNum = "555557";
          // const groupIDs = await semaphoreEthers.getGroupIds();
          // console.log(groupIDs);
          const admin = await semaphoreEthers.getGroupAdmin(groupIDNum);

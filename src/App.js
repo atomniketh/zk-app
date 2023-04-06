@@ -5,7 +5,7 @@ import Groups from "./components/Groups";
 import OffchainGroups from "./components/OffchainGroups";
 import SendFeedback from "./components/SendFeedback";
 import Messages from "./components/Messages";
-
+import AllGroups from "./components/AllGroups";
 
 function App() {
   return (
@@ -24,7 +24,7 @@ function App() {
           <Route path='/OffchainGroups' element={<OffchainGroups/>} />
           <Route path='/SendFeedback' element={<SendFeedback/>} exact/>
           <Route path='/Messages' element={<Messages/>} />
-
+          <Route path='/AllGroups' element={<AllGroups/>} />
           {/* If any route mismatches the upper 
           route endpoints then, redirect triggers 
           and redirects app to home component with to="/" */}
