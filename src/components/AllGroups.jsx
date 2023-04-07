@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
-import { ethers, utils } from "ethers";
+import { ethers } from "ethers";
 import SemaphoreCommunitiesABI from "../abi/SemaphoreCommunities.json";
 
 const semaphoreCommunitiesAddress =
@@ -69,9 +69,8 @@ class ComponentPage extends React.Component {
         signer
       );
       const verifierAddress = await contract.verifier();
-      console.log("verifierAddress is: " + verifierAddress);
-      this.setState({ currentVerifierContract: verifierAddress });
-
+      // console.log("verifierAddress is: " + verifierAddress);
+     this.setState({ currentVerifierContract: verifierAddress });
 
       const numberOfEntities = await contract.getNumberOfEntities();
       // console.log("Number of Entities: " + numberOfEntities);
@@ -95,9 +94,11 @@ class ComponentPage extends React.Component {
   }
 
   render() {
-    const { allGroups } = this.state;
+    // const { allGroups } = this.state;
     const { currentVerifierContract } = this.state;
+
     return (
+
       <div>
         <h1>All Groups Page</h1>
         <br />
@@ -106,7 +107,10 @@ class ComponentPage extends React.Component {
         <Link to="/OffchainGroups">Off-Chain Groups</Link> |{" "}
         <Link to="/SendFeedback">Send Feedback</Link> |{" "}
         <Link to="/CreateGroup">Create Group</Link> |{" "}
-        <Link to="/UpdateVerifierContract?addr=">Update Verifier Contract</Link>
+       
+<p>
+Current Verifier Contract Address is: { currentVerifierContract }  <Link to="/UpdateVerifierContract?addr=">(Update)</Link>
+</p>
         <table border="1">
           <tbody>
             <tr>
@@ -120,11 +124,8 @@ class ComponentPage extends React.Component {
               <React.Fragment key={item.idEntity.toString()}>
                 <tr>
                   <td>{item.idEntity.toString()}</td>
-                  {/* <td>{ index } is {item.entityName.toString()} <a href={`UpdateGroupName?index=${index}`} >Edit</a></td> */}
-                  <td>{item.entityName.toString()} <a href={`/UpdateGroupName?index=${index}&entityID=${item.idEntity.toString()}&entityName=${item.entityName.toString()}`} >Edit</a></td>
-                  {/* <td>{item.entityEditor.toString()}</td> */}
-                  <td>{item.entityEditor.toString()} <a href={`/UpdateEditor?index=${index}&entityID=${item.idEntity.toString()}&entityEditor=${item.entityEditor.toString()}`} >Edit</a></td>
-
+                  <td>{item.entityName.toString()} <a href={`/UpdateGroupName?index=${index}&entityID=${item.idEntity.toString()}&entityName=${item.entityName.toString()}`} >Rename</a></td>
+                  <td>{item.entityEditor.toString()} <a href={`/UpdateEditor?index=${index}&entityID=${item.idEntity.toString()}&entityEditor=${item.entityEditor.toString()}`} >Reassign</a></td>
                 </tr>
               </React.Fragment>
             ))}

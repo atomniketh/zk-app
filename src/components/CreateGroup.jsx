@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { ethers, utils } from "ethers";
+import { ethers } from "ethers";
 import SemaphoreCommunitiesABI from '../abi/SemaphoreCommunities.json';
 
 const semaphoreCommunitiesAddress = "0x8C8382dfA4505fE2d5b3EfC0e994951882A7e5ec";

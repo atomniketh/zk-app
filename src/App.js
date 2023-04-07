@@ -10,7 +10,7 @@ import CreateGroup from "./components/CreateGroup";
 import UpdateGroupName from "./components/UpdateGroupName";
 import UpdateEditor from "./components/UpdateEditor";
 import UpdateVerifierContract from "./components/UpdateVerifierContract";
-import AddUser from "./components/AddUser";
+// import AddUser from "./components/AddUser";
 
 function App() {
   return (
@@ -34,7 +34,7 @@ function App() {
           <Route path='/UpdateGroupName' element={<UpdateGroupName/>} />
           <Route path='/UpdateEditor' element={<UpdateEditor/>} />
           <Route path='/UpdateVerifierContract' element={<UpdateVerifierContract/>} />
-          <Route path='/AddUser' element={<AddUser/>} />
+          {/* <Route path='/AddUser' element={<AddUser/>} /> */}
 
           addWhistleblower
 
