@@ -6,6 +6,11 @@ import OffchainGroups from "./components/OffchainGroups";
 import SendFeedback from "./components/SendFeedback";
 import Messages from "./components/Messages";
 import AllGroups from "./components/AllGroups";
+import CreateGroup from "./components/CreateGroup";
+import UpdateGroupName from "./components/UpdateGroupName";
+import UpdateEditor from "./components/UpdateEditor";
+import UpdateVerifierContract from "./components/UpdateVerifierContract";
+import AddUser from "./components/AddUser";
 
 function App() {
   return (
@@ -25,6 +30,14 @@ function App() {
           <Route path='/SendFeedback' element={<SendFeedback/>} exact/>
           <Route path='/Messages' element={<Messages/>} />
           <Route path='/AllGroups' element={<AllGroups/>} />
+          <Route path='/CreateGroup' element={<CreateGroup/>} />
+          <Route path='/UpdateGroupName' element={<UpdateGroupName/>} />
+          <Route path='/UpdateEditor' element={<UpdateEditor/>} />
+          <Route path='/UpdateVerifierContract' element={<UpdateVerifierContract/>} />
+          <Route path='/AddUser' element={<AddUser/>} />
+
+          addWhistleblower
+
           {/* If any route mismatches the upper 
           route endpoints then, redirect triggers 
           and redirects app to home component with to="/" */}
