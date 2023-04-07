@@ -96,7 +96,7 @@ class ComponentPage extends React.Component {
 
   render() {
     const { allGroups } = this.state;
-    // const { verifiedProofs } = this.state;
+    const { currentVerifierContract } = this.state;
     return (
       <div>
         <h1>All Groups Page</h1>
