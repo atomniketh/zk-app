@@ -14,7 +14,7 @@ function CreateIdentity() {
   const [signedMessage, setSignedMessage] = React.useState("");
 
   const groupToJoin = "identity" + _entityID;
-  // console.log("groupToJoin: " + groupToJoin);
+
   console.log(
     "Identity is already stored as: " +
       localStorage.getItem(groupToJoin)
@@ -50,7 +50,6 @@ function CreateIdentity() {
       }
       
       <p>Signed Message: {signedMessage}</p>
-
       <p>Identity: {localStorage.getItem(groupToJoin)}</p>
     </div>
   );
