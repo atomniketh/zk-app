@@ -10,6 +10,8 @@ import CreateGroup from "./components/CreateGroup";
 import UpdateGroupName from "./components/UpdateGroupName";
 import UpdateEditor from "./components/UpdateEditor";
 import UpdateVerifierContract from "./components/UpdateVerifierContract";
+import CreateIdentity from "./components/CreateIdentity";
+
 // import AddUser from "./components/AddUser";
 
 function App() {
@@ -34,9 +36,8 @@ function App() {
           <Route path='/UpdateGroupName' element={<UpdateGroupName/>} />
           <Route path='/UpdateEditor' element={<UpdateEditor/>} />
           <Route path='/UpdateVerifierContract' element={<UpdateVerifierContract/>} />
+          <Route path='/CreateIdentity' element={<CreateIdentity/>} />
           {/* <Route path='/AddUser' element={<AddUser/>} /> */}
-
-          addWhistleblower
 
           {/* If any route mismatches the upper 
           route endpoints then, redirect triggers 

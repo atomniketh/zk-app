@@ -106,6 +106,7 @@ class ComponentPage extends React.Component {
         <Link to="/Groups">On-Chain Groups</Link> |{" "}
         <Link to="/OffchainGroups">Off-Chain Groups</Link> |{" "}
         <Link to="/SendFeedback">Send Feedback</Link> |{" "}
+        <br />
         <Link to="/CreateGroup">Create Group</Link> |{" "}
        
 <p>
@@ -117,6 +118,9 @@ Current Verifier Contract Address is: { currentVerifierContract }  <Link to="/Up
               <td>Group ID</td>
               <td>Group Name</td>
               <td>Group Editor Address</td>
+              <td>Group Functions</td>
+              <td>Group Admin Functions</td>
+
             </tr>
 
             {this.state.allGroups.map((item, index) => (
@@ -124,8 +128,10 @@ Current Verifier Contract Address is: { currentVerifierContract }  <Link to="/Up
               <React.Fragment key={item.idEntity.toString()}>
                 <tr>
                   <td>{item.idEntity.toString()}</td>
-                  <td>{item.entityName.toString()} <a href={`/UpdateGroupName?index=${index}&entityID=${item.idEntity.toString()}&entityName=${item.entityName.toString()}`} >Rename</a></td>
-                  <td>{item.entityEditor.toString()} <a href={`/UpdateEditor?index=${index}&entityID=${item.idEntity.toString()}&entityEditor=${item.entityEditor.toString()}`} >Reassign</a></td>
+                  <td>{item.entityName.toString()}</td>
+                  <td>{item.entityEditor.toString()}</td>
+                  <td> <a href={`/CreateIdentity?entityID=${item.idEntity.toString()}&entityName=${item.entityName.toString()}`}>Join Group</a> | List Members | Send Message | See Messages</td>
+                  <td> <a href={`/UpdateGroupName?index=${index}&entityID=${item.idEntity.toString()}&entityName=${item.entityName.toString()}`} >Rename</a> | <a href={`/UpdateEditor?index=${index}&entityID=${item.idEntity.toString()}&entityEditor=${item.entityEditor.toString()}`} >Reassign</a> | Remove Member </td>
                 </tr>
               </React.Fragment>
             ))}

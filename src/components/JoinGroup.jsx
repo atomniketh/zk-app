@@ -49,7 +49,7 @@ const Identities = () => {
           <input type="text" id="groupName" name="groupName" size="30" />
           <p></p>
           <label htmlFor="editor">Group Editor:</label> &nbsp;
-          <input type="text" id="editor" name="editor" size="48" /> <button type="button" onClick={fillForm}>
+          <input type="text" id="editor" name="editor" size="48" /> <button type="button">
             Use My Address
           </button>
           <p></p>
@@ -64,8 +64,8 @@ const Identities = () => {
           <p></p>
         </form>
         <p>
-          <button type="button" onClick={createGroup}>
-            Click here to create a new Group.
+          <button type="button" onClick={ addWhistleblower }>
+            Click here to create a new User.
           </button>
         </p>
 
