@@ -6,13 +6,19 @@ import { ethers } from "ethers";
 const provider = new ethers.providers.Web3Provider(window.ethereum);
 const signer = provider.getSigner();
 
+// Remove after testing ++++++++++++++++++++++++++++++++++++++++++++++++
+    const clearCookie = async () => {
+        localStorage.clear();
+        console.log("Cookies cleared");
+        window.location.reload();
+    };
+// Remove after testing ++++++++++++++++++++++++++++++++++++++++++++++++
+
 function CreateIdentity() {
   const queryParams = new URLSearchParams(window.location.search);
   const _entityID = queryParams.get("entityID");
   const _entityName = queryParams.get("entityName");
-
   const [signedMessage, setSignedMessage] = React.useState("");
-
   const groupToJoin = "identity" + _entityID;
 
   console.log(
@@ -20,7 +26,6 @@ function CreateIdentity() {
       localStorage.getItem(groupToJoin)
   );
   const groupToJoinValue = localStorage.getItem(groupToJoin);
-
   const signMessage = async () => {
     const messageToSign =
       "I am requesting to join Group ID " +
@@ -48,7 +53,7 @@ function CreateIdentity() {
         ? <div><button onClick={signMessage}>Sign Message</button><p> Signed Message: {signedMessage}</p></div>
         : <button>Request Access</button>
       }
-    
+      <button onClick={ clearCookie }>Clear ID in Storage</button>
     </div>
   );
 }
