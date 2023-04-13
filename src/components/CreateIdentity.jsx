@@ -45,12 +45,10 @@ function CreateIdentity() {
       <p>Create an Identity to Join this Group</p>
       {/* {groupToJoinValue === null && <button onClick={signMessage}>Sign Message</button>} */}
       {groupToJoinValue === null
-        ? <button onClick={signMessage}>Sign Message</button>
+        ? <div><button onClick={signMessage}>Sign Message</button><p> Signed Message: {signedMessage}</p></div>
         : <button>Request Access</button>
       }
-      
-      <p>Signed Message: {signedMessage}</p>
-      <p>Identity: {localStorage.getItem(groupToJoin)}</p>
+    
     </div>
   );
 }
