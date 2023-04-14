@@ -10,14 +10,6 @@ class ComponentPage extends React.Component {
   constructor() {
     super();
     this.state = {
-      // groupID: '',
-      // groupAdmin: '',
-      // root: '',
-      // depth: '',
-      // zeroValue: '',
-      // numberOfLeaves: '',
-      // numOfMsgs: '',
-      // verifiedProofs: [],
       allGroups: [],
       currentVerifierContract: "",
     };
@@ -25,41 +17,6 @@ class ComponentPage extends React.Component {
 
   async componentDidMount() {
     try {
-      //  const groupIDNum = "555556";
-      //  // const groupIDs = await semaphoreEthers.getGroupIds();
-      //  // console.log(groupIDs);
-      //  const admin = await semaphoreEthers.getGroupAdmin(groupIDNum);
-      //  this.setState({ groupAdmin: admin });
-      //  const urlLink = "https://goerli.etherscan.io/address/" + this.state.groupAdmin;
-      //  this.setState({url: urlLink});
-
-      //  await semaphoreEthers.getGroup(groupIDNum).then((result) => {
-      //    this.setState({ groupID: result.id });
-      //    let obj = result.merkleTree;
-      //    this.setState({ root: obj.root });
-      //    this.setState({ depth: obj.depth });
-      //    this.setState({ zeroValue: obj.zeroValue });
-      //    this.setState({ numberOfLeaves: obj.numberOfLeaves });
-      //  });
-
-      //  await semaphoreEthers
-      //    .getGroupMembers(groupIDNum)
-      //    .then((allMembers) => {
-      //      this.setState({ allMembers });
-      //    });
-
-      //  await semaphoreEthers
-      //    .getGroupVerifiedProofs(groupIDNum)
-      //    .then((verifiedProofs) => {
-      //     this.setState({ numOfMsgs: verifiedProofs.length });
-
-      //     const theMessages = [];
-      //      for (let index = 0; index < verifiedProofs.length; index++) {
-      //          theMessages[index] = Web3.utils.hexToAscii(Web3.utils.toHex(verifiedProofs[index].signal));
-      //     }
-      //     this.setState({ verifiedProofs:theMessages });
-      //    }, []);
-
       let provider = new ethers.providers.Web3Provider(window.ethereum, "any");
       await provider.send("eth_requestAccounts", []);
       const signer = provider.getSigner();
@@ -130,8 +87,8 @@ Current Verifier Contract Address is: { currentVerifierContract }  <Link to="/Up
                   <td>{item.idEntity.toString()}</td>
                   <td>{item.entityName.toString()}</td>
                   <td>{item.entityEditor.toString()}</td>
-                  <td> <a href={`/CreateIdentity?entityID=${item.idEntity.toString()}&entityName=${item.entityName.toString()}`}>Join Group</a> | List Members | Send Message | See Messages</td>
-                  <td> <a href={`/UpdateGroupName?index=${index}&entityID=${item.idEntity.toString()}&entityName=${item.entityName.toString()}`} >Rename</a> | <a href={`/UpdateEditor?index=${index}&entityID=${item.idEntity.toString()}&entityEditor=${item.entityEditor.toString()}`} >Reassign</a> | Remove Member </td>
+                  <td> <a href={`/CreateIdentity?entityID=${item.idEntity.toString()}&entityName=${item.entityName.toString()}&entityEditor=${item.entityEditor.toString()}`}>Request Access</a> | Send Message | See Messages</td>
+                  <td> <a href={`/UpdateGroupName?index=${index}&entityID=${item.idEntity.toString()}&entityName=${item.entityName.toString()}`} >Rename</a> | <a href={`/UpdateEditor?index=${index}&entityID=${item.idEntity.toString()}&entityEditor=${item.entityEditor.toString()}`} >Reassign</a> | Add Member | Remove Member </td>
                 </tr>
               </React.Fragment>
             ))}
