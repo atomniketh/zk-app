@@ -1,4 +1,5 @@
 import './App.css';
+import './w3.css'
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Identities from "./components/Identities";
 import Groups from "./components/Groups";
@@ -11,7 +12,7 @@ import UpdateGroupName from "./components/UpdateGroupName";
 import UpdateEditor from "./components/UpdateEditor";
 import UpdateVerifierContract from "./components/UpdateVerifierContract";
 import CreateIdentity from "./components/CreateIdentity";
-
+import AddMember from "./components/AddMember";
 // import AddUser from "./components/AddUser";
 
 function App() {
@@ -37,6 +38,7 @@ function App() {
           <Route path='/UpdateEditor' element={<UpdateEditor/>} />
           <Route path='/UpdateVerifierContract' element={<UpdateVerifierContract/>} />
           <Route path='/CreateIdentity' element={<CreateIdentity/>} />
+          <Route path='/AddMember' element={<AddMember/>} />
           {/* <Route path='/AddUser' element={<AddUser/>} /> */}
 
           {/* If any route mismatches the upper 

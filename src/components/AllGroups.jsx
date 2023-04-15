@@ -56,7 +56,7 @@ class ComponentPage extends React.Component {
 
     return (
 
-      <div>
+      <div class="w3-container">
         <h1>All Groups Page</h1>
         <br />
         <Link to="/">Identities</Link> |{" "}
@@ -69,13 +69,13 @@ class ComponentPage extends React.Component {
 <p>
 Current Verifier Contract Address is: { currentVerifierContract }  <Link to="/UpdateVerifierContract?addr=">(Update)</Link>
 </p>
-        <table border="1">
+        <table class="w3-table-all">
           <tbody>
             <tr>
               <td>Group ID</td>
               <td>Group Name</td>
-              <td>Group Editor Address</td>
-              <td>Group Functions</td>
+              {/* <td>Group Editor Address</td> */}
+              <td>User Functions</td>
               <td>Group Admin Functions</td>
 
             </tr>
@@ -86,9 +86,9 @@ Current Verifier Contract Address is: { currentVerifierContract }  <Link to="/Up
                 <tr>
                   <td>{item.idEntity.toString()}</td>
                   <td>{item.entityName.toString()}</td>
-                  <td>{item.entityEditor.toString()}</td>
+                  {/* <td>{item.entityEditor.toString()}</td> */}
                   <td> <a href={`/CreateIdentity?entityID=${item.idEntity.toString()}&entityName=${item.entityName.toString()}&entityEditor=${item.entityEditor.toString()}`}>Request Access</a> | Send Message | See Messages</td>
-                  <td> <a href={`/UpdateGroupName?index=${index}&entityID=${item.idEntity.toString()}&entityName=${item.entityName.toString()}`} >Rename</a> | <a href={`/UpdateEditor?index=${index}&entityID=${item.idEntity.toString()}&entityEditor=${item.entityEditor.toString()}`} >Reassign</a> | Add Member | Remove Member </td>
+                  <td> <a href={`/UpdateGroupName?index=${index}&entityID=${item.idEntity.toString()}&entityName=${item.entityName.toString()}`} >Rename</a> | <a href={`/UpdateEditor?index=${index}&entityID=${item.idEntity.toString()}&entityEditor=${item.entityEditor.toString()}`} >Reassign</a> | <a href={`/AddMember?entityID=${item.idEntity.toString()}&entityEditor=${item.entityEditor.toString()}`}>Add Member</a> | Remove Member </td>
                 </tr>
               </React.Fragment>
             ))}
