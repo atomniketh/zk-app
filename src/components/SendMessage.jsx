@@ -51,7 +51,7 @@ async function sendMessageToGroup() {
         <form id="addMemberForm">
             {/* <input type="hidden" id="entityID" name="entityID" value={queryParams.get("entityID")} /> */}
             <label htmlFor="leakMessage">Message:</label> &nbsp;
-            <input type="textarea" id="leakMessage" name="leakMessage" size="30" />
+            <textarea id="leakMessage" name="leakMessage" rows="4" cols="50" />
           <p></p>
         </form>
 
