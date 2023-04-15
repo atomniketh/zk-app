@@ -73,7 +73,7 @@ const addMember = () => {
           </button>
         </p>
         <p>
-          <button type="button" onClick={addMemberToGroup}>
+          <button type="button" onClick={addMemberToGroup} class="w3-button w3-white w3-border w3-border-red w3-round-large">
             Click here to Add User to Group.
           </button>
         </p>

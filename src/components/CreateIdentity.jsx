@@ -68,7 +68,7 @@ function CreateIdentity() {
           <p> Signed Message: {signedMessage}</p>
         </div>
       ) : (
-        <button>Request Access</button>
+        <button class="w3-button w3-white w3-border w3-border-red w3-round-large">Request Access</button>
       )}
       <button onClick={clearCookie}>Clear ID in Storage</button>
     </div>

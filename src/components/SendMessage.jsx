@@ -35,7 +35,6 @@ async function sendMessageToGroup() {
       console.log(`Gas used: ${receipt.gasUsed.toString()}`);
     }
 
-//    function sendMessage() {
  const sendMessage = () => {
     const queryParams = new URLSearchParams(window.location.search);
     const groupName = queryParams.get("entityName");
@@ -50,13 +49,13 @@ async function sendMessageToGroup() {
 
         <form id="addMemberForm">
             {/* <input type="hidden" id="entityID" name="entityID" value={queryParams.get("entityID")} /> */}
-            <label htmlFor="leakMessage">Message:</label> &nbsp;
+            <label htmlFor="leakMessage">Anonymous Message:</label> &nbsp;
             <textarea id="leakMessage" name="leakMessage" rows="4" cols="50" />
           <p></p>
         </form>
 
         <p>
-          <button type="button" onClick={sendMessageToGroup}>
+          <button type="button" onClick={sendMessageToGroup} class="w3-button w3-white w3-border w3-border-red w3-round-large">
             Click here to Send Message to Group.
           </button>
         </p>
