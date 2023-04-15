@@ -5,17 +5,29 @@ import SemaphoreCommunitiesABI from '../abi/SemaphoreCommunities.json';
 
 const semaphoreCommunitiesAddress = "0x8C8382dfA4505fE2d5b3EfC0e994951882A7e5ec";
 
-// async function fillForm() {
-//     let provider = new ethers.providers.Web3Provider(window.ethereum, "any");
-//     await provider.send("eth_requestAccounts", []);
-//     const signer = provider.getSigner();
-//     document.getElementById("editor").value = await signer.getAddress();
-// }
+async function checkEditor() {
+    // check if user is the group editor
+    const queryParams = new URLSearchParams(window.location.search);
+    const _entityID = queryParams.get("entityID");
+    const _entityEditor = queryParams.get("entityEditor");
+    let provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+    await provider.send("eth_requestAccounts", []);
+    const signer = provider.getSigner();
+    let isEditor = false;
+    if (await signer.getAddress() == _entityEditor) {
+        isEditor = true;
+        console.log("You are the editor of the group: " + _entityID);
+    } else {
+        isEditor = false;
+        console.log("You are not the editor of the group: " + _entityID);
+    }
+}
 
 async function addMemberToGroup() {
-      let groupName = document.getElementById("groupName").value;
-      let editor = document.getElementById("editor").value;
-      let merkleTreeDepth = document.getElementById("merkleTreeDepth").value;
+        const _memberCommitment = document.getElementById("memberCommitment").value;
+        const queryParams = new URLSearchParams(window.location.search);
+        const _entityID = queryParams.get("entityID");
+        console.log(_entityID + " " + _memberCommitment);
 
       let provider = new ethers.providers.Web3Provider(window.ethereum, "any");
       await provider.send("eth_requestAccounts", []);
@@ -25,48 +37,38 @@ async function addMemberToGroup() {
         SemaphoreCommunitiesABI.abi,
         signer
       );
-      const tx = await contract.createGroup(groupName, editor, merkleTreeDepth);
+      const tx = await contract.addWhistleblower(_entityID, _memberCommitment);
       console.log("Success!");
       console.log(`Transaction hash: https://goerli.etherscan.io/tx/${tx.hash}`);
-
-    //   document.getElementById("groupName").value = "";
-    //   document.getElementById("editor").value = "";
-    //   document.getElementById("merkleTreeDepth").value = "";
-      document.getElementById("createGroupForm").reset();
-
+      document.getElementById("addMemberForm").reset();
       const receipt = await tx.wait();
       console.log(`Transaction confirmed in block ${receipt.blockNumber}`);
       console.log(`Gas used: ${receipt.gasUsed.toString()}`);
- 
     }
 
 const addMember = () => {
-
+    const queryParams = new URLSearchParams(window.location.search);
+    const groupName = queryParams.get("entityName");
     return (
       <div>
         <h1>Add Member to Group</h1>
         <br />
-        <Link to="/">Identities</Link> |{" "} <Link to="/Groups">On-Chain Groups</Link> |{" "} <Link to="/OffchainGroups">Off-Chain Groups</Link> |{" "} <Link to="/Messages">Messages</Link> |{" "} <Link to="/SendFeedback">Send Feedback</Link> |{" "} <Link to="/AllGroups">All Groups</Link> |{" "} <Link to="/CreateGroup">Create Group</Link>
-        <p>Create Group:</p>
-        <form id="createGroupForm">
-          <label htmlFor="groupName">Group Name:</label> &nbsp;
-          <input type="text" id="groupName" name="groupName" size="30" />
-          <p></p>
-          <label htmlFor="editor">Group Editor:</label> &nbsp;
-          <input type="text" id="editor" name="editor" size="48" /> <button type="button" onClick={fillForm}>
-            Use My Address
-          </button>
-          <p></p>
-          <label htmlFor="merkleTreeDepth">Merkle Tree Depth:</label> &nbsp;
-          <select name="merkleTreeDepth" id="merkleTreeDepth">
-            <option value="16">16</option>
-            <option value="20">20</option>
-            <option value="24">24</option>
-            <option value="28">28</option>
-            <option value="32">32</option>
-          </select>
+        <Link to="/">Identities</Link> |{" "} <Link to="/Groups">On-Chain Groups</Link> |{" "} <Link to="/OffchainGroups">Off-Chain Groups</Link> |{" "} <Link to="/Messages">Messages</Link> |{" "} <Link to="/SendFeedback">Send Feedback</Link> |{" "} 
+        <p><Link to="/AllGroups">All Groups</Link> |{" "} <Link to="/CreateGroup">Create Group</Link></p>
+        <p>Add Member to {groupName} Group: </p>
+
+        <form id="addMemberForm">
+            {/* <input type="hidden" id="entityID" name="entityID" value={queryParams.get("entityID")} /> */}
+            <label htmlFor="memberCommitment">Commitment:</label> &nbsp;
+            <input type="text" id="memberCommitment" name="memberCommitment" size="30" />
           <p></p>
         </form>
+
+        <p>
+          <button type="button" onClick={checkEditor}>
+            Click here to Check if the editor is you.
+          </button>
+        </p>
         <p>
           <button type="button" onClick={addMemberToGroup}>
             Click here to Add User to Group.
