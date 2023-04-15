@@ -15,11 +15,6 @@ const clearCookie = async () => {
 };
 // Remove after testing ++++++++++++++++++++++++++++++++++++++++++++++++
 
-// async function requestAccess() {
-
-// }
-
-
 function CreateIdentity() {
   const queryParams = new URLSearchParams(window.location.search);
   const _entityID = queryParams.get("entityID");

@@ -13,6 +13,7 @@ import UpdateEditor from "./components/UpdateEditor";
 import UpdateVerifierContract from "./components/UpdateVerifierContract";
 import CreateIdentity from "./components/CreateIdentity";
 import AddMember from "./components/AddMember";
+import SendMessage from "./components/SendMessage";
 // import AddUser from "./components/AddUser";
 
 function App() {
@@ -39,6 +40,7 @@ function App() {
           <Route path='/UpdateVerifierContract' element={<UpdateVerifierContract/>} />
           <Route path='/CreateIdentity' element={<CreateIdentity/>} />
           <Route path='/AddMember' element={<AddMember/>} />
+          <Route path='/SendMessage' element={<SendMessage/>} />
           {/* <Route path='/AddUser' element={<AddUser/>} /> */}
 
           {/* If any route mismatches the upper 

@@ -5,27 +5,7 @@ import SemaphoreCommunitiesABI from '../abi/SemaphoreCommunities.json';
 
 const semaphoreCommunitiesAddress = "0x8C8382dfA4505fE2d5b3EfC0e994951882A7e5ec";
 
-async function checkEditor() {
-    // check if user is the group editor
-    const queryParams = new URLSearchParams(window.location.search);
-    const _entityID = queryParams.get("entityID");
-    const _entityEditor = queryParams.get("entityEditor");
-    let provider = new ethers.providers.Web3Provider(window.ethereum, "any");
-    await provider.send("eth_requestAccounts", []);
-    const signer = provider.getSigner();
-    let isEditor = false;
-    if (await signer.getAddress() === _entityEditor) {
-        isEditor = true;
-        console.log("You are the editor of the group: " + _entityID);
-    } else {
-        isEditor = false;
-        console.log("You are not the editor of the group: " + _entityID);
-        alert("You are not the editor of the group: " + _entityID);
-    }
-    const result = isEditor;
-}
-
-async function addMemberToGroup() {
+async function sendMessageToGroup() {
         const _memberCommitment = document.getElementById("memberCommitment").value;
         const queryParams = new URLSearchParams(window.location.search);
         const _entityID = queryParams.get("entityID");
@@ -39,6 +19,13 @@ async function addMemberToGroup() {
         SemaphoreCommunitiesABI.abi,
         signer
       );
+
+    //   function publishLeak(
+    //     uint256 leak,
+    //     uint256 nullifierHash,
+    //     uint256 entityId,
+    //     uint256[8] calldata proof
+
       const tx = await contract.addWhistleblower(_entityID, _memberCommitment);
       console.log("Success!");
       console.log(`Transaction hash: https://goerli.etherscan.io/tx/${tx.hash}`);
@@ -48,37 +35,33 @@ async function addMemberToGroup() {
       console.log(`Gas used: ${receipt.gasUsed.toString()}`);
     }
 
-const addMember = () => {
+//    function sendMessage() {
+ const sendMessage = () => {
     const queryParams = new URLSearchParams(window.location.search);
     const groupName = queryParams.get("entityName");
 
     return (
       <div>
-        <h1>Add Member to Group</h1>
+        <h1>Send Message to Group</h1>
         <br />
         <Link to="/">Identities</Link> |{" "} <Link to="/Groups">On-Chain Groups</Link> |{" "} <Link to="/OffchainGroups">Off-Chain Groups</Link> |{" "} <Link to="/Messages">Messages</Link> |{" "} <Link to="/SendFeedback">Send Feedback</Link> |{" "} 
         <p><Link to="/AllGroups">All Groups</Link> |{" "} <Link to="/CreateGroup">Create Group</Link></p>
-        <p>Add Member to {groupName} Group: </p>
+        <p>Send Message to {groupName} Group: </p>
 
         <form id="addMemberForm">
             {/* <input type="hidden" id="entityID" name="entityID" value={queryParams.get("entityID")} /> */}
-            <label htmlFor="memberCommitment">Commitment:</label> &nbsp;
-            <input type="text" id="memberCommitment" name="memberCommitment" size="30" />
+            <label htmlFor="leakMessage">Message:</label> &nbsp;
+            <input type="textarea" id="leakMessage" name="leakMessage" size="30" />
           <p></p>
         </form>
 
         <p>
-          <button type="button" onClick={checkEditor}>
-            Click here to Check if the editor is you.
-          </button>
-        </p>
-        <p>
-          <button type="button" onClick={addMemberToGroup}>
-            Click here to Add User to Group.
+          <button type="button" onClick={sendMessageToGroup}>
+            Click here to Send Message to Group.
           </button>
         </p>
       </div>
     );
   };
   
-  export default addMember;
+  export default sendMessage;
