@@ -14,13 +14,14 @@ async function checkEditor() {
     await provider.send("eth_requestAccounts", []);
     const signer = provider.getSigner();
     let isEditor = false;
-    if (await signer.getAddress() == _entityEditor) {
+    if (await signer.getAddress() === _entityEditor) {
         isEditor = true;
         console.log("You are the editor of the group: " + _entityID);
     } else {
         isEditor = false;
         console.log("You are not the editor of the group: " + _entityID);
     }
+    const result = isEditor;
 }
 
 async function addMemberToGroup() {
@@ -49,6 +50,7 @@ async function addMemberToGroup() {
 const addMember = () => {
     const queryParams = new URLSearchParams(window.location.search);
     const groupName = queryParams.get("entityName");
+
     return (
       <div>
         <h1>Add Member to Group</h1>
@@ -68,6 +70,9 @@ const addMember = () => {
           <button type="button" onClick={checkEditor}>
             Click here to Check if the editor is you.
           </button>
+
+            {checkEditor === true && <button>Yes</button>}
+            {checkEditor === false && <button>No</button>}
         </p>
         <p>
           <button type="button" onClick={addMemberToGroup}>
