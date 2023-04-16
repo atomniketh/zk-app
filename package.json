@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^6.4.0",
     "@semaphore-protocol/contracts": "^3.6.0-beta.0",
     "@semaphore-protocol/data": "^3.2.3",
     "@semaphore-protocol/group": "^3.2.3",
@@ -18,6 +19,7 @@
     "crypto-browserify": "^3.12.0",
     "dotenv": "^16.0.3",
     "env-cmd": "^10.1.0",
+    "font-awesome": "^4.7.0",
     "os-browserify": "^0.3.0",
     "path-browserify": "^1.0.1",
     "process": "^0.11.10",

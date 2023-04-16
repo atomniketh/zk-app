@@ -56,7 +56,7 @@ class ComponentPage extends React.Component {
 
     return (
 
-      <div class="w3-container">
+      <div className="w3-container">
         <h1>All Groups Page</h1>
         <br />
         <Link to="/">Identities</Link> |{" "}
@@ -69,7 +69,7 @@ class ComponentPage extends React.Component {
 <p>
 Current Verifier Contract Address is: { currentVerifierContract }  <Link to="/UpdateVerifierContract?addr=">(Update)</Link>
 </p>
-        <table class="w3-table-all">
+        <table className="w3-table-all">
           <tbody>
             <tr>
               <td>Group ID</td>

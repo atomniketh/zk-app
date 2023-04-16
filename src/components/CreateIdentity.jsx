@@ -19,7 +19,7 @@ function CreateIdentity() {
   const queryParams = new URLSearchParams(window.location.search);
   const _entityID = queryParams.get("entityID");
   const _entityName = queryParams.get("entityName");
-  const entityCurrentEditor = queryParams.get("entityEditor");
+  const _entityCurrentEditor = queryParams.get("entityEditor");
 
   const [signedMessage, setSignedMessage] = React.useState("");
   const groupToJoin = "identity" + _entityID;
@@ -47,14 +47,20 @@ function CreateIdentity() {
     const wallet = Wallet.createRandom();
     //const xmtp = await Client.create(wallet);
     const xmtp = await Client.create(wallet, { env: "production" });
-    const conversation = await xmtp.conversations.newConversation(entityCurrentEditor);
+    const conversation = await xmtp.conversations.newConversation(_entityCurrentEditor);
     // Load all messages in the conversation
-    const messages = await conversation.messages();
+    // ************* This can be removed after testing *************
+    // const messages = await conversation.messages();
+    // *************************************************************
+
     await conversation.send(identityInfo + " wants to join " + _entityID);
+
+    // ************* This can be removed after testing *************
     // Listen for new messages in the conversation
     for await (const message of await conversation.streamMessages()) {
       console.log(`[${message.senderAddress}]: ${message.content}`);
     };
+    // *************************************************************
   };
 
   return (
@@ -68,7 +74,7 @@ function CreateIdentity() {
           <p> Signed Message: {signedMessage}</p>
         </div>
       ) : (
-        <button class="w3-button w3-white w3-border w3-border-red w3-round-large">Request Access</button>
+        <button className="w3-button w3-white w3-border w3-border-red w3-round-large">Request Access</button>
       )}
       <button onClick={clearCookie}>Clear ID in Storage</button>
     </div>

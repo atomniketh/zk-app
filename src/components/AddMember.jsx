@@ -22,7 +22,6 @@ async function checkEditor() {
         console.log("You are not the editor of the group: " + _entityID);
         alert("You are not the editor of the group: " + _entityID);
     }
-    const result = isEditor;
 }
 
 async function addMemberToGroup() {
@@ -63,7 +62,7 @@ const addMember = () => {
         <form id="addMemberForm">
             {/* <input type="hidden" id="entityID" name="entityID" value={queryParams.get("entityID")} /> */}
             <label htmlFor="memberCommitment">Commitment:</label> &nbsp;
-            <input type="text" id="memberCommitment" name="memberCommitment" size="30" />
+            <input type="text" id="memberCommitment" name="memberCommitment" size="90" />
           <p></p>
         </form>
 
@@ -73,7 +72,7 @@ const addMember = () => {
           </button>
         </p>
         <p>
-          <button type="button" onClick={addMemberToGroup} class="w3-button w3-white w3-border w3-border-red w3-round-large">
+          <button type="button" onClick={addMemberToGroup} className="w3-button w3-white w3-border w3-border-red w3-round-large">
             Click here to Add User to Group.
           </button>
         </p>

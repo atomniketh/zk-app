@@ -50,7 +50,7 @@ const UpdateGroupName = () => {
         <p></p>
       </form>
       <p>
-        <button type="button" onClick={updateGroupName} class="w3-button w3-white w3-border w3-border-red w3-round-large">
+        <button type="button" onClick={updateGroupName} className="w3-button w3-white w3-border w3-border-red w3-round-large">
           Click here to update Group Name.
         </button>
       </p>
