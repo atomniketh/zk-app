@@ -12,7 +12,7 @@
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^14.0.0",
     "@testing-library/user-event": "^14.4.3",
-    "@xmtp/xmtp-js": "^8.0.1",
+    "@xmtp/xmtp-js": "^8.0.2",
     "browserify-fs": "^1.0.0",
     "buffer": "^6.0.3",
     "crypto": "^1.0.1",

@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { ethers, utils } from "ethers";
 import { Identity } from "@semaphore-protocol/identity";
 import { Group } from "@semaphore-protocol/group";
-import { generateProof } from "@semaphore-protocol/proof";
+import { generateProof, verifyProof } from "@semaphore-protocol/proof";
 import "font-awesome/css/font-awesome.min.css";
 import SemaphoreCommunitiesABI from "../abi/SemaphoreCommunities.json";
 
@@ -65,29 +65,32 @@ const submitMessage = async () => {
   );
   console.log("fullProof: " + fullProof.proof);
 
-  let provider = new ethers.providers.Web3Provider(window.ethereum, "any");
-  await provider.send("eth_requestAccounts", []);
-  const signer = provider.getSigner();
-  let contract = new ethers.Contract(
-    semaphoreCommunitiesAddress,
-    SemaphoreCommunitiesABI.abi,
-    signer
-  );
+const vProof = await verifyProof(fullProof, 20);
+console.log("vProof: " + vProof.valueOf);
 
-  let nonce = await signer.getTransactionCount();
+  // let provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+  // await provider.send("eth_requestAccounts", []);
+  // const signer = provider.getSigner();
+  // let contract = new ethers.Contract(
+  //   semaphoreCommunitiesAddress,
+  //   SemaphoreCommunitiesABI.abi,
+  //   signer
+  // );
 
-  const tx = await contract.publishLeak(
-    _leakMessage,
-    identity.nullifier,
-    _entityID,
-    fullProof.proof, { gasLimit: 1000000, nonce: nonce || undefined }
-  );
-  console.log("Success!");
-  console.log(`Transaction hash: https://goerli.etherscan.io/tx/${tx.hash}`);
-  document.getElementById("leakMessage").value = "";
-  const receipt = await tx.wait();
-  console.log(`Transaction confirmed in block ${receipt.blockNumber}`);
-  console.log(`Gas used: ${receipt.gasUsed.toString()}`);
+  // let nonce = await signer.getTransactionCount();
+
+  // const tx = await contract.publishLeak(
+  //   _leakMessage,
+  //   fullProof.nullifierHash,
+  //   _entityID,
+  //   fullProof.proof, { gasLimit: 1000000, nonce: nonce || undefined }
+  // );
+  // console.log("Success!");
+  // console.log(`Transaction hash: https://goerli.etherscan.io/tx/${tx.hash}`);
+  // document.getElementById("leakMessage").value = "";
+  // const receipt = await tx.wait();
+  // console.log(`Transaction confirmed in block ${receipt.blockNumber}`);
+  // console.log(`Gas used: ${receipt.gasUsed.toString()}`);
 };
 
 const sendMessage = () => {
