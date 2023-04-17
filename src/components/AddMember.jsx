@@ -22,6 +22,7 @@ async function checkEditor() {
         console.log("You are not the editor of the group: " + _entityID);
         alert("You are not the editor of the group: " + _entityID);
     }
+    console.log("Are you the editor of the group: " + isEditor);
 }
 
 async function addMemberToGroup() {

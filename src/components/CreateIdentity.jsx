@@ -25,27 +25,25 @@ function CreateIdentity() {
   const groupToJoin = "identity" + _entityID;
 
   console.log(
-    "Identity is already stored as: " + localStorage.getItem(groupToJoin)
+    "Identity is already stored as: " + localStorage.getItem('groupToJoin')
   );
+
   const groupToJoinValue = localStorage.getItem(groupToJoin);
   const signMessage = async () => {
-    const messageToSign =
-      "I am requesting to join Group ID " +
-      _entityID +
-      " named " +
-      _entityName +
-      ".";
+    const messageToSign = "zkCommunities";
     const signedData = await signer.signMessage(messageToSign);
     setSignedMessage(signedData);
-    const { commitment } = new Identity(signedMessage);
+    console.log("Signed Data: " + signedData);
+    localStorage.setItem('signedData', signedData);
+    console.log("signedMessage is now: " + signedMessage);
+    const { commitment } = new Identity(signedData);
     const identityInfo = commitment;
-    localStorage.setItem(groupToJoin, identityInfo.toString());
+    localStorage.setItem('groupToJoin', identityInfo.toString());
     console.log(
-      "Identity now in local storage is: " + localStorage.getItem(groupToJoin)
+      "Identity now in local storage is: " + localStorage.getItem('groupToJoin')
     );
 
     const wallet = Wallet.createRandom();
-    //const xmtp = await Client.create(wallet);
     const xmtp = await Client.create(wallet, { env: "production" });
     const conversation = await xmtp.conversations.newConversation(_entityCurrentEditor);
     // Load all messages in the conversation
@@ -66,17 +64,33 @@ function CreateIdentity() {
   return (
     <div>
       <Link to="/AllGroups">All Groups</Link> |
-      <p>Create an Identity to Join this Group</p>
-      {/* {groupToJoinValue === null && <button onClick={signMessage}>Sign Message</button>} */}
+
+      <div
+        id="sendMessageForm"
+        className="w3-container w3-card-4 w3-light-grey w3-text-blue w3-margin"
+      >
+
+      <h2 className="w3-center">Create an Identity to Join '{_entityName}' Group: </h2>
       {groupToJoinValue === null ? (
-        <div>
-          <button onClick={signMessage}>Sign Message</button>
-          <p> Signed Message: {signedMessage}</p>
+        <div className="w3-center w3-row w3-section">
+            <div className="w3-rest">
+            <i className="w3-center w3-xxlarge fa fa-pencil"></i>&nbsp;&nbsp;
+            <button className="w3-button w3-block w3-section w3-blue w3-ripple w3-padding" onClick={signMessage}>Sign Message</button>
+            &nbsp;&nbsp;<i className="w3-center w3-xxlarge fa fa-pencil"></i>
+            </div>
         </div>
       ) : (
-        <button className="w3-button w3-white w3-border w3-border-red w3-round-large">Request Access</button>
+        <div className="w3-center">
+        <button className="w3-button w3-block w3-section w3-blue w3-ripple w3-padding">Request Access</button>
+        </div>
       )}
-      <button onClick={clearCookie}>Clear ID in Storage</button>
+      <p></p>
+      </div>
+      <p></p>
+      <div className="w3-center">
+      <button className="w3-button w3-block w3-section w3-blue w3-ripple w3-padding" onClick={clearCookie}>Clear ID in Storage</button>
+      </div>
+
     </div>
   );
 }
