@@ -26,7 +26,7 @@ function App() {
           with exact path "/", in component props 
           we passes the imported component*/}
           {/* <Route path="/" element={<Home />} /> */}
-          <Route index element={<Identities />} />
+          <Route index element={<AllGroups />} />
           <Route path='*' element={<Identities />} />
           <Route path="/Identities" element={<Identities />} />
           <Route path='/Groups' element={<Groups/>} exact/>

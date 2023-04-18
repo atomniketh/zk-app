@@ -10,7 +10,7 @@ const feedbackAddress = "0x0C339f45aB084F48C60F82Fecb1844C72a6CcaDa"
 // block number when the smart contract was deployed
 // const startBlock = 8593998;
 const userName = "0x636d73746f6e6500000000000000000000000000000000000000000000000000";
-
+//
 
   // request access to the user's MetaMask account
   // async function requestAccount() {

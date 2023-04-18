@@ -4,7 +4,7 @@ import { ethers } from "ethers";
 import SemaphoreCommunitiesABI from "../abi/SemaphoreCommunities.json";
 
 const semaphoreCommunitiesAddress =
-  "0x8C8382dfA4505fE2d5b3EfC0e994951882A7e5ec";
+  "0x33F97669eD732Fa05924015863772118C9D4e236";
 
 async function updateEditor() {
   const queryParams = new URLSearchParams(window.location.search);
