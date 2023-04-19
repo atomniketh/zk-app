@@ -1,3 +1,7 @@
+Does this allow me to turn a long string >32 chars to a UINT256?
+        uint256 zeroValue = uint256(keccak256(abi.encodePacked(groupId))) >> 8;
+        
+
 npm install crypto-browserify
 
 

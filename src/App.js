@@ -15,7 +15,7 @@ import CreateIdentity from "./components/CreateIdentity";
 import AddMember from "./components/AddMember";
 import SendMessage from "./components/SendMessage";
 // import AddUser from "./components/AddUser";
-
+console.log("process.env.REACT_APP_CONTRACT is: " + process.env.REACT_APP_CONTRACT);
 function App() {
   return (
     <Router>

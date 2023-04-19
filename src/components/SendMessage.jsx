@@ -8,7 +8,7 @@ import "font-awesome/css/font-awesome.min.css";
 import SemaphoreCommunitiesABI from "../abi/SemaphoreCommunities.json";
 
 const semaphoreCommunitiesAddress =
-  "0x33F97669eD732Fa05924015863772118C9D4e236";
+  "0x233bd7b6de74e3029ffe1dac7fd2fcb2fdf9386c";
 
 const provider = new ethers.providers.Web3Provider(window.ethereum);
 const signer = provider.getSigner();
@@ -20,6 +20,15 @@ const clearCookie = async () => {
   window.location.reload();
 };
 // Remove after testing ++++++++++++++++++++++++++++++++++++++++++++++++
+
+// Remove after testing ++++++++++++++++++++++++++++++++++++++++++++++++
+const checkGroupInfo = async () => {
+
+    
+
+  };
+  // Remove after testing ++++++++++++++++++++++++++++++++++++++++++++++++
+
 
 async function signANewMessage() {
   const queryParams = new URLSearchParams(window.location.search);
@@ -48,6 +57,7 @@ const submitMessage = async () => {
   const _entityID = queryParams.get("entityID");
   // console.log(_entityID + " " + _memberCommitment);
   const group = new Group(_entityID);
+  console.log("Group root: " + group.root);
   const externalNullifier = utils.formatBytes32String("Topic");
   const signal = document.getElementById("leakMessage").value;
   const _leakMessage = utils.formatBytes32String(signal);
@@ -55,8 +65,20 @@ const submitMessage = async () => {
   //     localStorage.getItem("signedData")
   //   );
   const identity = new Identity(localStorage.getItem("signedData"));
-
+  
   group.addMember(identity.commitment);
+  const idIndex = group.indexOf(identity.commitment);
+  console.log("idIndex: " + idIndex);
+
+  const groupProof = group.generateMerkleProof(idIndex);
+    console.log("groupProof leaf: " + groupProof.leaf);
+    console.log("groupProof root: " + groupProof.root);
+    
+
+
+
+
+
   const fullProof = await generateProof(
     identity,
     group,
@@ -132,7 +154,12 @@ const sendMessage = () => {
             />
           </div>{" "}
         </div>
-
+        <button
+          onClick={submitMessage}
+          className="w3-button w3-block w3-section w3-blue w3-ripple w3-padding"
+        >
+          Submit Message
+        </button>
         <button
           onClick={signANewMessage}
           className="w3-button w3-block w3-section w3-blue w3-ripple w3-padding"
@@ -140,17 +167,18 @@ const sendMessage = () => {
           Sign Message
         </button>
         <button
+          onClick={checkGroupInfo}
+          className="w3-button w3-block w3-section w3-blue w3-ripple w3-padding"
+        >
+          Verify Group Info
+        </button>
+        <button
           onClick={clearCookie}
           className="w3-button w3-block w3-section w3-blue w3-ripple w3-padding"
         >
           Clear Cookies
         </button>
-        <button
-          onClick={submitMessage}
-          className="w3-button w3-block w3-section w3-blue w3-ripple w3-padding"
-        >
-          Submit Message
-        </button>
+
       </div>
     </div>
   );
