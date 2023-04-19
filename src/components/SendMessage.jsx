@@ -152,7 +152,6 @@ const sendMessage = () => {
 
         <div className="w3-row w3-section">
           <div className="w3-col" style={{ width: 50 + "px" }}>
-            {/* <i className="fa" className="w3-col"></i> */}
             <i className="w3-xxlarge fa fa-envelope-o"></i>
           </div>
           <div className="w3-rest">

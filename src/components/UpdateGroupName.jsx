@@ -35,24 +35,28 @@ const UpdateGroupName = () => {
   return (
     <div>
       <h1>Update Group Name Page</h1>
-      <br />
-      <Link to="/">Identities</Link> | <Link to="/Groups">On-Chain Groups</Link>{" "}
-      | <Link to="/OffchainGroups">Off-Chain Groups</Link> |{" "}
-      <Link to="/Messages">Messages</Link> |{" "}
-      <Link to="/SendFeedback">Send Feedback</Link> |{" "}
+      <p>
       <Link to="/AllGroups">All Groups</Link> |{" "}
       <Link to="/CreateGroup">Create Group</Link>
-      <p>Current Group Name: {entityNameCurrent} </p>
-      <form id="updateGroupNameForm">
+      </p>
+
+      <h2 className="w3-center">Current Group Name: {entityNameCurrent} </h2>
+      <div id="updateGroupNameForm" className="w3-container w3-card-4 w3-light-grey w3-text-blue w3-margin">
+        <div className="w3-col" style={{ width: 50 + "px" }}>
+            <i className="w3-xxlarge fa fa-pencil"></i>
+        </div>
+        <div className="w3-rest">
+          <p></p>
         <label htmlFor="newGroupName">New Group Name:</label> &nbsp;
         <input type="text" id="newGroupName" name="newGroupName" size="30" />
-        <p></p>
-      </form>
+        </div>
+
       <p>
-        <button type="button" onClick={updateGroupName} className="w3-button w3-white w3-border w3-border-red w3-round-large">
+        <button type="button" onClick={updateGroupName} className="w3-button w3-block w3-section w3-blue w3-ripple w3-padding">
           Click here to update Group Name.
         </button>
       </p>
+      </div>
     </div>
   );
 };

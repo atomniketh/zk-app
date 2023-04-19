@@ -4,7 +4,6 @@ import { ethers } from "ethers";
 import SemaphoreCommunitiesABI from "../abi/SemaphoreCommunities.json";
 const semaphoreCommunitiesAddress = process.env.REACT_APP_CONTRACT;
 
-
 async function updateEditor() {
   const queryParams = new URLSearchParams(window.location.search);
   const _index = queryParams.get("index");
@@ -20,12 +19,12 @@ async function updateEditor() {
     signer
   );
   const tx = await contract.updateGroupEditor(_index, _newEditor, _entityID);
-    // console.log("Success!");
+  // console.log("Success!");
   console.log(`Transaction hash: https://goerli.etherscan.io/tx/${tx.hash}`);
   document.getElementById("updateEditorForm").reset();
   // const receipt = await tx.wait();
-    // console.log(`Transaction confirmed in block ${receipt.blockNumber}`);
-    // console.log(`Gas used: ${receipt.gasUsed.toString()}`);
+  // console.log(`Transaction confirmed in block ${receipt.blockNumber}`);
+  // console.log(`Gas used: ${receipt.gasUsed.toString()}`);
 }
 
 const UpdateEditor = () => {
@@ -36,20 +35,34 @@ const UpdateEditor = () => {
     <div>
       <h1>Update Editor Page</h1>
       <br />
-      <Link to="/">Identities</Link> | <Link to="/Groups">On-Chain Groups</Link>{" "}
-      | <Link to="/OffchainGroups">Off-Chain Groups</Link> |{" "}
-      <Link to="/Messages">Messages</Link> |{" "}
-      <Link to="/SendFeedback">Send Feedback</Link> |{" "}
       <Link to="/AllGroups">All Groups</Link> |{" "}
-      <Link to="/CreateGroup">Create Group</Link>
-      <p>Current Editor Address: {entityCurrentEditor} </p>
-      <form id="updateEditorForm">
-        <label htmlFor="newEditorAddress">New Editor Address:</label> &nbsp;
-        <input type="text" id="newEditorAddress" name="newEditorAddress" size="50" />
-        <p></p>
-      </form>
+      <h2 className="w3-center">
+        Current Editor Address: {entityCurrentEditor}{" "}
+      </h2>
+      <div
+        id="updateEditorForm"
+        className="w3-container w3-card-4 w3-light-grey w3-text-blue w3-margin"
+      >
+        <div className="w3-col" style={{ width: 50 + "px" }}>
+          <i className="w3-xxlarge fa fa-pencil"></i>
+        </div>
+        <div className="w3-rest">
+          <p></p>
+          <label htmlFor="newEditorAddress">New Editor Address:</label> &nbsp;
+          <input
+            type="text"
+            id="newEditorAddress"
+            name="newEditorAddress"
+            size="50"
+          />
+        </div>
+      </div>
       <p>
-        <button type="button" onClick={updateEditor} className="w3-button w3-white w3-border w3-border-red w3-round-large">
+        <button
+          type="button"
+          onClick={updateEditor}
+          className="w3-button w3-block w3-section w3-blue w3-ripple w3-padding"
+        >
           Click here to update Editor Address.
         </button>
       </p>
