@@ -5,7 +5,10 @@ const { FullProof, generateProof } = require("@semaphore-protocol/proof");
 const { Signer, utils } = require("ethers");
 const { expect } = require("chai");
 const { ethers, run } = require("hardhat");
-const { Pairing, SemaphoreCommunities } = "../Contracts/";
+const { SemaphoreCommunities } = "../Contracts/";
+const { Pairing } = "../Contracts/";
+
+const poseidonContract = require("circomlibjs").poseidon_gencontract;
 
 describe("SemaphoreCommunities", () => {
   let semaphoreCommunitiesContract
@@ -21,22 +24,83 @@ describe("SemaphoreCommunities", () => {
 
 
     before(async () => {
-    const { semaphoreCommunities, pairingAddress } = await run(
-      "deploy:semaphore-communities", {
-        logs: false
-      }
-    )
 
-    semaphoreCommunitiesContract = semaphoreCommunities
-    pairingContract = await ethers.getContractAt("Pairing", pairingAddress)
+      const poseidonT3ABI = poseidonContract.generateABI(2);
+      const poseidonT3Bytecode = poseidonContract.createCode(2);
+
+      const [signer] = await hre.ethers.getSigners();
+
+      const PoseidonLibT3Factory = new hre.ethers.ContractFactory(
+        poseidonT3ABI,
+        poseidonT3Bytecode,
+        signer
+      );
+      const poseidonT3Lib = await PoseidonLibT3Factory.deploy();
+
+      await poseidonT3Lib.deployed();
+
+        console.log(
+          "PoseidonT3 library has been deployed to: " + poseidonT3Lib.address
+        );
+
+      const IncrementalBinaryTreeLibFactory = await hre.ethers.getContractFactory(
+        "IncrementalBinaryTree",
+        {
+          libraries: {
+            PoseidonT3: poseidonT3Lib.address,
+          },
+        }
+      );
+      const incrementalBinaryTreeLib =
+        await IncrementalBinaryTreeLibFactory.deploy();
+
+      await incrementalBinaryTreeLib.deployed();
+
+        console.log(
+          "IncrementalBinaryTree library has been deployed to: " + incrementalBinaryTreeLib.address
+        );
+
+      const SemaphoreCommunitiesFactory = await hre.ethers.getContractFactory(
+        "SemaphoreCommunities",
+        {
+          libraries: {
+            IncrementalBinaryTree: incrementalBinaryTreeLib.address,
+          },
+        }
+      );
+
+      const contract = await SemaphoreCommunitiesFactory.deploy(
+        "0xb908Bcb798e5353fB90155C692BddE3b4937217C"
+      );
+
+      await contract.deployed();
+
+        console.log(
+          "SemaphoreCommunities contract has been deployed to: " + contract.address
+        );
+
+      semaphoreCommunitiesContract = contract;
+
+
+    // const { semaphoreCommunities, pairingAddress } = await run(
+    //   "deploy:semaphore-communities", {
+    //     logs: false
+    //   }
+    // )
+
+    // semaphoreCommunitiesContract = semaphoreCommunities
+    // const pairingAddress = contract.address;
+    // // pairingContract = await ethers.getContractAt("Pairing", pairingAddress)
+    // const PairingTest = await ethers.getContractFactory("Pairing");
+    // const pairingContract = await PairingTest.deploy();
 
     accounts = await ethers.getSigners()
     editor = await accounts[1].getAddress()
   })
 
-  describe("# createEntity", () => {
+  describe("# createGroup", () => {
     it("Should not create an entity with a wrong depth", async () => {
-      const transaction = semaphoreCommunitiesContract.createEntity(
+      const transaction = semaphoreCommunitiesContract.createGroup(
         entityIds[0], editor, 10
       )
 
