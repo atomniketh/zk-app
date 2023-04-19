@@ -41,7 +41,7 @@ async function addMemberToGroup() {
   const tx = await contract.addWhistleblower(_entityID, _memberCommitment);
   console.log("Success!");
   console.log(`Transaction hash: https://goerli.etherscan.io/tx/${tx.hash}`);
-  document.getElementById("addMemberForm").reset();
+  document.getElementById("memberCommitment").value = "";
   const receipt = await tx.wait();
   console.log(`Transaction confirmed in block ${receipt.blockNumber}`);
   console.log(`Gas used: ${receipt.gasUsed.toString()}`);

@@ -44,8 +44,8 @@ module.exports = {
 }
 };
 
-const contractFactory = await this.env.ethers.getContractFactory("Example", {
-  libraries: {
-    ExampleLib: "0x...",
-  },
-});
+// const contractFactory = await this.env.ethers.getContractFactory("Example", {
+//   libraries: {
+//     ExampleLib: "0x...",
+//   },
+// });
