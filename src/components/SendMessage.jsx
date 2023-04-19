@@ -7,8 +7,7 @@ import { generateProof, verifyProof } from "@semaphore-protocol/proof";
 import "font-awesome/css/font-awesome.min.css";
 import SemaphoreCommunitiesABI from "../abi/SemaphoreCommunities.json";
 
-const semaphoreCommunitiesAddress =
-  "0x233bd7b6de74e3029ffe1dac7fd2fcb2fdf9386c";
+const semaphoreCommunitiesAddress = process.env.REACT_APP_CONTRACT;
 
 const provider = new ethers.providers.Web3Provider(window.ethereum);
 const signer = provider.getSigner();
@@ -55,8 +54,9 @@ async function signANewMessage() {
 const submitMessage = async () => {
   const queryParams = new URLSearchParams(window.location.search);
   const _entityID = queryParams.get("entityID");
+  console.log("entityID Value: " + BigInt(_entityID));
   // console.log(_entityID + " " + _memberCommitment);
-  const group = new Group(_entityID);
+  const group = new Group(BigInt(_entityID), 16);
   console.log("Group root: " + group.root);
   const externalNullifier = utils.formatBytes32String("Topic");
   const signal = document.getElementById("leakMessage").value;
@@ -73,11 +73,15 @@ const submitMessage = async () => {
   const groupProof = group.generateMerkleProof(idIndex);
     console.log("groupProof leaf: " + groupProof.leaf);
     console.log("groupProof root: " + groupProof.root);
+
+    console.log("******* Generating Proof With: *********************************");
+    console.log("identity: " + identity);
+    console.log("group: " + group);
+    console.log("externalNullifier: " + externalNullifier);
+    console.log("_leakMessage: " + _leakMessage);
+    console.log("*******  End of Generating Proof With: *********************************");
     
-
-
-
-
+    
 
   const fullProof = await generateProof(
     identity,
@@ -87,7 +91,7 @@ const submitMessage = async () => {
   );
   console.log("fullProof: " + fullProof.proof);
 
-const vProof = await verifyProof(fullProof, 20);
+const vProof = await verifyProof(fullProof, 16);
 console.log("vProof: " + vProof);
 
   let provider = new ethers.providers.Web3Provider(window.ethereum, "any");
@@ -101,6 +105,13 @@ console.log("vProof: " + vProof);
 
   let nonce = await signer.getTransactionCount();
 
+  console.log("******* Publishing Leak With: *********************************");
+  console.log("_leakMessage: " + _leakMessage);
+  console.log("fullProof.nullifierHash: " + fullProof.nullifierHash);
+  console.log("_entityID: " + _entityID);
+  console.log("fullProof.proof: " + fullProof.proof);
+  console.log("*******  End of Publishing Leak With: *********************************");
+  
   const tx = await contract.publishLeak(
     _leakMessage,
     fullProof.nullifierHash,

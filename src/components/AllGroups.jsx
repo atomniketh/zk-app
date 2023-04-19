@@ -2,10 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { ethers } from "ethers";
 import SemaphoreCommunitiesABI from "../abi/SemaphoreCommunities.json";
-require('dotenv').config();
-console.log("Connecting to " + process.env.NODE_ENV);
-console.log("process.env.REACT_APP_CONTRACT is: " + process.env.REACT_APP_CONTRACT);
-const semaphoreCommunitiesAddress = "0x233bd7b6de74e3029ffe1dac7fd2fcb2fdf9386c";
+const semaphoreCommunitiesAddress = process.env.REACT_APP_CONTRACT;
 
 //"0x33F97669eD732Fa05924015863772118C9D4e236";
  // "0x8C8382dfA4505fE2d5b3EfC0e994951882A7e5ec";

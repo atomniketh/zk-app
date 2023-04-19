@@ -2,9 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { ethers } from "ethers";
 import SemaphoreCommunitiesABI from "../abi/SemaphoreCommunities.json";
-
-const semaphoreCommunitiesAddress =
-  "0x233bd7b6de74e3029ffe1dac7fd2fcb2fdf9386c";
+const semaphoreCommunitiesAddress = process.env.REACT_APP_CONTRACT;
 
 async function updateVerifierContract() {
   const newVerifierContract = document.getElementById(
