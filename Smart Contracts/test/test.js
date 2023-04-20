@@ -18,6 +18,7 @@ describe("SemaphoreCommunities", () => {
 
   const treeDepth = Number(process.env.TREE_DEPTH) || 20
   const entityIds = [1, 2]
+  const groupName = "Test Group"
 
   const wasmFilePath = `https://www.trusted-setup-pse.org/semaphore/${treeDepth}/semaphore.wasm`
   const zkeyFilePath = `https://www.trusted-setup-pse.org/semaphore/${treeDepth}/semaphore.zkey`
@@ -101,28 +102,30 @@ describe("SemaphoreCommunities", () => {
   describe("# createGroup", () => {
     it("Should not create an entity with a wrong depth", async () => {
       const transaction = semaphoreCommunitiesContract.createGroup(
-        entityIds[0], editor, 10
+        entityIds[0].toString, editor, 10
       )
+
 
       await expect(transaction).to.be.revertedWithCustomError(
         semaphoreCommunitiesContract,
         "Semaphore__MerkleTreeDepthIsNotSupported"
       )
+      
     })
 
     it("Should create an entity", async () => {
-      const transaction = semaphoreCommunitiesContract.createEntity(
-        entityIds[0], editor, treeDepth
+      const transaction = semaphoreCommunitiesContract.createGroup(
+        entityIds[0].toString, editor, treeDepth
       )
 
       await expect(transaction)
         .to.emit(semaphoreCommunitiesContract, "EntityCreated")
-        .withArgs(entityIds[0], editor)
+        .withArgs(entityIds[0].toString, editor)
     })
 
     it("Should not create a entity if it already exists", async () => {
-      const transaction = semaphoreCommunitiesContract.createEntity(
-        entityIds[0], editor, treeDepth
+      const transaction = semaphoreCommunitiesContract.createGroup(
+        entityIds[0].toString, editor, treeDepth
       )
 
       await expect(transaction).to.be.revertedWithCustomError(
