@@ -76,9 +76,10 @@ contract SemaphoreCommunities is SemaphoreGroups, AccessControl {
 
     /// @dev Initializes the Semaphore verifier used to verify the user's ZK proofs.
     /// @param _verifier: Semaphore verifier address.
-    constructor(ISemaphoreVerifier _verifier) {
+    constructor(address _verifier) {
         _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
-        verifier = _verifier;
+        // verifier = _verifier;
+        verifier = ISemaphoreVerifier(_verifier);
     }
 
     /// @dev See {ISemaphoreWhistleblowing-createEntity}.
@@ -190,8 +191,8 @@ contract SemaphoreCommunities is SemaphoreGroups, AccessControl {
     /// Only the contract admin can call this function.
     /// @param _newSemaphoreVerifier: Address from the SemaphoreVerifier.sol row
     /// located at https://semaphore.appliedzkp.org/docs/deployed-contracts#semaphore
-    function updateVerifierContract(ISemaphoreVerifier _newSemaphoreVerifier) public onlyRole(DEFAULT_ADMIN_ROLE) {
-        verifier = _newSemaphoreVerifier;
+    function updateVerifierContract(address _newSemaphoreVerifier) public onlyRole(DEFAULT_ADMIN_ROLE) {
+        verifier = ISemaphoreVerifier(_newSemaphoreVerifier);
     }
 
 }
