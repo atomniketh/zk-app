@@ -40,7 +40,7 @@ contract SemaphoreCommunities is SemaphoreGroups, AccessControl {
     // with the SemaphoreGroups contract uncertainty in which IDs 
     // are already in use.
     // @param Generate a unique entityID
-    uint256 private entityCounter = 555555;
+    uint256 private entityCounter = 0;
 
     /// @dev A struct to hold information about the entities.
     /// This is better than mappings, as it allows us to iterate over the entities.
