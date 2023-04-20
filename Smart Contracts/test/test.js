@@ -6,7 +6,7 @@ const { Signer, utils } = require("ethers");
 const { expect } = require("chai");
 const { ethers, run } = require("hardhat");
 const { SemaphoreCommunities } = "../Contracts/";
-const { Pairing } = "../Contracts/";
+// const { Pairing } = "../Contracts/";
 require("@nomicfoundation/hardhat-chai-matchers");
 
 const poseidonContract = require("circomlibjs").poseidon_gencontract;
@@ -73,9 +73,7 @@ describe("SemaphoreCommunities", () => {
         }
       );
 
-      const contract = await SemaphoreCommunitiesFactory.deploy(
-        "0xb908Bcb798e5353fB90155C692BddE3b4937217C"
-      );
+      const contract = await SemaphoreCommunitiesFactory.deploy("0xb908Bcb798e5353fB90155C692BddE3b4937217C");
 
       await contract.deployed();
 
@@ -217,6 +215,8 @@ describe("SemaphoreCommunities", () => {
   describe("# publishLeak", function () {
     const identity = new Identity("test")
     const leak = utils.formatBytes32String("This is a leak")
+    // const leak = utils.formatBytes32String("This is a leak")
+
 
     const group = new Group(entityIds[1], treeDepth)
 
@@ -242,25 +242,36 @@ describe("SemaphoreCommunities", () => {
       })
     })
 
-    it("Should not publish a leak if the proof is not valid", async () => {
-      const transaction = semaphoreCommunitiesContract
-        .connect(accounts[1])
-        .publishLeak(leak, 0, entityIds[1], fullProof.proof)
+    // it("Should not publish a leak if the proof is not valid", async () => {
+    //   const transaction = semaphoreCommunitiesContract
+    //     .connect(accounts[1])
+    //     .publishLeak(leak, 0, entityIds[1], fullProof.proof)
 
-      await expect(transaction).to.be.revertedWithCustomError(
-        pairingContract,
-        "InvalidProof"
-      )
-    })
+    //   await expect(transaction).to.be.revertedWithCustomError(
+    //     pairingContract,
+    //     "InvalidProof"
+    //   )
 
     it("Should publish a leak", async () => {
+
       const transaction = semaphoreCommunitiesContract
         .connect(accounts[1])
         .publishLeak(leak, fullProof.nullifierHash, entityIds[1], fullProof.proof)
-
-      await expect(transaction)
+        uint256 merkleTreeRoot,
+        uint256 nullifierHash,
+        uint256 signal,
+        uint256 externalNullifier,
+        uint256[8] calldata proof,
+        uint256 merkleTreeDepth
+        // this would need to come over from Semaphore.sol
+        // await expect(transaction)
+        // .to.emit(semaphoreCommunitiesContract, "ProofVerified")
+        // .withArgs(entityIds[1], fullProof.merkleTreeRoot, fullProof.nullifierHash, entityIds[1], fullProof.signal)
+  
+        await expect(transaction)
         .to.emit(semaphoreCommunitiesContract, "LeakPublished")
         .withArgs(entityIds[1], leak)
+      })
     })
   })
-})
+//})

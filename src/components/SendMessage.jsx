@@ -115,7 +115,7 @@ console.log("vProof: " + vProof);
   const tx = await contract.publishLeak(
     _leakMessage,
     fullProof.nullifierHash,
-    _entityID,
+    externalNullifier,
     fullProof.proof, { gasLimit: 1000000, nonce: nonce || undefined }
   );
   console.log("Success!");
