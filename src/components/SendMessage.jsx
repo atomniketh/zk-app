@@ -22,8 +22,15 @@ const clearCookie = async () => {
 
 // Remove after testing ++++++++++++++++++++++++++++++++++++++++++++++++
 const checkGroupInfo = async () => {
-
-    
+  const queryParams = new URLSearchParams(window.location.search);
+  const _entityID = queryParams.get("entityID");
+  let contract = new ethers.Contract(
+    semaphoreCommunitiesAddress,
+    SemaphoreCommunitiesABI.abi,
+    signer
+  );
+  const groupMTRoot = await contract.getMerkleTreeRoot(_entityID);
+  console.log("GroupMTRoot: " + groupMTRoot);
 
   };
   // Remove after testing ++++++++++++++++++++++++++++++++++++++++++++++++
@@ -56,7 +63,7 @@ const submitMessage = async () => {
   const _entityID = queryParams.get("entityID");
   console.log("entityID Value: " + BigInt(_entityID));
   // console.log(_entityID + " " + _memberCommitment);
-  const group = new Group(BigInt(_entityID), 16);
+  const group = new Group(parseInt(_entityID), 16);
   console.log("Group root: " + group.root);
   const externalNullifier = utils.formatBytes32String("Topic");
   const signal = document.getElementById("leakMessage").value;
@@ -70,22 +77,46 @@ const submitMessage = async () => {
   const idIndex = group.indexOf(identity.commitment);
   console.log("idIndex: " + idIndex);
 
+
   const groupProof = group.generateMerkleProof(idIndex);
     console.log("groupProof leaf: " + groupProof.leaf);
     console.log("groupProof root: " + groupProof.root);
+    console.log("_entityID: " + _entityID);
+
+    console.log("******* Group Info: *********************************");
+    console.log("GroupID: " + group.id);
+    console.log("Group Root: " + group.root);
+    console.log("Group Depth: " + group.depth);
+    console.log("Group zeroValue: " + group.zeroValue);
+    console.log("Group Leaves: " + group.numberOfLeaves);
+    console.log("*******  End of Group Info *********************************");
+
+   
+    let provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+    await provider.send("eth_requestAccounts", []);
+    const signer = provider.getSigner();
+    let contract = new ethers.Contract(
+      semaphoreCommunitiesAddress,
+      SemaphoreCommunitiesABI.abi,
+      signer
+    );
+
+    const groupMTRoot = await contract.getMerkleTreeRoot(_entityID);
+    console.log("GroupMTRoot: " + groupMTRoot);
+    const groupMTRootInt = BigInt(groupMTRoot);
+    console.log("It is: " + typeof groupMTRootInt);
+
 
     console.log("******* Generating Proof With: *********************************");
     console.log("identity: " + identity);
-    console.log("group: " + group);
+    console.log("groupMTRoot: " + groupMTRoot);
     console.log("externalNullifier: " + externalNullifier);
     console.log("_leakMessage: " + _leakMessage);
     console.log("*******  End of Generating Proof With: *********************************");
-    
-    
 
   const fullProof = await generateProof(
     identity,
-    group,
+    groupMTRoot,
     externalNullifier,
     _leakMessage
   );
@@ -93,15 +124,6 @@ const submitMessage = async () => {
 
 const vProof = await verifyProof(fullProof, 16);
 console.log("vProof: " + vProof);
-
-  let provider = new ethers.providers.Web3Provider(window.ethereum, "any");
-  await provider.send("eth_requestAccounts", []);
-  const signer = provider.getSigner();
-  let contract = new ethers.Contract(
-    semaphoreCommunitiesAddress,
-    SemaphoreCommunitiesABI.abi,
-    signer
-  );
 
   let nonce = await signer.getTransactionCount();
 

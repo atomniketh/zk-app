@@ -21,6 +21,11 @@ async function getProof() {
   const identity2 = new Identity();
   group.addMember(identity2.commitment);
 
+  // console.log("GroupID: " + group.id);
+  // console.log("Group Root: " + group.root);
+  // console.log("Group Depth: " + group.depth);
+  // console.log("Group zeroValue: " + group.zeroValue);
+  // console.log("Group Leaves: " + group.numberOfLeaves);
 
   const userName = "0x636d73746f6e6500000000000000000000000000000000000000000000000000";
 

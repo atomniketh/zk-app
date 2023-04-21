@@ -16,6 +16,7 @@ class ComponentPage extends React.Component {
     };
   }
 
+
   async componentDidMount() {
     try {
       let provider = new ethers.providers.Web3Provider(window.ethereum, "any");
@@ -37,19 +38,28 @@ class ComponentPage extends React.Component {
 
       const allGroups = [];
       let groupInfo;
+      let groupMTRoot;
       for (let index = 0; index < numberOfEntities; index++) {
         groupInfo = await contract.allEntities(index);
+        groupMTRoot = await contract.getMerkleTreeRoot(groupInfo.idEntity);
         allGroups[index] = groupInfo;
-        //console.log(groupInfo);
+        // allGroups[index] = groupMTRoot;
+        console.log("Group " + groupInfo.idEntity + " MerkleTreeRoot: " + groupMTRoot);
+         //console.log(groupInfo);
         // console.log(`entityName is ${groupInfo.entityName}`);
         // console.log(`entityEditor is ${groupInfo.entityEditor}`);
-        console.log(`idEntity is ${groupInfo.root}`);
+        // console.log(`idEntity is ${groupInfo.root}`);
       }
       this.setState({ allGroups });
     } catch (error) {
       console.error(error);
     }
+    const checkGroupInfo = async () => {
+      document.getElementById("theProof").value = await contract.getMerkleTreeRoot(item.idEntity);
   }
+  }
+
+
 
   render() {
     // const { allGroups } = this.state;
@@ -86,8 +96,9 @@ Current Verifier Contract Address is: { currentVerifierContract }  <Link to="/Up
               <React.Fragment key={item.idEntity.toString()}>
                 <tr>
                   <td>{item.idEntity.toString()}</td>
-                  <td>{item.entityName.toString()}</td>
-                  {/* <td>{item.entityEditor.toString()}</td> */}
+                  <td>{item.entityName.toString()} {" "} {item.root}
+                  </td>
+
                   <td> <a href={`/CreateIdentity?entityID=${item.idEntity.toString()}&entityName=${item.entityName.toString()}&entityEditor=${item.entityEditor.toString()}`}>Request Access</a> | <a href={`/SendMessage?entityID=${item.idEntity.toString()}&entityName=${item.entityName.toString()}`}>Send Message</a> | See Messages</td>
                   <td> <a href={`/UpdateGroupName?index=${index}&entityID=${item.idEntity.toString()}&entityName=${item.entityName.toString()}`} >Rename</a> | <a href={`/UpdateEditor?index=${index}&entityID=${item.idEntity.toString()}&entityEditor=${item.entityEditor.toString()}`} >Reassign</a> | <a href={`/AddMember?entityID=${item.idEntity.toString()}&entityEditor=${item.entityEditor.toString()}&entityName=${item.entityName.toString()}`}>Add Member</a> | Remove Member </td>
                 </tr>

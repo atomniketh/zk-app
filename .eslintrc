@@ -1,9 +1,9 @@
 {
-  // "parserOptions": {
-  //   "ecmaVersion": 2020,
-  //   "project": ["tsconfig.json"] ,
-  //   "sourceType": "module"
-  // },
+  "parserOptions": {
+    "ecmaVersion": 2020,
+    "project": ["tsconfig.json"] ,
+    "sourceType": "module"
+  },
   "env": {
     "browser": true,
     "node": true
