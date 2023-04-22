@@ -49,7 +49,7 @@ async function signANewMessage() {
   //alert("Signed message: " + signedMessage);
 
   const { commitment } = new Identity(signedData);
-  alert("New Identity: " + commitment.toString());
+  // alert("New Identity: " + commitment.toString());
   console.log("New Identity: " + commitment.toString());
   //const identityInfo = commitment;
   localStorage.setItem("groupToJoin", commitment.toString());
@@ -60,23 +60,28 @@ async function signANewMessage() {
 
 const submitMessage = async () => {
   const queryParams = new URLSearchParams(window.location.search);
-  const _entityID = queryParams.get("entityID");
+  const _entityID = parseInt(queryParams.get("entityID"));
   console.log("entityID Value: " + BigInt(_entityID));
   // console.log(_entityID + " " + _memberCommitment);
-  const group = new Group(parseInt(_entityID), 16);
+  const group = new Group(parseInt(parseInt(_entityID)), 16);
+console.log("Group Members Beginning: " + group.members);
   console.log("Group root: " + group.root);
-  const externalNullifier = utils.formatBytes32String("Topic");
+  console.log("Group size: " + group.depth);
+
+  // const externalNullifier = utils.formatBytes32String("Topic");
+  const externalNullifier = group.root;
   const signal = document.getElementById("leakMessage").value;
   const _leakMessage = utils.formatBytes32String(signal);
   //   const { trapdoor, nullifier, commitment } = new Identity(
   //     localStorage.getItem("signedData")
   //   );
+  console.log("localStorage.getItem(signedData): " + localStorage.getItem("signedData"));
   const identity = new Identity(localStorage.getItem("signedData"));
-  
+  console.log("identity.commitment: " + identity.commitment);
   group.addMember(identity.commitment);
   const idIndex = group.indexOf(identity.commitment);
   console.log("idIndex: " + idIndex);
-
+  console.log("Group Members: " + group.members);
 
   const groupProof = group.generateMerkleProof(idIndex);
     console.log("groupProof leaf: " + groupProof.leaf);
@@ -88,7 +93,9 @@ const submitMessage = async () => {
     console.log("Group Root: " + group.root);
     console.log("Group Depth: " + group.depth);
     console.log("Group zeroValue: " + group.zeroValue);
-    console.log("Group Leaves: " + group.numberOfLeaves);
+    const thisIdsGroupMerkleProof = group.generateMerkleProof(idIndex)
+    console.log("Group MerkleProof Leaf: " + thisIdsGroupMerkleProof.leaf);
+    console.log("Group MerkleProof Root: " + thisIdsGroupMerkleProof.root);
     console.log("*******  End of Group Info *********************************");
 
    
@@ -103,43 +110,71 @@ const submitMessage = async () => {
 
     const groupMTRoot = await contract.getMerkleTreeRoot(_entityID);
     console.log("GroupMTRoot: " + groupMTRoot);
+    console.log("Raw is: " + typeof groupMTRoot);
     const groupMTRootInt = BigInt(groupMTRoot);
     console.log("It is: " + typeof groupMTRootInt);
-
+    const groupMTDepth = await contract.getMerkleTreeDepth(_entityID);
+    console.log("GroupMTDepth: " + groupMTDepth);
+    
 
     console.log("******* Generating Proof With: *********************************");
     console.log("identity: " + identity);
-    console.log("groupMTRoot: " + groupMTRoot);
+    console.log("thisIdsGroupMerkleProof: " + thisIdsGroupMerkleProof);
     console.log("externalNullifier: " + externalNullifier);
     console.log("_leakMessage: " + _leakMessage);
     console.log("*******  End of Generating Proof With: *********************************");
 
-  const fullProof = await generateProof(
+
+  //const { proof, merkleTreeRoot, nullifierHash }  
+  const { proof, merkleTreeRoot, nullifierHash } = await generateProof(
     identity,
-    groupMTRoot,
+    thisIdsGroupMerkleProof,
     externalNullifier,
     _leakMessage
   );
-  console.log("fullProof: " + fullProof.proof);
+//   console.log("fullProof: " + fullProof.proof);
 
-const vProof = await verifyProof(fullProof, 16);
-console.log("vProof: " + vProof);
+// const vProof = await verifyProof(fullProof, 16);
+// console.log("vProof: " + vProof);
 
   let nonce = await signer.getTransactionCount();
 
+  // console.log("******* Publishing Leak With: *********************************");
+  // console.log("_leakMessage: " + _leakMessage);
+  // console.log("fullProof.nullifierHash: " + fullProof.nullifierHash);
+  // console.log("_entityID: " + _entityID);
+  // console.log("fullProof.proof: " + fullProof.proof);
+  // console.log("*******  End of Publishing Leak With: *********************************");
+  
   console.log("******* Publishing Leak With: *********************************");
   console.log("_leakMessage: " + _leakMessage);
-  console.log("fullProof.nullifierHash: " + fullProof.nullifierHash);
-  console.log("_entityID: " + _entityID);
-  console.log("fullProof.proof: " + fullProof.proof);
+  console.log("nullifierHash: " + nullifierHash);
+  console.log("_entityID: " + _entityID + " " + typeof _entityID);
+  console.log("proof: " + proof);
   console.log("*******  End of Publishing Leak With: *********************************");
-  
+
+  //const transaction = await contract.sendFeedback(feedback, merkleTreeRoot, nullifierHash, proof)
+
+  // const tx = await contract.publishLeak(
+  //   _leakMessage,
+  //   nullifierHash,
+  //   parseInt(_entityID),
+  //   proof, { gasLimit: 1000000, nonce: nonce || undefined }
+  // );
+
   const tx = await contract.publishLeak(
     _leakMessage,
-    fullProof.nullifierHash,
-    externalNullifier,
-    fullProof.proof, { gasLimit: 1000000, nonce: nonce || undefined }
+    nullifierHash,
+    parseInt(_entityID),
+    proof
   );
+
+  // const tx = await contract.publishLeak(
+  //   _leakMessage,
+  //   fullProof.nullifierHash,
+  //   externalNullifier,
+  //   fullProof.proof, { gasLimit: 1000000, nonce: nonce || undefined }
+  // );
   console.log("Success!");
   console.log(`Transaction hash: https://goerli.etherscan.io/tx/${tx.hash}`);
   document.getElementById("leakMessage").value = "";

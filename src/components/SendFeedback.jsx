@@ -10,17 +10,27 @@ import FeedbackContractABI from '../abi/Feedback.json';
 // console.log("Commitment: " + localStorage.getItem('myCommitment'));
 
 async function getProof() {
-  const feedbackAddress = "0x0C339f45aB084F48C60F82Fecb1844C72a6CcaDa";
-  const groupID = "444";
+  const feedbackAddress = "0x7832A5B527ce8c7d6282e7FbA53F3A9A598D67Ed";
+  const groupID = "32474";
   let provider = new ethers.providers.Web3Provider(window.ethereum, "any");
-  const group = new Group(groupID);
+  const group = new Group(parseInt(groupID));
   //const externalNullifier = utils.formatBytes32String("Topic");
-  const signal = utils.formatBytes32String("Hello world");
+  //const signal = utils.formatBytes32String("Hello world");
+  const signal = ethers.BigNumber.from(utils.formatBytes32String("Hello world")).toString();
+//  const signal = BigNumber.from(utils.formatBytes32String("Hello world")).toString();
+  console.log("signal: " + signal);
   // let textareaValue = document.getElementById("messageTxt").value;
   // const feedbackBytes32 = formatBytes32String(textareaValue);
-  const identity2 = new Identity();
-  group.addMember(identity2.commitment);
-
+  const identity2 = new Identity("testing");
+  if (group.indexOf(identity2.commitment) == -1) {
+    group.addMember(identity2.commitment);    
+  } else {
+    console.log("Identity already exists in group");
+  }
+  const idIndex = group.indexOf(identity2.commitment);
+  console.log("identity2.commitment: " + identity2.commitment);
+  console.log("idIndex: " + idIndex);
+  const groupProof = group.generateMerkleProof(idIndex);
   // console.log("GroupID: " + group.id);
   // console.log("Group Root: " + group.root);
   // console.log("Group Depth: " + group.depth);
@@ -33,7 +43,7 @@ async function getProof() {
   const signer = provider.getSigner();
   //let userAddress = await signer.getAddress();
   let contract = new ethers.Contract(feedbackAddress, FeedbackContractABI.abi, signer);
-  const tx = await contract.joinGroup(identity2.commitment, userName);
+  const tx = await contract.joinGroup(identity2.commitment);
   console.log(`Transaction hash: https://goerli.etherscan.io/tx/${tx.hash}`);
   const receipt = await tx.wait();
   console.log(`Transaction confirmed in block ${receipt.blockNumber}`);
@@ -41,7 +51,7 @@ async function getProof() {
 
 
   const externalNullifier = group.root;
-  const fullProof = await generateProof(identity2, group, externalNullifier, signal);
+  const fullProof = await generateProof(identity2, groupProof, externalNullifier, signal);
 
   // await provider.send("eth_requestAccounts", []);
   // const signer = provider.getSigner();
@@ -67,7 +77,7 @@ async function getProof() {
   // const gasEstimated = await contract.estimateGas.sendFeedback(signal, externalNullifier, idNullifier, proofString, { gasLimit: 1000000, nonce: nonce || undefined, });
   // console.log("gasEstimated: " + gasEstimated);
 
-  const txGreet = await contract.sendFeedback(signal, externalNullifier, idNullifier, proofString, { gasLimit: 1000000, nonce: nonce || undefined, });
+  const txGreet = await contract.sendFeedback(signal, externalNullifier, idNullifier, fullProof.proof, { gasLimit: 1000000, nonce: nonce || undefined, });
   console.log(`Transaction hash: https://goerli.etherscan.io/tx/${txGreet.hash}`);
   const receiptGreet = await txGreet.wait();
   console.log(`Transaction confirmed in block ${receiptGreet.blockNumber}`);

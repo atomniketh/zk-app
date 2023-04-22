@@ -61,8 +61,7 @@ const UpdateEditor = () => {
         <button
           type="button"
           onClick={updateEditor}
-          className="w3-button w3-block w3-section w3-blue w3-ripple w3-padding"
-        >
+          className="w3-button w3-block w3-section w3-blue w3-ripple w3-padding">
           Click here to update Editor Address.
         </button>
       </p>

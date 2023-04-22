@@ -6,7 +6,7 @@ import { Identity } from "@semaphore-protocol/identity";
 
 //const { identity, trapdoor, nullifier, commitment } = new Identity();
 const identity = new Identity()
-const feedbackAddress = "0x0C339f45aB084F48C60F82Fecb1844C72a6CcaDa"
+const feedbackAddress = "0x7832A5B527ce8c7d6282e7FbA53F3A9A598D67Ed"
 // block number when the smart contract was deployed
 // const startBlock = 8593998;
 const userName = "0x636d73746f6e6500000000000000000000000000000000000000000000000000";

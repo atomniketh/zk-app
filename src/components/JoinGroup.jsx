@@ -4,7 +4,7 @@ import { Identity } from "@semaphore-protocol/identity";
 import { ethers } from "ethers";
 import SemaphoreCommunitiesABI from '../abi/SemaphoreCommunities.json';
 
-const semaphoreCommunitiesAddress = "0x8C8382dfA4505fE2d5b3EfC0e994951882A7e5ec";
+const semaphoreCommunitiesAddress = process.env.REACT_APP_CONTRACT;
 
 async function addWhistleblower() {
     let groupName = document.getElementById("groupName").value;

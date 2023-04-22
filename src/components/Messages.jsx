@@ -1,9 +1,10 @@
 import React from 'react';
 import { Link } from "react-router-dom";
-import { SemaphoreEthers } from "@semaphore-protocol/data";
+import { SemaphoreEthers, SemaphoreSubgraph } from "@semaphore-protocol/data";
 import Web3 from "web3";
 
 const semaphoreEthers = new SemaphoreEthers();
+const semaphoreSubgraph = new SemaphoreSubgraph()
 
 class ComponentPage extends React.Component {
     constructor() {
@@ -24,13 +25,22 @@ class ComponentPage extends React.Component {
       
     async componentDidMount() {
       try {
-         const groupIDNum = "444";
-         // const groupIDs = await semaphoreEthers.getGroupIds();
-         // console.log(groupIDs);
-         const admin = await semaphoreEthers.getGroupAdmin(groupIDNum);
-         this.setState({ groupAdmin: admin });
-         const urlLink = "https://goerli.etherscan.io/address/" + this.state.groupAdmin;
-         this.setState({url: urlLink});
+         const groupIDNum = "32473";
+         const graphIDs = await semaphoreSubgraph.getGroupIds();
+         console.log(graphIDs);
+         const groups = await semaphoreSubgraph.getGroups()
+          console.log(groups);
+          const myGroup = await semaphoreSubgraph.getGroup("32474", { admin: true, members: true, verifiedProofs: true });
+          console.log(myGroup);
+          console.log(myGroup.admin);
+          console.log(myGroup.members);
+          console.log(myGroup.verifiedProofs);
+          console.log(myGroup.merkleTree);
+          console.log(myGroup.merkleTree.root);
+        //  const admin = await semaphoreEthers.getGroupAdmin(groupIDNum);
+        //  this.setState({ groupAdmin: admin });
+        //  const urlLink = "https://goerli.etherscan.io/address/" + this.state.groupAdmin;
+        //  this.setState({url: urlLink});
  
          await semaphoreEthers.getGroup(groupIDNum).then((result) => {
            this.setState({ groupID: result.id });
