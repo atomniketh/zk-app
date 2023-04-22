@@ -2,29 +2,31 @@
 pragma solidity ^0.8.4;
 
 import "@semaphore-protocol/contracts/interfaces/ISemaphore.sol";
+import "@openzeppelin/contracts/access/AccessControl.sol";
 
 contract Feedback {
     ISemaphore public semaphore;
     uint256 public groupId;
     string groupName;
 
-    // @dev Setting the initial entityID to 55555500000 to avoid conflicts 
-    // with the SemaphoreGroups contract uncertainty in which IDs 
+    // @dev Setting the initial groupID to 55555500000 to avoid conflicts
+    // with the SemaphoreGroups contract uncertainty in which IDs
     // are already in use.
-    // @param Generate a unique entityID
-    uint256 private entityCounter = 55555500000;
-    
-    /// @dev A mapping of entityIDs to group names
+    // @param Generate a unique groupID
+    uint256 private groupCounter = 55555500000;
+
+    /// @dev A mapping of groupIDs to group names
     mapping(uint256 => string) public groupNames;
-    
-    /// @dev Generates a unique entityID
-    function generateEntityID() internal returns (uint256) {
-        return ++entityCounter;
+
+    /// @dev Generates a unique groupID
+    function generateGroupID() internal returns (uint256) {
+        return ++groupCounter;
     }
 
     constructor(address semaphoreAddress, string memory _groupName) {
+        _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
         semaphore = ISemaphore(semaphoreAddress);
-        groupId = generateEntityID();
+        groupId = generateGroupID();
         groupNames[groupId] = _groupName;
         semaphore.createGroup(groupId, 20, address(this));
     }
@@ -34,7 +36,7 @@ contract Feedback {
     }
 
     function createNewGroup(string memory _groupName) external {
-        groupId = generateEntityID();
+        groupId = generateGroupID();
         groupNames[groupId] = _groupName;
         semaphore.createGroup(groupId, 20, address(this));
     }
@@ -46,6 +48,32 @@ contract Feedback {
         uint256 nullifierHash,
         uint256[8] calldata proof
     ) external {
-        semaphore.verifyProof(_groupID, merkleTreeRoot, feedback, nullifierHash, _groupID, proof);
+        semaphore.verifyProof(
+            _groupID,
+            merkleTreeRoot,
+            feedback,
+            nullifierHash,
+            _groupID,
+            proof
+        );
+    }
+
+    /// @dev Updates the Semaphore Contract.
+    /// Only the contract admin can call this function.
+    /// @param _newSemaphoreContract: Address from the Semaphore.sol row
+    /// located at https://semaphore.appliedzkp.org/docs/deployed-contracts#semaphore
+    function updateSemaphoreContract(
+        address _newSemaphoreContract
+    ) public {
+        semaphore = ISemaphore(_newSemaphoreContract);
+    }
+
+    /// @dev Updates the Name of the Group.
+    /// @param _groupName: New group name.
+    function updateGroupName(
+        string calldata _groupName,
+        uint256 _groupID
+    ) public {
+        groupNames[_groupID] = _groupName;
     }
 }
