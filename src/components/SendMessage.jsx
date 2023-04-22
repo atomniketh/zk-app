@@ -4,6 +4,10 @@ import { ethers, utils } from "ethers";
 import { Identity } from "@semaphore-protocol/identity";
 import { Group } from "@semaphore-protocol/group";
 import { generateProof, verifyProof } from "@semaphore-protocol/proof";
+import { SemaphoreEthers } from "@semaphore-protocol/data"
+import { SemaphoreSubgraph } from "@semaphore-protocol/data"
+
+// const semaphoreEthers = new SemaphoreEthers()
 import "font-awesome/css/font-awesome.min.css";
 import SemaphoreCommunitiesABI from "../abi/SemaphoreCommunities.json";
 
@@ -31,6 +35,17 @@ const checkGroupInfo = async () => {
   );
   const groupMTRoot = await contract.getMerkleTreeRoot(_entityID);
   console.log("GroupMTRoot: " + groupMTRoot);
+
+  const semaphoreSubgraph = new SemaphoreSubgraph("goerli");
+  const groupIds = await semaphoreSubgraph.getGroupIds();
+  console.log("Group IDs: " + groupIds);
+
+  const semaphoreEthers = new SemaphoreEthers("goerli", {
+    address: process.env.REACT_APP_CONTRACT,
+    startBlock: 0
+  })
+  const members = await semaphoreEthers.getGroupMembers(_entityID)
+  console.log("Group Members: " + members);
 
   };
   // Remove after testing ++++++++++++++++++++++++++++++++++++++++++++++++

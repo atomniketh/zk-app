@@ -8,10 +8,24 @@ contract Feedback {
     uint256 public groupId;
     string groupName;
 
-    constructor(address semaphoreAddress, uint256 _groupId, string memory _groupName) {
+    // @dev Setting the initial entityID to 55555500000 to avoid conflicts 
+    // with the SemaphoreGroups contract uncertainty in which IDs 
+    // are already in use.
+    // @param Generate a unique entityID
+    uint256 private entityCounter = 55555500000;
+    
+    /// @dev A mapping of entityIDs to group names
+    mapping(uint256 => string) public groupNames;
+    
+    /// @dev Generates a unique entityID
+    function generateEntityID() internal returns (uint256) {
+        return ++entityCounter;
+    }
+
+    constructor(address semaphoreAddress, string memory _groupName) {
         semaphore = ISemaphore(semaphoreAddress);
-        groupId = _groupId;
-        groupName = _groupName;
+        groupId = generateEntityID();
+        groupNames[groupId] = _groupName;
         semaphore.createGroup(groupId, 20, address(this));
     }
 
@@ -19,12 +33,19 @@ contract Feedback {
         semaphore.addMember(groupId, identityCommitment);
     }
 
+    function createNewGroup(string memory _groupName) external {
+        groupId = generateEntityID();
+        groupNames[groupId] = _groupName;
+        semaphore.createGroup(groupId, 20, address(this));
+    }
+
     function sendFeedback(
         uint256 feedback,
+        uint256 _groupID,
         uint256 merkleTreeRoot,
         uint256 nullifierHash,
         uint256[8] calldata proof
     ) external {
-        semaphore.verifyProof(groupId, merkleTreeRoot, feedback, nullifierHash, groupId, proof);
+        semaphore.verifyProof(_groupID, merkleTreeRoot, feedback, nullifierHash, _groupID, proof);
     }
 }
