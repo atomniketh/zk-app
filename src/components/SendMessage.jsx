@@ -1,13 +1,13 @@
+/* eslint-disable no-console */
 import React from "react";
 import { Link } from "react-router-dom";
-import { ethers, utils } from "ethers";
+import { BigNumber, ethers, utils } from "ethers";
 import { Identity } from "@semaphore-protocol/identity";
 import { Group } from "@semaphore-protocol/group";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { generateProof, verifyProof } from "@semaphore-protocol/proof";
-import { SemaphoreEthers } from "@semaphore-protocol/data"
-import { SemaphoreSubgraph } from "@semaphore-protocol/data"
+import { SemaphoreEthers, SemaphoreSubgraph } from "@semaphore-protocol/data"
 
-// const semaphoreEthers = new SemaphoreEthers()
 import "font-awesome/css/font-awesome.min.css";
 import SemaphoreCommunitiesABI from "../abi/SemaphoreCommunities.json";
 
@@ -28,45 +28,45 @@ const clearCookie = async () => {
 const checkGroupInfo = async () => {
   const queryParams = new URLSearchParams(window.location.search);
   const _entityID = queryParams.get("entityID");
-  let contract = new ethers.Contract(
+  const contract = new ethers.Contract(
     semaphoreCommunitiesAddress,
     SemaphoreCommunitiesABI.abi,
     signer
   );
   const groupMTRoot = await contract.getMerkleTreeRoot(_entityID);
-  console.log("GroupMTRoot: " + groupMTRoot);
+  console.log(`Group MTRoot: ${  groupMTRoot}`);
 
   const semaphoreSubgraph = new SemaphoreSubgraph("goerli");
   const groupIds = await semaphoreSubgraph.getGroupIds();
-  console.log("Group IDs: " + groupIds);
+  console.log(`Group IDs: ${  groupIds}`);
 
   const semaphoreEthers = new SemaphoreEthers("goerli", {
     address: process.env.REACT_APP_CONTRACT,
     startBlock: 0
   })
-  const members = await semaphoreEthers.getGroupMembers(_entityID)
-  console.log("Group Members: " + members);
+  const members = await semaphoreEthers.getGroupMembers("32473")
+  console.log(`Group Members: ${  members}`);
 
   };
   // Remove after testing ++++++++++++++++++++++++++++++++++++++++++++++++
 
 
 async function signANewMessage() {
-  const queryParams = new URLSearchParams(window.location.search);
-  const _entityID = queryParams.get("entityID");
-  const _entityName = queryParams.get("entityName");
-  const groupToJoin = "identity" + _entityID;
+  // const queryParams = new URLSearchParams(window.location.search);
+  // const _entityID = queryParams.get("entityID");
+  // const _entityName = queryParams.get("entityName");
+  // const groupToJoin = `identity${  _entityID}`;
 
   const messageToSign = "zkCommunities";
 
   const signedData = await signer.signMessage(messageToSign);
-  //setSignedMessage(signedData);
-  //alert("Signed message: " + signedMessage);
+  // setSignedMessage(signedData);
+  // alert("Signed message: " + signedMessage);
 
   const { commitment } = new Identity(signedData);
   // alert("New Identity: " + commitment.toString());
-  console.log("New Identity: " + commitment.toString());
-  //const identityInfo = commitment;
+  console.log(`New Identity: ${  commitment.toString()}`);
+  // const identityInfo = commitment;
   localStorage.setItem("groupToJoin", commitment.toString());
   // console.log(
   //   "Identity now is updated in local storage as: " + localStorage.getItem(groupToJoin)
@@ -75,121 +75,97 @@ async function signANewMessage() {
 
 const submitMessage = async () => {
   const queryParams = new URLSearchParams(window.location.search);
-  const _entityID = parseInt(queryParams.get("entityID"));
-  console.log("entityID Value: " + BigInt(_entityID));
+  const _entityID = parseInt(queryParams.get("entityID"), 10);
+  // eslint-disable-next-line no-undef
+  console.log(`entityID Value: ${  BigInt(_entityID)}`);
   // console.log(_entityID + " " + _memberCommitment);
-  const group = new Group(parseInt(parseInt(_entityID)), 16);
-console.log("Group Members Beginning: " + group.members);
-  console.log("Group root: " + group.root);
-  console.log("Group size: " + group.depth);
+  const group = new Group(parseInt(_entityID, 10), 20);
+console.log(`Group Members Beginning: ${  group.members}`);
+  console.log(`Group root: ${  group.root}`);
+  console.log(`Group size: ${  group.depth}`);
 
   // const externalNullifier = utils.formatBytes32String("Topic");
   const externalNullifier = group.root;
   const signal = document.getElementById("leakMessage").value;
-  const _leakMessage = utils.formatBytes32String(signal);
-  //   const { trapdoor, nullifier, commitment } = new Identity(
-  //     localStorage.getItem("signedData")
-  //   );
-  console.log("localStorage.getItem(signedData): " + localStorage.getItem("signedData"));
+  const _leakMessage = BigNumber.from(utils.formatBytes32String(signal)).toString();
+  console.log(`localStorage.getItem(signedData): ${  localStorage.getItem("signedData")}`);
   const identity = new Identity(localStorage.getItem("signedData"));
-  console.log("identity.commitment: " + identity.commitment);
+  console.log(`identity.commitment: ${  identity.commitment}`);
   group.addMember(identity.commitment);
   const idIndex = group.indexOf(identity.commitment);
-  console.log("idIndex: " + idIndex);
-  console.log("Group Members: " + group.members);
+  console.log(`idIndex: ${  idIndex}`);
+  console.log(`Group Members: ${  group.members}`);
 
   const groupProof = group.generateMerkleProof(idIndex);
-    console.log("groupProof leaf: " + groupProof.leaf);
-    console.log("groupProof root: " + groupProof.root);
-    console.log("_entityID: " + _entityID);
+    console.log(`groupProof leaf: ${  groupProof.leaf}`);
+    console.log(`groupProof root: ${  groupProof.root}`);
+    console.log(`_entityID: ${  _entityID}`);
 
     console.log("******* Group Info: *********************************");
-    console.log("GroupID: " + group.id);
-    console.log("Group Root: " + group.root);
-    console.log("Group Depth: " + group.depth);
-    console.log("Group zeroValue: " + group.zeroValue);
+    console.log(`GroupID: ${  group.id}`);
+    console.log(`Group Root: ${  group.root}`);
+    console.log(`Group Depth: ${  group.depth}`);
+    console.log(`Group zeroValue: ${  group.zeroValue}`);
     const thisIdsGroupMerkleProof = group.generateMerkleProof(idIndex)
-    console.log("Group MerkleProof Leaf: " + thisIdsGroupMerkleProof.leaf);
-    console.log("Group MerkleProof Root: " + thisIdsGroupMerkleProof.root);
+    console.log(`Group MerkleProof Leaf: ${  thisIdsGroupMerkleProof.leaf}`);
+    console.log(`Group MerkleProof Root: ${  thisIdsGroupMerkleProof.root}`);
     console.log("*******  End of Group Info *********************************");
 
    
-    let provider = new ethers.providers.Web3Provider(window.ethereum, "any");
     await provider.send("eth_requestAccounts", []);
-    const signer = provider.getSigner();
-    let contract = new ethers.Contract(
+        const contract = new ethers.Contract(
       semaphoreCommunitiesAddress,
       SemaphoreCommunitiesABI.abi,
       signer
     );
 
     const groupMTRoot = await contract.getMerkleTreeRoot(_entityID);
-    console.log("GroupMTRoot: " + groupMTRoot);
-    console.log("Raw is: " + typeof groupMTRoot);
+    console.log(`GroupMTRoot: ${  groupMTRoot}`);
+    console.log(`Raw is: ${  typeof groupMTRoot}`);
+      // eslint-disable-next-line no-undef
     const groupMTRootInt = BigInt(groupMTRoot);
-    console.log("It is: " + typeof groupMTRootInt);
+    console.log(`Int is: ${  typeof groupMTRootInt}`);
     const groupMTDepth = await contract.getMerkleTreeDepth(_entityID);
-    console.log("GroupMTDepth: " + groupMTDepth);
+    console.log(`GroupMTDepth: ${  groupMTDepth}`);
     
 
     console.log("******* Generating Proof With: *********************************");
-    console.log("identity: " + identity);
-    console.log("thisIdsGroupMerkleProof: " + thisIdsGroupMerkleProof);
-    console.log("externalNullifier: " + externalNullifier);
-    console.log("_leakMessage: " + _leakMessage);
+    console.log(`identity: ${  identity}`);
+    console.log(`thisIdsGroupMerkleProof: ${  thisIdsGroupMerkleProof }`);
+    console.log(`externalNullifier: ${  externalNullifier}`);
+    console.log(`_leakMessage: ${  _leakMessage}`);
     console.log("*******  End of Generating Proof With: *********************************");
 
 
-  //const { proof, merkleTreeRoot, nullifierHash }  
-  const { proof, merkleTreeRoot, nullifierHash } = await generateProof(
-    identity,
-    thisIdsGroupMerkleProof,
-    externalNullifier,
-    _leakMessage
-  );
-//   console.log("fullProof: " + fullProof.proof);
+    const fullProof = await generateProof(
+      identity,
+      group,
+      _entityID,
+      _leakMessage
+  )
 
-// const vProof = await verifyProof(fullProof, 16);
-// console.log("vProof: " + vProof);
+  console.log(`fullProof: ${ fullProof.proof }`);
 
-  let nonce = await signer.getTransactionCount();
+const vProof = await verifyProof(fullProof, 20);
+console.log(`vProof: ${  vProof}`);
 
-  // console.log("******* Publishing Leak With: *********************************");
-  // console.log("_leakMessage: " + _leakMessage);
-  // console.log("fullProof.nullifierHash: " + fullProof.nullifierHash);
-  // console.log("_entityID: " + _entityID);
-  // console.log("fullProof.proof: " + fullProof.proof);
-  // console.log("*******  End of Publishing Leak With: *********************************");
-  
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const nonce = await signer.getTransactionCount();
+
   console.log("******* Publishing Leak With: *********************************");
-  console.log("_leakMessage: " + _leakMessage);
-  console.log("nullifierHash: " + nullifierHash);
-  console.log("_entityID: " + _entityID + " " + typeof _entityID);
-  console.log("proof: " + proof);
+  console.log(`_leakMessage: ${  _leakMessage}`);
+  console.log(`nullifierHash: ${  fullProof.nullifierHash}`);
+  console.log(`_entityID: ${  _entityID  } ${  typeof _entityID}`);
+  console.log(`proof: ${  fullProof.proof}`);
   console.log("*******  End of Publishing Leak With: *********************************");
-
-  //const transaction = await contract.sendFeedback(feedback, merkleTreeRoot, nullifierHash, proof)
-
-  // const tx = await contract.publishLeak(
-  //   _leakMessage,
-  //   nullifierHash,
-  //   parseInt(_entityID),
-  //   proof, { gasLimit: 1000000, nonce: nonce || undefined }
-  // );
 
   const tx = await contract.publishLeak(
     _leakMessage,
-    nullifierHash,
-    parseInt(_entityID),
-    proof
+    fullProof.merkleTreeRoot,
+    fullProof.nullifierHash,
+    fullProof.proof, { gasLimit: 1000000, nonce: nonce || undefined }
   );
 
-  // const tx = await contract.publishLeak(
-  //   _leakMessage,
-  //   fullProof.nullifierHash,
-  //   externalNullifier,
-  //   fullProof.proof, { gasLimit: 1000000, nonce: nonce || undefined }
-  // );
   console.log("Success!");
   console.log(`Transaction hash: https://goerli.etherscan.io/tx/${tx.hash}`);
   document.getElementById("leakMessage").value = "";
@@ -203,7 +179,7 @@ const sendMessage = () => {
   const groupName = queryParams.get("entityName");
 
   console.log(
-    "Identity now in local storage is: " + localStorage.getItem("groupToJoin")
+    `Identity now in local storage is: ${  localStorage.getItem("groupToJoin")}`
   );
 
   return (
@@ -223,7 +199,7 @@ const sendMessage = () => {
         <h2 className="w3-center">Send Message to '{groupName}' Group: </h2>
 
         <div className="w3-row w3-section">
-          <div className="w3-col" style={{ width: 50 + "px" }}>
+          <div className="w3-col" style={{ width: `${50  }px` }}>
             <i className="w3-xxlarge fa fa-envelope-o"></i>
           </div>
           <div className="w3-rest">

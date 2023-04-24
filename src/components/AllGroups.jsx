@@ -1,10 +1,12 @@
+/* eslint-disable no-console */
 import React from "react";
 import { Link } from "react-router-dom";
 import { ethers } from "ethers";
 import SemaphoreCommunitiesABI from "../abi/SemaphoreCommunities.json";
+
 const semaphoreCommunitiesAddress = process.env.REACT_APP_CONTRACT;
 
-//"0x33F97669eD732Fa05924015863772118C9D4e236";
+// "0x33F97669eD732Fa05924015863772118C9D4e236";
  // "0x8C8382dfA4505fE2d5b3EfC0e994951882A7e5ec";
 
 class ComponentPage extends React.Component {
@@ -19,10 +21,10 @@ class ComponentPage extends React.Component {
 
   async componentDidMount() {
     try {
-      let provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+      const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
       await provider.send("eth_requestAccounts", []);
       const signer = provider.getSigner();
-      let contract = new ethers.Contract(
+      const contract = new ethers.Contract(
         semaphoreCommunitiesAddress,
         SemaphoreCommunitiesABI.abi,
         signer
@@ -39,13 +41,16 @@ class ComponentPage extends React.Component {
       const allGroups = [];
       let groupInfo;
       let groupMTRoot;
+      let groupMTDepth;
+      // eslint-disable-next-line no-plusplus
       for (let index = 0; index < numberOfEntities; index++) {
         groupInfo = await contract.allEntities(index);
         groupMTRoot = await contract.getMerkleTreeRoot(groupInfo.idEntity);
+        groupMTDepth = await contract.getMerkleTreeDepth(groupInfo.idEntity);
         allGroups[index] = groupInfo;
         // allGroups[index] = groupMTRoot;
-        console.log("Group " + groupInfo.idEntity + " MerkleTreeRoot: " + groupMTRoot);
-         //console.log(groupInfo);
+        console.log(`Group ${  groupInfo.idEntity  } MerkleTreeRoot: ${  groupMTRoot} MerkleTreeDepth: ${  groupMTDepth}`);
+         // console.log(groupInfo);
         // console.log(`entityName is ${groupInfo.entityName}`);
         // console.log(`entityEditor is ${groupInfo.entityEditor}`);
         // console.log(`idEntity is ${groupInfo.root}`);
@@ -54,9 +59,19 @@ class ComponentPage extends React.Component {
     } catch (error) {
       console.error(error);
     }
-    const checkGroupInfo = async () => {
-      document.getElementById("theProof").value = await contract.getMerkleTreeRoot(item.idEntity);
-  }
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  //   const checkGroupInfo = async () => {
+  //     const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+  //     await provider.send("eth_requestAccounts", []);
+  //     const signer = provider.getSigner();
+  //     const contract = new ethers.Contract(
+  //       semaphoreCommunitiesAddress,
+  //       SemaphoreCommunitiesABI.abi,
+  //       signer
+  //     );
+  //     // eslint-disable-next-line no-undef
+  //     document.getElementById("theProof").value = await contract.getMerkleTreeRoot(item.idEntity);
+  // }
   }
 
 

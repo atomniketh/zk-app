@@ -1,7 +1,9 @@
+/* eslint-disable no-console */
 import React from "react";
 import { Link } from "react-router-dom";
 import { ethers } from "ethers";
 import SemaphoreCommunitiesABI from "../abi/SemaphoreCommunities.json";
+
 const semaphoreCommunitiesAddress = process.env.REACT_APP_CONTRACT;
 
 async function checkEditor() {
@@ -9,31 +11,31 @@ async function checkEditor() {
   const queryParams = new URLSearchParams(window.location.search);
   const _entityID = queryParams.get("entityID");
   const _entityEditor = queryParams.get("entityEditor");
-  let provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+  const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
   await provider.send("eth_requestAccounts", []);
   const signer = provider.getSigner();
   let isEditor = false;
   if ((await signer.getAddress()) === _entityEditor) {
     isEditor = true;
-    console.log("You are the editor of the group: " + _entityID);
+    console.log(`You are the editor of the group: ${  _entityID}`);
   } else {
     isEditor = false;
-    console.log("You are not the editor of the group: " + _entityID);
-    alert("You are not the editor of the group: " + _entityID);
+    console.log(`You are not the editor of the group: ${  _entityID}`);
+    alert(`You are not the editor of the group: ${  _entityID}`);
   }
-  console.log("Are you the editor of the group: " + isEditor);
+  console.log(`Are you the editor of the group: ${  isEditor}`);
 }
 
 async function addMemberToGroup() {
   const _memberCommitment = document.getElementById("memberCommitment").value;
   const queryParams = new URLSearchParams(window.location.search);
   const _entityID = queryParams.get("entityID");
-  console.log(_entityID + " " + _memberCommitment);
+  console.log(`${_entityID  } ${  _memberCommitment}`);
 
-  let provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+  const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
   await provider.send("eth_requestAccounts", []);
   const signer = provider.getSigner();
-  let contract = new ethers.Contract(
+  const contract = new ethers.Contract(
     semaphoreCommunitiesAddress,
     SemaphoreCommunitiesABI.abi,
     signer
@@ -67,7 +69,7 @@ const addMember = () => {
         {/* <input type="hidden" id="entityID" name="entityID" value={queryParams.get("entityID")} /> */}
         <p></p>
         <label htmlFor="memberCommitment">Commitment:</label> &nbsp;
-        <div className="w3-col" style={{ width: 50 + "px" }}>
+        <div className="w3-col" style={{ width: `${50  }px` }}>
           <i className="w3-xxlarge fa fa-pencil"></i>
         </div>
         <input

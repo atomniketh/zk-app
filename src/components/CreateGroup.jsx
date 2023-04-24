@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React from "react";
 import { Link } from "react-router-dom";
 import { ethers } from "ethers";
@@ -5,33 +6,41 @@ import SemaphoreCommunitiesABI from '../abi/SemaphoreCommunities.json';
 
 const semaphoreCommunitiesAddress = process.env.REACT_APP_CONTRACT;
 
+// import SemaphoreABI from '../abi/Semaphore.json';
+// const semaphoreAddress = process.env.REACT_APP_CONTRACT;
+
 async function fillForm() {
-    let provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+    const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
     await provider.send("eth_requestAccounts", []);
     const signer = provider.getSigner();
     document.getElementById("editor").value = await signer.getAddress();
 }
 
 async function createGroup() {
-      let groupName = document.getElementById("groupName").value;
-      let editor = document.getElementById("editor").value;
-      let merkleTreeDepth = document.getElementById("merkleTreeDepth").value;
+  const groupName = document.getElementById("groupName").value;
+  const editor = document.getElementById("editor").value;
+  const merkleTreeDepth = document.getElementById("merkleTreeDepth").value;
 
-      let provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+  const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
       await provider.send("eth_requestAccounts", []);
       const signer = provider.getSigner();
-      let contract = new ethers.Contract(
+      const contract = new ethers.Contract(
         semaphoreCommunitiesAddress,
         SemaphoreCommunitiesABI.abi,
         signer
       );
+      // let contract = new ethers.Contract(
+      //   semaphoreAddress,
+      //   SemaphoreABI.abi,
+      //   signer
+      // );
+      console.log(contract);
       const tx = await contract.createGroup(groupName, editor, merkleTreeDepth);
+      // const tx = await contract.createGroup(groupName, merkleTreeDepth, editor, 3600);
+      
       console.log("Success!");
       console.log(`Transaction hash: https://goerli.etherscan.io/tx/${tx.hash}`);
 
-    //   document.getElementById("groupName").value = "";
-    //   document.getElementById("editor").value = "";
-    //   document.getElementById("merkleTreeDepth").value = "";
       document.getElementById("createGroupForm").reset();
 
       const receipt = await tx.wait();
@@ -41,9 +50,7 @@ async function createGroup() {
     }
 
 
-const CreateGroup = () => {
-
-    return (
+const CreateGroup = () => (
       <div>
         <h1>Create Group Page</h1>
         <br />
@@ -75,6 +82,5 @@ const CreateGroup = () => {
         </p>
       </div>
     );
-  };
   
   export default CreateGroup;

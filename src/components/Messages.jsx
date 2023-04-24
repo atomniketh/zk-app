@@ -1,10 +1,15 @@
+/* eslint-disable no-console */
 import React from 'react';
 import { Link } from "react-router-dom";
 import { SemaphoreEthers, SemaphoreSubgraph } from "@semaphore-protocol/data";
 import Web3 from "web3";
 
-const semaphoreEthers = new SemaphoreEthers();
-const semaphoreSubgraph = new SemaphoreSubgraph()
+// const semaphoreEthers = new SemaphoreEthers();
+const semaphoreSubgraph = new SemaphoreSubgraph();
+const semaphoreEthers = new SemaphoreEthers("goerli", {
+  address: process.env.REACT_APP_CONTRACT,
+  startBlock: 0
+})
 
 class ComponentPage extends React.Component {
     constructor() {
@@ -25,26 +30,26 @@ class ComponentPage extends React.Component {
       
     async componentDidMount() {
       try {
-         const groupIDNum = "32473";
+         const groupIDNum = "32474";
          const graphIDs = await semaphoreSubgraph.getGroupIds();
          console.log(graphIDs);
          const groups = await semaphoreSubgraph.getGroups()
           console.log(groups);
           const myGroup = await semaphoreSubgraph.getGroup("32474", { admin: true, members: true, verifiedProofs: true });
           console.log(myGroup);
-          console.log(myGroup.admin);
-          console.log(myGroup.members);
-          console.log(myGroup.verifiedProofs);
-          console.log(myGroup.merkleTree);
-          console.log(myGroup.merkleTree.root);
-        //  const admin = await semaphoreEthers.getGroupAdmin(groupIDNum);
-        //  this.setState({ groupAdmin: admin });
-        //  const urlLink = "https://goerli.etherscan.io/address/" + this.state.groupAdmin;
-        //  this.setState({url: urlLink});
+          console.log(`Group Admin: ${  myGroup.admin}`);
+          console.log(`Group Members: ${  myGroup.members}`);
+          console.log(`Group verifiedProofs: ${  myGroup.verifiedProofs}`);
+          console.log(`Group merkleTree: ${  myGroup.merkleTree}`);
+          console.log(`Group merkleTree.root: ${  myGroup.merkleTree.root}`);
+          const admin = await semaphoreEthers.getGroupAdmin(groupIDNum);
+          this.setState({ groupAdmin: admin });
+          const urlLink = `https://goerli.etherscan.io/address/${  this.state.groupAdmin}`;
+          this.setState({url: urlLink});
  
          await semaphoreEthers.getGroup(groupIDNum).then((result) => {
            this.setState({ groupID: result.id });
-           let obj = result.merkleTree;
+           const obj = result.merkleTree;
            this.setState({ root: obj.root });
            this.setState({ depth: obj.depth });
            this.setState({ zeroValue: obj.zeroValue });
@@ -63,6 +68,7 @@ class ComponentPage extends React.Component {
             this.setState({ numOfMsgs: verifiedProofs.length });
 
             const theMessages = [];
+             // eslint-disable-next-line no-plusplus
              for (let index = 0; index < verifiedProofs.length; index++) {
                  theMessages[index] = Web3.utils.hexToAscii(Web3.utils.toHex(verifiedProofs[index].signal));
             }
@@ -89,16 +95,12 @@ class ComponentPage extends React.Component {
                 <tr><td><strong>numberOfLeaves:</strong></td><td>{this.state.numberOfLeaves}</td></tr>
                 <tr><td><strong>Group Members:</strong></td>
                 <td>
-                    {allMembers.map((value) => {
-                        return <p key={value}>{value}</p>;
-                    })}
+                    {allMembers.map((value) => <p key={value}>{value}</p>)}
                 </td>
                 </tr>
                 <tr><td><strong>{this.state.numOfMsgs} Messages:</strong></td>
                 <td>
-                {verifiedProofs.map((value) => {
-                        return <p key={value}>{value}</p>;
-                    })}
+                {verifiedProofs.map((value) => <p key={value}>{value}</p>)}
                 </td>
                 </tr>
                 </tbody>
