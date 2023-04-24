@@ -2,9 +2,10 @@
 pragma solidity ^0.8.4;
 
 import "@semaphore-protocol/contracts/interfaces/ISemaphore.sol";
-import "@openzeppelin/contracts/access/AccessControl.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/security/Pausable.sol";
 
-contract Feedback {
+contract Feedback is Pausable, Ownable {
     ISemaphore public semaphore;
     uint256 public groupId;
     string groupName;
@@ -24,11 +25,18 @@ contract Feedback {
     }
 
     constructor(address semaphoreAddress, string memory _groupName) {
-        _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
         semaphore = ISemaphore(semaphoreAddress);
         groupId = generateGroupID();
         groupNames[groupId] = _groupName;
         semaphore.createGroup(groupId, 20, address(this));
+    }
+
+    function pause() public onlyOwner {
+        _pause();
+    }
+
+    function unpause() public onlyOwner {
+        _unpause();
     }
 
     function joinGroup(uint256 identityCommitment) external {
@@ -64,7 +72,7 @@ contract Feedback {
     /// located at https://semaphore.appliedzkp.org/docs/deployed-contracts#semaphore
     function updateSemaphoreContract(
         address _newSemaphoreContract
-    ) public {
+    ) public onlyOwner {
         semaphore = ISemaphore(_newSemaphoreContract);
     }
 
@@ -73,7 +81,7 @@ contract Feedback {
     function updateGroupName(
         string calldata _groupName,
         uint256 _groupID
-    ) public {
+    ) public onlyOwner {
         groupNames[_groupID] = _groupName;
     }
 }
