@@ -22,7 +22,7 @@ async function updateGroupName() {
   const tx = await contract.updateGroupName(_index, newGroupName, _entityID);
   //   console.log("Success!");
     console.log(`Transaction hash: https://goerli.etherscan.io/tx/${tx.hash}`);
-  document.getElementById("updateGroupNameForm").reset();
+    document.getElementById("newGroupName").value = "";
   //   const receipt = await tx.wait();
   //   console.log(`Transaction confirmed in block ${receipt.blockNumber}`);
   //   console.log(`Gas used: ${receipt.gasUsed.toString()}`);

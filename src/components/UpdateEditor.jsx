@@ -22,7 +22,7 @@ async function updateEditor() {
   const tx = await contract.updateGroupEditor(_index, _newEditor, _entityID);
   // console.log("Success!");
   console.log(`Transaction hash: https://goerli.etherscan.io/tx/${tx.hash}`);
-  document.getElementById("updateEditorForm").reset();
+  document.getElementById("newEditorAddress").value = "";
   // const receipt = await tx.wait();
   // console.log(`Transaction confirmed in block ${receipt.blockNumber}`);
   // console.log(`Gas used: ${receipt.gasUsed.toString()}`);
