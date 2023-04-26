@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { ethers } from "ethers";
 import SemaphoreCommunitiesABI from '../abi/SemaphoreCommunities.json';
 
-const semaphoreCommunitiesAddress = process.env.REACT_APP_CONTRACT;
+const semaphoreCommunitiesAddress = process.env.REACT_APP_WBCONTRACT;
 
 // import SemaphoreABI from '../abi/Semaphore.json';
 // const semaphoreAddress = process.env.REACT_APP_CONTRACT;

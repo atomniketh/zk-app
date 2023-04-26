@@ -2,17 +2,18 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { ethers } from "ethers";
 import SemaphoreCommunitiesABI from "../abi/SemaphoreCommunities.json";
-const semaphoreCommunitiesAddress = process.env.REACT_APP_CONTRACT;
+
+const semaphoreCommunitiesAddress = process.env.REACT_APP_WBCONTRACT;
 
 async function updateVerifierContract() {
   const newVerifierContract = document.getElementById(
     "newVerifierContract"
   ).value;
 
-  let provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+  const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
   await provider.send("eth_requestAccounts", []);
   const signer = provider.getSigner();
-  let contract = new ethers.Contract(
+  const contract = new ethers.Contract(
     semaphoreCommunitiesAddress,
     SemaphoreCommunitiesABI.abi,
     signer
@@ -26,9 +27,7 @@ async function updateVerifierContract() {
   console.log(`Gas used: ${receipt.gasUsed.toString()}`);
 }
 
-const UpdateVerifierContract = () => {
-
-  return (
+const UpdateVerifierContract = () => (
     <div>
       <h1>Update Verifier Contract Page</h1>
       <br />
@@ -59,6 +58,5 @@ const UpdateVerifierContract = () => {
       </p>
     </div>
   );
-};
 
 export default UpdateVerifierContract;

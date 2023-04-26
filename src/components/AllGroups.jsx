@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { ethers } from "ethers";
 import SemaphoreCommunitiesABI from "../abi/SemaphoreCommunities.json";
 
-const semaphoreCommunitiesAddress = process.env.REACT_APP_CONTRACT;
+const semaphoreCommunitiesAddress = process.env.REACT_APP_WBCONTRACT;
 
 // "0x33F97669eD732Fa05924015863772118C9D4e236";
  // "0x8C8382dfA4505fE2d5b3EfC0e994951882A7e5ec";
@@ -29,7 +29,7 @@ class ComponentPage extends React.Component {
         SemaphoreCommunitiesABI.abi,
         signer
       );
-      const verifierAddress = await contract.verifier();
+      const verifierAddress = await contract.semaphore();
       // console.log("verifierAddress is: " + verifierAddress);
      this.setState({ currentVerifierContract: verifierAddress });
 

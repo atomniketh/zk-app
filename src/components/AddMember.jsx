@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { ethers } from "ethers";
 import SemaphoreCommunitiesABI from "../abi/SemaphoreCommunities.json";
 
-const semaphoreCommunitiesAddress = process.env.REACT_APP_CONTRACT;
+const semaphoreCommunitiesAddress = process.env.REACT_APP_WBCONTRACT;
 
 async function checkEditor() {
   // check if user is the group editor
@@ -40,7 +40,10 @@ async function addMemberToGroup() {
     SemaphoreCommunitiesABI.abi,
     signer
   );
-  const tx = await contract.addWhistleblower(_entityID, _memberCommitment);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const nonce = await signer.getTransactionCount();
+  console.log(`Adding membercommitment ${  _memberCommitment  } to ${  _entityID}`);
+  const tx = await contract.addWhistleblower(_entityID, _memberCommitment, { gasLimit: 1000000, nonce: nonce || undefined });
   console.log("Success!");
   console.log(`Transaction hash: https://goerli.etherscan.io/tx/${tx.hash}`);
   document.getElementById("memberCommitment").value = "";

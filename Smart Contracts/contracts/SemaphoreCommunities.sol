@@ -1,10 +1,9 @@
 //SPDX-License-Identifier: MIT
 pragma solidity 0.8.4;
 
-import "@semaphore-protocol/contracts/interfaces/ISemaphoreVerifier.sol";
+import "@semaphore-protocol/contracts/interfaces/ISemaphore.sol";
 import "@semaphore-protocol/contracts/base/SemaphoreGroups.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
-
 
 /// @title Semaphore Communities contract.
 /// @notice It allows users to leak information anonymously .
@@ -34,13 +33,15 @@ contract SemaphoreCommunities is SemaphoreGroups, AccessControl {
     /// @param leak: News leak.
     event LeakPublished(uint256 indexed entityId, uint256 leak);
 
-    ISemaphoreVerifier public verifier;
+    ISemaphore public semaphore;
 
-    // @dev Setting the initial entityID to 555555 to avoid conflicts 
-    // with the SemaphoreGroups contract uncertainty in which IDs 
+    // ISemaphoreVerifier public verifier;
+
+    // @dev Setting the initial entityID to 555555 to avoid conflicts
+    // with the SemaphoreGroups contract uncertainty in which IDs
     // are already in use.
     // @param Generate a unique entityID
-    uint256 private entityCounter = 0;
+    uint256 private entityCounter = 555555;
 
     /// @dev A struct to hold information about the entities.
     /// This is better than mappings, as it allows us to iterate over the entities.
@@ -58,7 +59,7 @@ contract SemaphoreCommunities is SemaphoreGroups, AccessControl {
 
     /// @dev A mapping of entityIDs to group names
     mapping(uint256 => string) public entityNames;
-    
+
     /// @dev Generates a unique entityID
     function generateEntityID() internal returns (uint256) {
         return ++entityCounter;
@@ -74,11 +75,11 @@ contract SemaphoreCommunities is SemaphoreGroups, AccessControl {
         _;
     }
 
-    /// @dev Initializes the Semaphore verifier used to verify the user's ZK proofs.
-    /// @param _verifier: Semaphore verifier address.
-    constructor(ISemaphoreVerifier _verifier) {
+    /// @dev Initializes the Semaphore contract used to verify the user's ZK proofs.
+    /// @param semaphoreAddress: Semaphore address.
+    constructor(address semaphoreAddress) {
+        semaphore = ISemaphore(semaphoreAddress);
         _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
-        verifier = _verifier;
     }
 
     /// @dev See {ISemaphoreWhistleblowing-createEntity}.
@@ -93,7 +94,7 @@ contract SemaphoreCommunities is SemaphoreGroups, AccessControl {
             revert Semaphore__MerkleTreeDepthIsNotSupported();
         }
 
-        _createGroup(entityId, merkleTreeDepth);
+        semaphore.createGroup(entityId, merkleTreeDepth, editor);
 
         editors[entityId] = editor;
         entityNames[entityId] = groupName;
@@ -115,7 +116,7 @@ contract SemaphoreCommunities is SemaphoreGroups, AccessControl {
         uint256 entityId,
         uint256 identityCommitment
     ) public onlyEditor(entityId) {
-        _addMember(entityId, identityCommitment);
+        semaphore.addMember(entityId, identityCommitment);
     }
 
     /// @dev See {ISemaphoreWhistleblowing-removeWhistleblower}.
@@ -125,7 +126,7 @@ contract SemaphoreCommunities is SemaphoreGroups, AccessControl {
         uint256[] calldata proofSiblings,
         uint8[] calldata proofPathIndices
     ) public onlyEditor(entityId) {
-        _removeMember(
+        semaphore.removeMember(
             entityId,
             identityCommitment,
             proofSiblings,
@@ -135,23 +136,21 @@ contract SemaphoreCommunities is SemaphoreGroups, AccessControl {
 
     /// @dev See {ISemaphoreWhistleblowing-publishLeak}.
     function publishLeak(
+        uint entityId,
         uint256 leak,
         uint256 nullifierHash,
-        uint256 entityId,
         uint256[8] calldata proof
     ) public {
-        uint256 merkleTreeDepth = getMerkleTreeDepth(entityId);
         uint256 merkleTreeRoot = getMerkleTreeRoot(entityId);
 
-        verifier.verifyProof(
-            merkleTreeRoot,
-            nullifierHash,
-            leak,
+        semaphore.verifyProof(
             entityId,
-            proof,
-            merkleTreeDepth
+            merkleTreeRoot,
+            leak,
+            nullifierHash,
+            entityId,
+            proof
         );
-
         emit LeakPublished(entityId, leak);
     }
 
@@ -186,12 +185,13 @@ contract SemaphoreCommunities is SemaphoreGroups, AccessControl {
         editors[entityId] = _newEditor;
     }
 
-    /// @dev Updates the Verifier Contract.
+    /// @dev Updates the Semaphore Contract.
     /// Only the contract admin can call this function.
-    /// @param _newSemaphoreVerifier: Address from the SemaphoreVerifier.sol row
+    /// @param _newSemaphoreContract: Address from the Semaphore.sol row
     /// located at https://semaphore.appliedzkp.org/docs/deployed-contracts#semaphore
-    function updateVerifierContract(address _newSemaphoreVerifier) public onlyRole(DEFAULT_ADMIN_ROLE) {
-        verifier = ISemaphoreVerifier(_newSemaphoreVerifier);
+    function updateSemaphoreContract(
+        address _newSemaphoreContract
+    ) public onlyRole(DEFAULT_ADMIN_ROLE) {
+        semaphore = ISemaphore(_newSemaphoreContract);
     }
-
 }

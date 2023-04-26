@@ -11,7 +11,7 @@ import { SemaphoreEthers, SemaphoreSubgraph } from "@semaphore-protocol/data"
 import "font-awesome/css/font-awesome.min.css";
 import SemaphoreCommunitiesABI from "../abi/SemaphoreCommunities.json";
 
-const semaphoreCommunitiesAddress = process.env.REACT_APP_CONTRACT;
+const semaphoreCommunitiesAddress = process.env.REACT_APP_WBCONTRACT;
 
 const provider = new ethers.providers.Web3Provider(window.ethereum);
 const signer = provider.getSigner();
@@ -44,7 +44,7 @@ const checkGroupInfo = async () => {
     address: process.env.REACT_APP_CONTRACT,
     startBlock: 0
   })
-  const members = await semaphoreEthers.getGroupMembers("32473")
+  const members = await semaphoreEthers.getGroupMembers("1")
   console.log(`Group Members: ${  members}`);
 
   };

@@ -20,7 +20,7 @@ async function main() {
       await poseidonT3Lib.deployed();
 
         console.log(
-          "PoseidonT3 library has been deployed to: " + poseidonT3Lib.address
+          `PoseidonT3 library has been deployed to: ${  poseidonT3Lib.address}`
         );
 
       const IncrementalBinaryTreeLibFactory = await hre.ethers.getContractFactory(
@@ -37,26 +37,27 @@ async function main() {
       await incrementalBinaryTreeLib.deployed();
 
         console.log(
-          "IncrementalBinaryTree library has been deployed to: " + incrementalBinaryTreeLib.address
+          `IncrementalBinaryTree library has been deployed to: ${  incrementalBinaryTreeLib.address}`
         );
 
       const SemaphoreCommunitiesFactory = await hre.ethers.getContractFactory(
-        "SemaphoreCommunities",
-        {
-          libraries: {
-            IncrementalBinaryTree: incrementalBinaryTreeLib.address,
-          },
-        }
+        "SemaphoreCommunities"
+        //,
+        // {
+        //   libraries: {
+        //     IncrementalBinaryTree: incrementalBinaryTreeLib.address,
+        //   },
+        // }
       );
 
       const contract = await SemaphoreCommunitiesFactory.deploy(
-        "0xb908Bcb798e5353fB90155C692BddE3b4937217C"
+        "0x3889927F0B5Eb1a02C6E2C20b39a1Bd4EAd76131"
       );
 
       await contract.deployed();
 
         console.log(
-          "SemaphoreCommunities contract has been deployed to: " + contract.address
+          `SemaphoreCommunities contract has been deployed to: ${  contract.address}`
         );
 
       return contract;

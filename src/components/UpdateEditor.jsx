@@ -2,7 +2,8 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { ethers } from "ethers";
 import SemaphoreCommunitiesABI from "../abi/SemaphoreCommunities.json";
-const semaphoreCommunitiesAddress = process.env.REACT_APP_CONTRACT;
+
+const semaphoreCommunitiesAddress = process.env.REACT_APP_WBCONTRACT;
 
 async function updateEditor() {
   const queryParams = new URLSearchParams(window.location.search);
@@ -10,10 +11,10 @@ async function updateEditor() {
   const _entityID = queryParams.get("entityID");
   const _newEditor = document.getElementById("newEditorAddress").value;
 
-  let provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+  const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
   await provider.send("eth_requestAccounts", []);
   const signer = provider.getSigner();
-  let contract = new ethers.Contract(
+  const contract = new ethers.Contract(
     semaphoreCommunitiesAddress,
     SemaphoreCommunitiesABI.abi,
     signer
@@ -43,7 +44,7 @@ const UpdateEditor = () => {
         id="updateEditorForm"
         className="w3-container w3-card-4 w3-light-grey w3-text-blue w3-margin"
       >
-        <div className="w3-col" style={{ width: 50 + "px" }}>
+        <div className="w3-col" style={{ width: `${50  }px` }}>
           <i className="w3-xxlarge fa fa-pencil"></i>
         </div>
         <div className="w3-rest">

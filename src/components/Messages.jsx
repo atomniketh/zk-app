@@ -7,7 +7,7 @@ import Web3 from "web3";
 // const semaphoreEthers = new SemaphoreEthers();
 const semaphoreSubgraph = new SemaphoreSubgraph();
 const semaphoreEthers = new SemaphoreEthers("goerli", {
-  address: process.env.REACT_APP_CONTRACT,
+  address: process.env.REACT_APP_WBCONTRACT,
   startBlock: 0
 })
 
@@ -30,12 +30,12 @@ class ComponentPage extends React.Component {
       
     async componentDidMount() {
       try {
-         const groupIDNum = "32474";
+         const groupIDNum = "1";
          const graphIDs = await semaphoreSubgraph.getGroupIds();
          console.log(graphIDs);
          const groups = await semaphoreSubgraph.getGroups()
           console.log(groups);
-          const myGroup = await semaphoreSubgraph.getGroup("32474", { admin: true, members: true, verifiedProofs: true });
+          const myGroup = await semaphoreSubgraph.getGroup("1", { admin: true, members: true, verifiedProofs: true });
           console.log(myGroup);
           console.log(`Group Admin: ${  myGroup.admin}`);
           console.log(`Group Members: ${  myGroup.members}`);

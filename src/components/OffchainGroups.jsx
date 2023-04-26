@@ -1,4 +1,4 @@
-//import { group } from "console";
+// import { group } from "console";
 import React from "react";
 import { Link } from "react-router-dom";
 // import { Identity } from "@semaphore-protocol/identity";
@@ -31,9 +31,7 @@ import { Link } from "react-router-dom";
 // }
 // test();
 
-const Feedback = () => {
-
-  return (
+const Feedback = () => (
     <div>
       <h1>Feedback Page</h1>
       <br />
@@ -58,6 +56,5 @@ const Feedback = () => {
 
     </div>
   );
-};
 
 export default Feedback;
