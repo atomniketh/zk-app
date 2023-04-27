@@ -30,12 +30,12 @@ class ComponentPage extends React.Component {
       
     async componentDidMount() {
       try {
-         const groupIDNum = "1";
+         const groupIDNum = "2";
          const graphIDs = await semaphoreSubgraph.getGroupIds();
          console.log(graphIDs);
          const groups = await semaphoreSubgraph.getGroups()
           console.log(groups);
-          const myGroup = await semaphoreSubgraph.getGroup("1", { admin: true, members: true, verifiedProofs: true });
+          const myGroup = await semaphoreSubgraph.getGroup("2", { admin: true, members: true, verifiedProofs: true });
           console.log(myGroup);
           console.log(`Group Admin: ${  myGroup.admin}`);
           console.log(`Group Members: ${  myGroup.members}`);

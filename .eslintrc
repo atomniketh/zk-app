@@ -1,6 +1,7 @@
 {
   "parserOptions": {
     "ecmaVersion": 2020,
+    "no-console": "off",
     "project": ["tsconfig.json"] ,
     "sourceType": "module"
   },

@@ -12,24 +12,24 @@ import FeedbackContractABI from '../abi/Feedback.json';
 async function getProof() {
   const feedbackAddress = "0x7832A5B527ce8c7d6282e7FbA53F3A9A598D67Ed";
   const groupID = "32474";
-  let provider = new ethers.providers.Web3Provider(window.ethereum, "any");
-  const group = new Group(parseInt(groupID));
-  //const externalNullifier = utils.formatBytes32String("Topic");
-  //const signal = utils.formatBytes32String("Hello world");
+  const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+  const group = new Group(parseInt(groupID, 10));
+  // const externalNullifier = utils.formatBytes32String("Topic");
+  // const signal = utils.formatBytes32String("Hello world");
   const signal = ethers.BigNumber.from(utils.formatBytes32String("Hello world")).toString();
 //  const signal = BigNumber.from(utils.formatBytes32String("Hello world")).toString();
-  console.log("signal: " + signal);
+  console.log(`signal: ${  signal}`);
   // let textareaValue = document.getElementById("messageTxt").value;
   // const feedbackBytes32 = formatBytes32String(textareaValue);
   const identity2 = new Identity("testing");
-  if (group.indexOf(identity2.commitment) == -1) {
+  if (group.indexOf(identity2.commitment) === -1) {
     group.addMember(identity2.commitment);    
   } else {
     console.log("Identity already exists in group");
   }
   const idIndex = group.indexOf(identity2.commitment);
-  console.log("identity2.commitment: " + identity2.commitment);
-  console.log("idIndex: " + idIndex);
+  console.log(`identity2.commitment: ${  identity2.commitment}`);
+  console.log(`idIndex: ${  idIndex}`);
   const groupProof = group.generateMerkleProof(idIndex);
   // console.log("GroupID: " + group.id);
   // console.log("Group Root: " + group.root);
@@ -37,12 +37,13 @@ async function getProof() {
   // console.log("Group zeroValue: " + group.zeroValue);
   // console.log("Group Leaves: " + group.numberOfLeaves);
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const userName = "0x636d73746f6e6500000000000000000000000000000000000000000000000000";
 
   await provider.send("eth_requestAccounts", []);
   const signer = provider.getSigner();
-  //let userAddress = await signer.getAddress();
-  let contract = new ethers.Contract(feedbackAddress, FeedbackContractABI.abi, signer);
+  // let userAddress = await signer.getAddress();
+  const contract = new ethers.Contract(feedbackAddress, FeedbackContractABI.abi, signer);
   const tx = await contract.joinGroup(identity2.commitment);
   console.log(`Transaction hash: https://goerli.etherscan.io/tx/${tx.hash}`);
   const receipt = await tx.wait();
@@ -57,22 +58,22 @@ async function getProof() {
   // const signer = provider.getSigner();
   // let contract = new ethers.Contract(feedbackAddress, FeedbackContractABI.abi, signer);
   const idNullifier = identity2.nullifier;
-  let proofString = fullProof.proof;
-  console.log("Length: " + proofString.length);
+  const proofString = fullProof.proof;
+  console.log(`Length: ${  proofString.length}`);
 
   // const abiCoder = new utils.AbiCoder();
   // const encodedProof = abiCoder.encode(['uint256[8]'], [fullProof.proof]);
   // console.log("Encoded proof: " + encodedProof);
 
-  console.log("signal: " + signal);
-  console.log("externalNullifier: " + externalNullifier);
-  console.log("idNullifier: " + idNullifier);
-  console.log("proofString: " + proofString);
+  console.log(`signal: ${  signal}`);
+  console.log(`externalNullifier: ${  externalNullifier}`);
+  console.log(`idNullifier: ${  idNullifier}`);
+  console.log(`proofString: ${  proofString}`);
 
   const gasPrice = await signer.getGasPrice();
-  console.log("gasPrice: " + gasPrice);
+  console.log(`gasPrice: ${  gasPrice}`);
 
-  let nonce = await signer.getTransactionCount();
+  const nonce = await signer.getTransactionCount();
 
   // const gasEstimated = await contract.estimateGas.sendFeedback(signal, externalNullifier, idNullifier, proofString, { gasLimit: 1000000, nonce: nonce || undefined, });
   // console.log("gasEstimated: " + gasEstimated);
@@ -85,9 +86,7 @@ async function getProof() {
  }
 // getProof();
 
-const Feedback = () => {
-
-  return (
+const Feedback = () => (
     <div>
       <h1>Send Feedback Page</h1>
       <br />
@@ -98,6 +97,5 @@ const Feedback = () => {
       <p><button type="button" onClick={ getProof }>Click here to send the Signal</button></p>
     </div>
   );
-};
 
 export default Feedback;

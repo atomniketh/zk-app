@@ -6,7 +6,7 @@ import { Group } from "@semaphore-protocol/group";
 const Identities = () => {
   const { trapdoor, nullifier, commitment } = new Identity();
   const group1 = new Group(1);
-  //const commitment = identity.generateCommitment()
+  // const commitment = identity.generateCommitment()
   group1.addMember(commitment);
 //   console.log("Group1: " + group1.indexOf(commitment));
 

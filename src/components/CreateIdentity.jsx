@@ -22,10 +22,10 @@ function CreateIdentity() {
   const _entityCurrentEditor = queryParams.get("entityEditor");
 
   const [signedMessage, setSignedMessage] = React.useState("");
-  const groupToJoin = "identity" + _entityID;
+  const groupToJoin = `identity${  _entityID}`;
 
   console.log(
-    "Identity is already stored as: " + localStorage.getItem('groupToJoin')
+    `Identity is already stored as: ${  localStorage.getItem('groupToJoin')}`
   );
 
   const groupToJoinValue = localStorage.getItem(groupToJoin);
@@ -33,14 +33,14 @@ function CreateIdentity() {
     const messageToSign = "zkCommunities";
     const signedData = await signer.signMessage(messageToSign);
     setSignedMessage(signedData);
-    console.log("Signed Data: " + signedData);
+    console.log(`Signed Data: ${  signedData}`);
     localStorage.setItem('signedData', signedData);
-    console.log("signedMessage is now: " + signedMessage);
+    console.log(`signedMessage is now: ${  signedMessage}`);
     const { commitment } = new Identity(signedData);
     const identityInfo = commitment;
     localStorage.setItem('groupToJoin', identityInfo.toString());
     console.log(
-      "Identity now in local storage is: " + localStorage.getItem('groupToJoin')
+      `Identity now in local storage is: ${  localStorage.getItem('groupToJoin')}`
     );
 
     const wallet = Wallet.createRandom();
@@ -51,7 +51,7 @@ function CreateIdentity() {
     // const messages = await conversation.messages();
     // *************************************************************
 
-    await conversation.send(identityInfo + " wants to join " + _entityID);
+    await conversation.send(`${identityInfo  } wants to join ${  _entityID}`);
 
     // ************* This can be removed after testing *************
     // Listen for new messages in the conversation

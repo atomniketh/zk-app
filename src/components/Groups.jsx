@@ -1,10 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { ethers } from 'ethers';
-import FeedbackContractABI from '../abi/Feedback.json';
 import { Identity } from "@semaphore-protocol/identity";
+import FeedbackContractABI from '../abi/Feedback.json';
 
-//const { identity, trapdoor, nullifier, commitment } = new Identity();
+// const { identity, trapdoor, nullifier, commitment } = new Identity();
 const identity = new Identity()
 const feedbackAddress = "0x7832A5B527ce8c7d6282e7FbA53F3A9A598D67Ed"
 // block number when the smart contract was deployed
@@ -17,13 +17,13 @@ const userName = "0x636d73746f6e650000000000000000000000000000000000000000000000
   //   await window.ethereum.request({ method: 'eth_requestAccounts' });
   // }
 
-  let provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+  const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
 
   async function joinGroup() {
     await provider.send("eth_requestAccounts", []);
     const signer = provider.getSigner();
-    //let userAddress = await signer.getAddress();
-    let contract = new ethers.Contract(feedbackAddress, FeedbackContractABI.abi, signer);
+    // let userAddress = await signer.getAddress();
+    const contract = new ethers.Contract(feedbackAddress, FeedbackContractABI.abi, signer);
     const tx = await contract.joinGroup(identity.commitment, userName);
     console.log(`Transaction hash: https://goerli.etherscan.io/tx/${tx.hash}`);
     const receipt = await tx.wait();
@@ -31,15 +31,13 @@ const userName = "0x636d73746f6e650000000000000000000000000000000000000000000000
     console.log(`Gas used: ${receipt.gasUsed.toString()}`);
 
     localStorage.setItem('myIdentity', identity.toString);
-    console.log("myIdentity: " + localStorage.getItem('myIdentity'));
+    console.log(`myIdentity: ${  localStorage.getItem('myIdentity')}`);
     localStorage.setItem('myCommitment', identity.commitment);
-    console.log("myCommitment: " + localStorage.getItem('myCommitment'));
+    console.log(`myCommitment: ${  localStorage.getItem('myCommitment')}`);
   }  
   // joinGroup();
 
-const Groups = () => {
-
-    return (
+const Groups = () => (
       <div>
         <h1>Groups Page</h1>
         <br />
@@ -48,6 +46,5 @@ const Groups = () => {
 
       </div>
     );
-  };
   
   export default Groups;

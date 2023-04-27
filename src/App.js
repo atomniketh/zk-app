@@ -1,3 +1,4 @@
+/* eslint-disable import/no-unresolved */
 import './App.css';
 import './w3.css'
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
@@ -23,7 +24,7 @@ function App() {
       <Routes>
           {/* This route is for Identities component 
           with exact path "/", in component props 
-          we passes the imported component*/}
+          we passes the imported component */}
           {/* <Route path="/" element={<Home />} /> */}
           <Route index element={<AllGroups />} />
           <Route path='*' element={<Identities />} />
