@@ -1,50 +1,60 @@
-import React from "react";
+/* eslint-disable no-console */
+import React, { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
 import { ethers } from "ethers";
-import SemaphoreCommunitiesABI from "../abi/SemaphoreCommunities.json";
+import { SemaphoreSubgraph } from "@semaphore-protocol/data";
+import SemaphoreContractABI from "../abi/Semaphore.json";
 
-const semaphoreCommunitiesAddress = process.env.REACT_APP_WBCONTRACT;
+const semaphoreContractAddress = process.env.REACT_APP_SEMAPHORE;
 
 async function updateEditor() {
   const queryParams = new URLSearchParams(window.location.search);
-  const _index = queryParams.get("index");
   const _entityID = queryParams.get("entityID");
   const _newEditor = document.getElementById("newEditorAddress").value;
-
   const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
   await provider.send("eth_requestAccounts", []);
   const signer = provider.getSigner();
   const contract = new ethers.Contract(
-    semaphoreCommunitiesAddress,
-    SemaphoreCommunitiesABI.abi,
+    semaphoreContractAddress,
+    SemaphoreContractABI.abi,
     signer
   );
-  const tx = await contract.updateGroupEditor(_index, _newEditor, _entityID);
-  // console.log("Success!");
+  const tx = await contract.updateGroupAdmin(_entityID, _newEditor);
   console.log(`Transaction hash: https://goerli.etherscan.io/tx/${tx.hash}`);
   document.getElementById("newEditorAddress").value = "";
-  // const receipt = await tx.wait();
-  // console.log(`Transaction confirmed in block ${receipt.blockNumber}`);
-  // console.log(`Gas used: ${receipt.gasUsed.toString()}`);
+  const receipt = await tx.wait();
+  console.log(`Transaction confirmed in block ${receipt.blockNumber}`);
+  console.log(`Gas used: ${receipt.gasUsed.toString()}`);
 }
 
-const UpdateEditor = () => {
-  const queryParams = new URLSearchParams(window.location.search);
-  const entityCurrentEditor = queryParams.get("entityEditor");
-  // console.log("Name is now: " + entityNameCurrent);
+function editorComponent() {
+  const [currentAdmin, setCurrentAdmin] = useState(null);
+
+  useEffect(() => {
+    async function fetchEditor() {
+      const semaphoreSubgraph = new SemaphoreSubgraph();
+      const queryParams = new URLSearchParams(window.location.search);
+      const entityCurrentID = queryParams.get("entityID");
+      // eslint-disable-next-line no-const-assign, @typescript-eslint/no-shadow
+      const currentAdmin = await semaphoreSubgraph.getGroup(entityCurrentID, { admin: true });
+      setCurrentAdmin(currentAdmin.admin);
+    }
+    fetchEditor();
+  }, []);
+
   return (
     <div>
       <h1>Update Editor Page</h1>
       <br />
       <Link to="/AllGroups">All Groups</Link> |{" "}
       <h2 className="w3-center">
-        Current Editor Address: {entityCurrentEditor}{" "}
+        Current Editor Address: {currentAdmin}{" "}
       </h2>
       <div
         id="updateEditorForm"
         className="w3-container w3-card-4 w3-light-grey w3-text-blue w3-margin"
       >
-        <div className="w3-col" style={{ width: `${50  }px` }}>
+        <div className="w3-col" style={{ width: `${50}px` }}>
           <i className="w3-xxlarge fa fa-pencil"></i>
         </div>
         <div className="w3-rest">
@@ -67,7 +77,7 @@ const UpdateEditor = () => {
         </button>
       </p>
     </div>
-  );
-};
-
-export default UpdateEditor;
+  )
+  ;
+}
+export default editorComponent;

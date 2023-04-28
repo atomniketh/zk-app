@@ -6,9 +6,6 @@ import SemaphoreCommunitiesABI from "../abi/SemaphoreCommunities.json";
 
 const semaphoreCommunitiesAddress = process.env.REACT_APP_WBCONTRACT;
 
-// "0x33F97669eD732Fa05924015863772118C9D4e236";
- // "0x8C8382dfA4505fE2d5b3EfC0e994951882A7e5ec";
-
 class ComponentPage extends React.Component {
   constructor() {
     super();
@@ -17,7 +14,6 @@ class ComponentPage extends React.Component {
       currentVerifierContract: "",
     };
   }
-
 
   async componentDidMount() {
     try {
@@ -31,7 +27,7 @@ class ComponentPage extends React.Component {
       );
       const verifierAddress = await contract.semaphore();
       // console.log("verifierAddress is: " + verifierAddress);
-     this.setState({ currentVerifierContract: verifierAddress });
+      this.setState({ currentVerifierContract: verifierAddress });
 
       const numberOfEntities = await contract.getNumberOfEntities();
       // console.log("Number of Entities: " + numberOfEntities);
@@ -44,13 +40,14 @@ class ComponentPage extends React.Component {
       let groupMTDepth;
       // eslint-disable-next-line no-plusplus
       for (let index = 0; index < numberOfEntities; index++) {
+
         groupInfo = await contract.allEntities(index);
         groupMTRoot = await contract.getMerkleTreeRoot(groupInfo.idEntity);
         groupMTDepth = await contract.getMerkleTreeDepth(groupInfo.idEntity);
         allGroups[index] = groupInfo;
         // allGroups[index] = groupMTRoot;
-        console.log(`Group ${  groupInfo.idEntity  } MerkleTreeRoot: ${  groupMTRoot} MerkleTreeDepth: ${  groupMTDepth}`);
-         // console.log(groupInfo);
+        console.log(`Group ${groupInfo.idEntity} MerkleTreeRoot: ${groupMTRoot} MerkleTreeDepth: ${groupMTDepth}`);
+        // console.log(groupInfo);
         // console.log(`entityName is ${groupInfo.entityName}`);
         // console.log(`entityEditor is ${groupInfo.entityEditor}`);
         // console.log(`idEntity is ${groupInfo.root}`);
@@ -60,21 +57,19 @@ class ComponentPage extends React.Component {
       console.error(error);
     }
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  //   const checkGroupInfo = async () => {
-  //     const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
-  //     await provider.send("eth_requestAccounts", []);
-  //     const signer = provider.getSigner();
-  //     const contract = new ethers.Contract(
-  //       semaphoreCommunitiesAddress,
-  //       SemaphoreCommunitiesABI.abi,
-  //       signer
-  //     );
-  //     // eslint-disable-next-line no-undef
-  //     document.getElementById("theProof").value = await contract.getMerkleTreeRoot(item.idEntity);
-  // }
+    //   const checkGroupInfo = async () => {
+    //     const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+    //     await provider.send("eth_requestAccounts", []);
+    //     const signer = provider.getSigner();
+    //     const contract = new ethers.Contract(
+    //       semaphoreCommunitiesAddress,
+    //       SemaphoreCommunitiesABI.abi,
+    //       signer
+    //     );
+    //     // eslint-disable-next-line no-undef
+    //     document.getElementById("theProof").value = await contract.getMerkleTreeRoot(item.idEntity);
+    // }
   }
-
-
 
   render() {
     // const { allGroups } = this.state;
@@ -91,10 +86,10 @@ class ComponentPage extends React.Component {
         <Link to="/SendFeedback">Send Feedback</Link> |{" "}
         <br />
         <Link to="/CreateGroup">Create Group</Link> |{" "}
-       
-<p>
-Current Verifier Contract Address is: { currentVerifierContract }  <Link to="/UpdateVerifierContract?addr=">(Update)</Link>
-</p>
+
+        <p>
+          Current Semaphore Contract Address is: {currentVerifierContract}  <Link to="/UpdateVerifierContract?addr=">(Update)</Link>
+        </p>
         <table className="w3-table-all">
           <tbody>
             <tr>
@@ -114,8 +109,8 @@ Current Verifier Contract Address is: { currentVerifierContract }  <Link to="/Up
                   <td>{item.entityName.toString()} {" "} {item.root}
                   </td>
 
-                  <td> <a href={`/CreateIdentity?entityID=${item.idEntity.toString()}&entityName=${item.entityName.toString()}&entityEditor=${item.entityEditor.toString()}`}>Request Access</a> | <a href={`/SendMessage?entityID=${item.idEntity.toString()}&entityName=${item.entityName.toString()}`}>Send Message</a> | See Messages</td>
-                  <td> <a href={`/UpdateGroupName?index=${index}&entityID=${item.idEntity.toString()}&entityName=${item.entityName.toString()}`} >Rename</a> | <a href={`/UpdateEditor?index=${index}&entityID=${item.idEntity.toString()}&entityEditor=${item.entityEditor.toString()}`} >Reassign</a> | <a href={`/AddMember?entityID=${item.idEntity.toString()}&entityEditor=${item.entityEditor.toString()}&entityName=${item.entityName.toString()}`}>Add Member</a> | Remove Member </td>
+                  <td> <a href={`/CreateIdentity?entityID=${item.idEntity.toString()}&entityName=${item.entityName.toString()}&entityEditor=${item.entityEditor.toString()}`}>Request Access</a> | <a href={`/SendMessage?entityID=${item.idEntity.toString()}&entityName=${item.entityName.toString()}`}>Send Message</a> | <a href={`/Messages?entityID=${item.idEntity.toString()}`}>See Messages</a></td>
+                  <td> <a href={`/UpdateGroupName?index=${index}&entityID=${item.idEntity.toString()}&entityName=${item.entityName.toString()}`} >Rename</a> | <a href={`/UpdateEditor?entityID=${item.idEntity.toString()}`} >Reassign</a> | <a href={`/AddMember?entityID=${item.idEntity.toString()}&entityEditor=${item.entityEditor.toString()}&entityName=${item.entityName.toString()}`}>Add Member</a> | Remove Member </td>
                 </tr>
               </React.Fragment>
             ))}

@@ -30,12 +30,13 @@ class ComponentPage extends React.Component {
       
     async componentDidMount() {
       try {
-         const groupIDNum = "2";
+        const queryParams = new URLSearchParams(window.location.search);
+        const groupIDNum = queryParams.get("entityID");
          const graphIDs = await semaphoreSubgraph.getGroupIds();
          console.log(graphIDs);
          const groups = await semaphoreSubgraph.getGroups()
           console.log(groups);
-          const myGroup = await semaphoreSubgraph.getGroup("2", { admin: true, members: true, verifiedProofs: true });
+          const myGroup = await semaphoreSubgraph.getGroup(groupIDNum, { admin: true, members: true, verifiedProofs: true });
           console.log(myGroup);
           console.log(`Group Admin: ${  myGroup.admin}`);
           console.log(`Group Members: ${  myGroup.members}`);
@@ -85,7 +86,10 @@ class ComponentPage extends React.Component {
       return (
         <div>
             <Link to="/">Identities</Link> | <Link to="/Groups">On-Chain Groups</Link> | <Link to="/OffchainGroups">Off-Chain Groups</Link> | <Link to="/SendFeedback">Send Feedback</Link>
-            <table border="1">
+            <h1>Messages Page</h1>
+      <Link to="/AllGroups">All Groups</Link> {" "}
+      <br />      <br />
+            <table className="w3-table-all">
                 <tbody>
                 <tr><td><strong>Group ID:</strong></td><td>{this.state.groupID}</td></tr>
                 <tr><td><strong>Group Admin:</strong></td><td><a href={this.state.url}>{this.state.groupAdmin}</a></td></tr>
