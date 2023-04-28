@@ -36,17 +36,17 @@ class ComponentPage extends React.Component {
 
       const allGroups = [];
       let groupInfo;
-      let groupMTRoot;
-      let groupMTDepth;
+      // let groupMTRoot;
+      // let groupMTDepth;
       // eslint-disable-next-line no-plusplus
       for (let index = 0; index < numberOfEntities; index++) {
 
         groupInfo = await contract.allEntities(index);
-        groupMTRoot = await contract.getMerkleTreeRoot(groupInfo.idEntity);
-        groupMTDepth = await contract.getMerkleTreeDepth(groupInfo.idEntity);
+        // groupMTRoot = await contract.getMerkleTreeRoot(groupInfo.idEntity);
+        // groupMTDepth = await contract.getMerkleTreeDepth(groupInfo.idEntity);
         allGroups[index] = groupInfo;
         // allGroups[index] = groupMTRoot;
-        console.log(`Group ${groupInfo.idEntity} MerkleTreeRoot: ${groupMTRoot} MerkleTreeDepth: ${groupMTDepth}`);
+        // console.log(`Group ${groupInfo.idEntity} MerkleTreeRoot: ${groupMTRoot} MerkleTreeDepth: ${groupMTDepth}`);
         // console.log(groupInfo);
         // console.log(`entityName is ${groupInfo.entityName}`);
         // console.log(`entityEditor is ${groupInfo.entityEditor}`);

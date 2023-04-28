@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React from "react";
 import { Link } from "react-router-dom";
 import { ethers } from "ethers";
@@ -19,12 +20,20 @@ async function updateGroupName() {
     SemaphoreCommunitiesABI.abi,
     signer
   );
+
+  // ****************************************************************
+  // console.log(`info is: ${  _index}, ${  newGroupName}, ${  _entityID}`);
+  // TODO: updateGroupName generates an error when the _index is "0"
+  // ****************************************************************
+
   const tx = await contract.updateGroupName(_index, newGroupName, _entityID);
   //   console.log("Success!");
     console.log(`Transaction hash: https://goerli.etherscan.io/tx/${tx.hash}`);
     document.getElementById("newGroupName").value = "";
-  //   const receipt = await tx.wait();
-  //   console.log(`Transaction confirmed in block ${receipt.blockNumber}`);
+    document.getElementById("groupName").innerHTML = newGroupName;
+    document.getElementById("newGroupName").value = "";
+    // const receipt = await tx.wait();
+    // console.log(`Transaction confirmed in block ${receipt.blockNumber}`);
   //   console.log(`Gas used: ${receipt.gasUsed.toString()}`);
 }
 
@@ -40,7 +49,7 @@ const UpdateGroupName = () => {
       <Link to="/CreateGroup">Create Group</Link>
       </p>
 
-      <h2 className="w3-center">Current Group Name: {entityNameCurrent} </h2>
+      <h2 className="w3-center">Current Group Name: <div id="groupName" name="groupName">{entityNameCurrent}</div> </h2>
       <div id="updateGroupNameForm" className="w3-container w3-card-4 w3-light-grey w3-text-blue w3-margin">
         <div className="w3-col" style={{ width: `${50  }px` }}>
             <i className="w3-xxlarge fa fa-pencil"></i>
