@@ -4,6 +4,9 @@ import { Link } from "react-router-dom";
 import { ethers } from "ethers";
 // import SemaphoreCommunitiesABI from "../abi/SemaphoreCommunities.json";
 import SemaphoreContractABI from "../abi/Semaphore.json";
+import { SemaphoreSubgraph } from "@semaphore-protocol/data"
+
+const semaphoreSubgraph = new SemaphoreSubgraph()
 
 // const semaphoreCommunitiesAddress = process.env.REACT_APP_WBCONTRACT;
 const semaphoreContractAddress = process.env.REACT_APP_SEMAPHORE;
@@ -43,17 +46,36 @@ async function addMemberToGroup() {
     SemaphoreContractABI.abi,
     signer
   );
+
+// ********************************
+// TODO: get group members
+const { members } = semaphoreSubgraph.getGroup(_entityID, { members: true })
+// TODO: check if member is already in group
+console.log("Members: ", members);
+// TODO: only add if member is not already in group
+// ********************************
+
+
+
+
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const nonce = await signer.getTransactionCount();
+  // const nonce = await signer.getTransactionCount();
   console.log(`Adding membercommitment ${  _memberCommitment  } to ${  _entityID}`);
 //  const tx = await contract.addWhistleblower(_entityID, _memberCommitment, { gasLimit: 1000000, nonce: nonce || undefined });
-  const tx = await contract.addMember(_entityID, _memberCommitment);
-  console.log("Success!");
-  console.log(`Transaction hash: https://goerli.etherscan.io/tx/${tx.hash}`);
-  document.getElementById("memberCommitment").value = "";
-  const receipt = await tx.wait();
-  console.log(`Transaction confirmed in block ${receipt.blockNumber}`);
-  console.log(`Gas used: ${receipt.gasUsed.toString()}`);
+
+
+// ********************************
+// paused for testing to see if member exists first
+// const tx = await contract.addMember(_entityID, _memberCommitment);
+//   console.log("Success!");
+//   console.log(`Transaction hash: https://goerli.etherscan.io/tx/${tx.hash}`);
+//   document.getElementById("memberCommitment").value = "";
+//   const receipt = await tx.wait();
+//   console.log(`Transaction confirmed in block ${receipt.blockNumber}`);
+//   console.log(`Gas used: ${receipt.gasUsed.toString()}`);
+// ********************************
+
 }
 
 const addMember = () => {
