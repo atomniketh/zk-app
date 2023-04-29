@@ -4,9 +4,10 @@ import { Link } from "react-router-dom";
 import { ethers } from "ethers";
 // import SemaphoreCommunitiesABI from "../abi/SemaphoreCommunities.json";
 import SemaphoreContractABI from "../abi/Semaphore.json";
-import { SemaphoreSubgraph } from "@semaphore-protocol/data"
+import { SemaphoreEthers, SemaphoreSubgraph } from "@semaphore-protocol/data"
 
-const semaphoreSubgraph = new SemaphoreSubgraph()
+const semaphoreSubgraph = new SemaphoreSubgraph("goerli");
+const semaphoreEthers = new SemaphoreEthers()
 
 // const semaphoreCommunitiesAddress = process.env.REACT_APP_WBCONTRACT;
 const semaphoreContractAddress = process.env.REACT_APP_SEMAPHORE;
@@ -51,7 +52,9 @@ async function addMemberToGroup() {
 // TODO: get group members
 const { members } = semaphoreSubgraph.getGroup(_entityID, { members: true })
 // TODO: check if member is already in group
-console.log("Members: ", members);
+console.log("Members: ", members, " in ", _entityID);
+const members2 = await semaphoreEthers.getGroupMembers(_entityID)
+console.log("Members2: ", members2, " in ", _entityID);
 // TODO: only add if member is not already in group
 // ********************************
 
