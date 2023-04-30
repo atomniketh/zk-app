@@ -4,19 +4,27 @@ import { Link } from "react-router-dom";
 import { ethers } from "ethers";
 // import SemaphoreCommunitiesABI from "../abi/SemaphoreCommunities.json";
 import SemaphoreContractABI from "../abi/Semaphore.json";
-import { SemaphoreEthers, SemaphoreSubgraph } from "@semaphore-protocol/data"
+import { SemaphoreEthers } from "@semaphore-protocol/data";
 
-const semaphoreSubgraph = new SemaphoreSubgraph("goerli");
-const semaphoreEthers = new SemaphoreEthers()
+const semaphoreEthers = new SemaphoreEthers("goerli");
 
 // const semaphoreCommunitiesAddress = process.env.REACT_APP_WBCONTRACT;
 const semaphoreContractAddress = process.env.REACT_APP_SEMAPHORE;
+
+
 
 async function checkEditor() {
   // check if user is the group editor
   const queryParams = new URLSearchParams(window.location.search);
   const _entityID = queryParams.get("entityID");
   const _entityEditor = queryParams.get("entityEditor");
+
+  const members2 = await semaphoreEthers.getGroupMembers(_entityID)
+  console.log("Members2: ", members2, " in ", _entityID);
+  for (let key in members2) {
+    console.log(key + ": " + members2[key]);
+  }
+  
   const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
   await provider.send("eth_requestAccounts", []);
   const signer = provider.getSigner();
@@ -50,17 +58,11 @@ async function addMemberToGroup() {
 
 // ********************************
 // TODO: get group members
-const { members } = semaphoreSubgraph.getGroup(_entityID, { members: true })
 // TODO: check if member is already in group
-console.log("Members: ", members, " in ", _entityID);
-const members2 = await semaphoreEthers.getGroupMembers(_entityID)
-console.log("Members2: ", members2, " in ", _entityID);
+// const members2 = await semaphoreEthers.getGroupMembers(_entityID)
+// console.log("Members2: ", members2, " in ", _entityID);
 // TODO: only add if member is not already in group
 // ********************************
-
-
-
-
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   // const nonce = await signer.getTransactionCount();
@@ -70,13 +72,13 @@ console.log("Members2: ", members2, " in ", _entityID);
 
 // ********************************
 // paused for testing to see if member exists first
-// const tx = await contract.addMember(_entityID, _memberCommitment);
-//   console.log("Success!");
-//   console.log(`Transaction hash: https://goerli.etherscan.io/tx/${tx.hash}`);
-//   document.getElementById("memberCommitment").value = "";
-//   const receipt = await tx.wait();
-//   console.log(`Transaction confirmed in block ${receipt.blockNumber}`);
-//   console.log(`Gas used: ${receipt.gasUsed.toString()}`);
+  const tx = await contract.addMember(_entityID, _memberCommitment);
+  console.log("Success!");
+  console.log(`Transaction hash: https://goerli.etherscan.io/tx/${tx.hash}`);
+  document.getElementById("memberCommitment").value = "";
+  const receipt = await tx.wait();
+  console.log(`Transaction confirmed in block ${receipt.blockNumber}`);
+  console.log(`Gas used: ${receipt.gasUsed.toString()}`);
 // ********************************
 
 }
@@ -84,7 +86,6 @@ console.log("Members2: ", members2, " in ", _entityID);
 const addMember = () => {
   const queryParams = new URLSearchParams(window.location.search);
   const groupName = queryParams.get("entityName");
-
   return (
     <div>
       <h1>Add Member to Group</h1>
