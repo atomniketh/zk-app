@@ -5,7 +5,7 @@ import { SemaphoreEthers, SemaphoreSubgraph } from "@semaphore-protocol/data";
 import Web3 from "web3";
 
 // const semaphoreEthers = new SemaphoreEthers();
-const semaphoreSubgraph = new SemaphoreSubgraph();
+const semaphoreSubgraph = new SemaphoreSubgraph("goerli");
 const semaphoreEthers = new SemaphoreEthers("goerli", {
   address: process.env.REACT_APP_WBCONTRACT,
   startBlock: 0
