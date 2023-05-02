@@ -4,13 +4,18 @@ import { Identity } from "@semaphore-protocol/identity";
 import { Group } from "@semaphore-protocol/group";
 import { generateProof } from "@semaphore-protocol/proof";
 import { ethers, utils } from "ethers"
-import FeedbackContractABI from '../abi/Feedback.json';
+// import FeedbackContractABI from '../abi/Feedback.json';
+import SemaphoreContractABI from "../abi/Semaphore.json";
+import { SemaphoreEthers } from "@semaphore-protocol/data";
+
+const semaphoreEthers = new SemaphoreEthers("goerli");
+const semaphoreContractAddress = process.env.REACT_APP_SEMAPHORE;
 
 // console.log("Identity: " + localStorage.getItem('myIdentity'));
 // console.log("Commitment: " + localStorage.getItem('myCommitment'));
 
 async function getProof() {
-  const feedbackAddress = "0x7832A5B527ce8c7d6282e7FbA53F3A9A598D67Ed";
+  // const feedbackAddress = "0x7832A5B527ce8c7d6282e7FbA53F3A9A598D67Ed";
   const groupID = "32474";
   const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
   const group = new Group(parseInt(groupID, 10));
@@ -38,18 +43,17 @@ async function getProof() {
   // console.log("Group Leaves: " + group.numberOfLeaves);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const userName = "0x636d73746f6e6500000000000000000000000000000000000000000000000000";
+  // const userName = "0x636d73746f6e6500000000000000000000000000000000000000000000000000";
 
   await provider.send("eth_requestAccounts", []);
   const signer = provider.getSigner();
   // let userAddress = await signer.getAddress();
-  const contract = new ethers.Contract(feedbackAddress, FeedbackContractABI.abi, signer);
-  const tx = await contract.joinGroup(identity2.commitment);
-  console.log(`Transaction hash: https://goerli.etherscan.io/tx/${tx.hash}`);
-  const receipt = await tx.wait();
-  console.log(`Transaction confirmed in block ${receipt.blockNumber}`);
-  console.log(`Gas used: ${receipt.gasUsed.toString()}`);
-
+  const contract = new ethers.Contract(semaphoreContractAddress, SemaphoreContractABI.abi, signer);
+  // const tx = await contract.joinGroup(identity2.commitment);
+  // console.log(`Transaction hash: https://goerli.etherscan.io/tx/${tx.hash}`);
+  // const receipt = await tx.wait();
+  // console.log(`Transaction confirmed in block ${receipt.blockNumber}`);
+  // console.log(`Gas used: ${receipt.gasUsed.toString()}`);
 
   const externalNullifier = group.root;
   const fullProof = await generateProof(identity2, groupProof, externalNullifier, signal);

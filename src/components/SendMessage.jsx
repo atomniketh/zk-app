@@ -7,11 +7,16 @@ import { Group } from "@semaphore-protocol/group";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { generateProof, verifyProof } from "@semaphore-protocol/proof";
 import { SemaphoreEthers, SemaphoreSubgraph } from "@semaphore-protocol/data"
-
 import "font-awesome/css/font-awesome.min.css";
-import SemaphoreCommunitiesABI from "../abi/SemaphoreCommunities.json";
+// import SemaphoreCommunitiesABI from "../abi/SemaphoreCommunities.json";
+import SemaphoreContractABI from "../abi/Semaphore.json";
 
-const semaphoreCommunitiesAddress = process.env.REACT_APP_WBCONTRACT;
+
+const semaphoreEthers = new SemaphoreEthers("goerli");
+const semaphoreContractAddress = process.env.REACT_APP_SEMAPHORE;
+
+
+// const semaphoreCommunitiesAddress = process.env.REACT_APP_WBCONTRACT;
 
 const provider = new ethers.providers.Web3Provider(window.ethereum);
 const signer = provider.getSigner();
@@ -114,8 +119,8 @@ console.log(`Group Members Beginning: ${  group.members}`);
    
     await provider.send("eth_requestAccounts", []);
         const contract = new ethers.Contract(
-      semaphoreCommunitiesAddress,
-      SemaphoreCommunitiesABI.abi,
+      semaphoreContractAddress,
+      SemaphoreContractABI.abi,
       signer
     );
 
@@ -152,19 +157,31 @@ console.log(`vProof: ${  vProof}`);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const nonce = await signer.getTransactionCount();
 
-  console.log("******* Publishing Leak With: *********************************");
-  console.log(`_leakMessage: ${  _leakMessage}`);
+  // console.log("******* Publishing Leak With: *********************************");
+  // console.log(`_leakMessage: ${  _leakMessage}`);
+  // console.log(`nullifierHash: ${  fullProof.nullifierHash}`);
+  // console.log(`_entityID: ${  _entityID  } ${  typeof _entityID}`);
+  // console.log(`proof: ${  fullProof.proof}`);
+  // console.log("*******  End of Publishing Leak With: *********************************");
+
+  // const tx = await contract.publishLeak(
+  //   _leakMessage,
+  //   fullProof.merkleTreeRoot,
+  //   fullProof.nullifierHash,
+  //   fullProof.proof, { gasLimit: 1000000, nonce: nonce || undefined }
+  // );
+
+  console.log("******* Publishing Signal With: *********************************");
+  console.log(`groupId: ${  _entityID }`);
+  console.log(`merkleTreeRoot: ${  fullProof.merkleTreeRoot}`);
+  console.log(`signal: ${  _leakMessage}`);
   console.log(`nullifierHash: ${  fullProof.nullifierHash}`);
-  console.log(`_entityID: ${  _entityID  } ${  typeof _entityID}`);
+  console.log(`externalNullifier: ${  externalNullifier}`);
   console.log(`proof: ${  fullProof.proof}`);
   console.log("*******  End of Publishing Leak With: *********************************");
 
-  const tx = await contract.publishLeak(
-    _leakMessage,
-    fullProof.merkleTreeRoot,
-    fullProof.nullifierHash,
-    fullProof.proof, { gasLimit: 1000000, nonce: nonce || undefined }
-  );
+
+  const tx = await contract.verifyProof(_entityID, fullProof.merkleTreeRoot, _leakMessage, fullProof.nullifierHash, externalNullifier, fullProof.proof)
 
   console.log("Success!");
   console.log(`Transaction hash: https://goerli.etherscan.io/tx/${tx.hash}`);
