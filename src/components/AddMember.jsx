@@ -2,16 +2,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { ethers } from "ethers";
-// import SemaphoreCommunitiesABI from "../abi/SemaphoreCommunities.json";
 import SemaphoreContractABI from "../abi/Semaphore.json";
 import { SemaphoreEthers } from "@semaphore-protocol/data";
 
 const semaphoreEthers = new SemaphoreEthers("goerli");
-
-// const semaphoreCommunitiesAddress = process.env.REACT_APP_WBCONTRACT;
 const semaphoreContractAddress = process.env.REACT_APP_SEMAPHORE;
-
-
 
 async function checkEditor() {
   // check if user is the group editor
@@ -19,68 +14,56 @@ async function checkEditor() {
   const _entityID = queryParams.get("entityID");
   const _entityEditor = queryParams.get("entityEditor");
 
-  const members2 = await semaphoreEthers.getGroupMembers(_entityID)
-  console.log("Members2: ", members2, " in ", _entityID);
-  for (let key in members2) {
-    console.log(key + ": " + members2[key]);
-  }
-  
   const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
   await provider.send("eth_requestAccounts", []);
   const signer = provider.getSigner();
   let isEditor = false;
   if ((await signer.getAddress()) === _entityEditor) {
     isEditor = true;
-    console.log(`You are the editor of the group: ${  _entityID}`);
+    console.log(`You are the editor of the group: ${_entityID}`);
   } else {
     isEditor = false;
-    console.log(`You are not the editor of the group: ${  _entityID}`);
-    alert(`You are not the editor of the group: ${  _entityID}`);
+    console.log(`You are not the editor of the group: ${_entityID}`);
+    alert(`You are not the editor of the group: ${_entityID}`);
   }
-  console.log(`Are you the editor of the group: ${  isEditor}`);
+  console.log(`Are you the editor of the group: ${isEditor}`);
 }
 
 async function addMemberToGroup() {
   const _memberCommitment = document.getElementById("memberCommitment").value;
   const queryParams = new URLSearchParams(window.location.search);
   const _entityID = queryParams.get("entityID");
-  console.log(`${_entityID  } ${  _memberCommitment}`);
-
   const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
   await provider.send("eth_requestAccounts", []);
   const signer = provider.getSigner();
-  console.log(`Contract address: ${  semaphoreContractAddress}`);
   const contract = new ethers.Contract(
     semaphoreContractAddress,
     SemaphoreContractABI.abi,
     signer
   );
 
-// ********************************
-// TODO: get group members
-// TODO: check if member is already in group
-// const members2 = await semaphoreEthers.getGroupMembers(_entityID)
-// console.log("Members2: ", members2, " in ", _entityID);
-// TODO: only add if member is not already in group
-// ********************************
+  const allMembers = await semaphoreEthers.getGroupMembers(_entityID)
+  //console.log("Members: ", allMembers, " in ", _entityID);
+  let memberExists = false;
+  for (let key in allMembers) {
+    //console.log(key + ": " + allMembers[key]);
+    if (allMembers[key] == _memberCommitment) {
+      memberExists = true;
+    }
+  }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  // const nonce = await signer.getTransactionCount();
-  console.log(`Adding membercommitment ${  _memberCommitment  } to ${  _entityID}`);
-//  const tx = await contract.addWhistleblower(_entityID, _memberCommitment, { gasLimit: 1000000, nonce: nonce || undefined });
-
-
-// ********************************
-// paused for testing to see if member exists first
-  const tx = await contract.addMember(_entityID, _memberCommitment);
-  console.log("Success!");
-  console.log(`Transaction hash: https://goerli.etherscan.io/tx/${tx.hash}`);
-  document.getElementById("memberCommitment").value = "";
-  const receipt = await tx.wait();
-  console.log(`Transaction confirmed in block ${receipt.blockNumber}`);
-  console.log(`Gas used: ${receipt.gasUsed.toString()}`);
-// ********************************
-
+  if (memberExists) {
+    console.log("No need to add. This member already exists.")
+  } else {
+    console.log(`Adding membercommitment ${_memberCommitment} to ${_entityID}`);
+    const tx = await contract.addMember(_entityID, _memberCommitment);
+    console.log("Success!");
+    console.log(`Transaction hash: https://goerli.etherscan.io/tx/${tx.hash}`);
+    document.getElementById("memberCommitment").value = "";
+    const receipt = await tx.wait();
+    console.log(`Transaction confirmed in block ${receipt.blockNumber}`);
+    console.log(`Gas used: ${receipt.gasUsed.toString()}`);
+  }
 }
 
 const addMember = () => {
@@ -102,7 +85,7 @@ const addMember = () => {
         {/* <input type="hidden" id="entityID" name="entityID" value={queryParams.get("entityID")} /> */}
         <p></p>
         <label htmlFor="memberCommitment">Commitment:</label> &nbsp;
-        <div className="w3-col" style={{ width: `${50  }px` }}>
+        <div className="w3-col" style={{ width: `${50}px` }}>
           <i className="w3-xxlarge fa fa-pencil"></i>
         </div>
         <input
