@@ -5,7 +5,7 @@ import { BigNumber, ethers, utils } from "ethers";
 import { Identity } from "@semaphore-protocol/identity";
 import { Group } from "@semaphore-protocol/group";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { generateProof, verifyProof } from "@semaphore-protocol/proof";
+import { generateProof, verifyProof, calculateNullifierHash } from "@semaphore-protocol/proof";
 import { SemaphoreEthers, SemaphoreSubgraph } from "@semaphore-protocol/data"
 import "font-awesome/css/font-awesome.min.css";
 // import SemaphoreCommunitiesABI from "../abi/SemaphoreCommunities.json";
@@ -81,7 +81,8 @@ async function signANewMessage() {
 const submitMessage = async () => {
   const queryParams = new URLSearchParams(window.location.search);
   const _entityID = parseInt(queryParams.get("entityID"), 10);
-  // eslint-disable-next-line no-undef
+  const _entityIDStr = queryParams.get("entityID");
+    // eslint-disable-next-line no-undef
   console.log(`entityID Value: ${  BigInt(_entityID)}`);
   // console.log(_entityID + " " + _memberCommitment);
   const group = new Group(parseInt(_entityID, 10), 20);
@@ -90,13 +91,19 @@ console.log(`Group Members Beginning: ${  group.members}`);
   console.log(`Group size: ${  group.depth}`);
 
   // const externalNullifier = utils.formatBytes32String("Topic");
-  const externalNullifier = group.root;
+  // const externalNullifier = group.root;
   const signal = document.getElementById("leakMessage").value;
-  const _leakMessage = BigNumber.from(utils.formatBytes32String(signal)).toString();
+  const _leakMessage = utils.formatBytes32String(signal).toString();
   console.log(`localStorage.getItem(signedData): ${  localStorage.getItem("signedData")}`);
   const identity = new Identity(localStorage.getItem("signedData"));
   console.log(`identity.commitment: ${  identity.commitment}`);
-  group.addMember(identity.commitment);
+  
+  const externalNullifier = utils.formatBytes32String("Topic")
+
+  const allMembers = await semaphoreEthers.getGroupMembers(_entityIDStr);
+  group.addMembers(allMembers);
+  console.log(`allMembers: ${ allMembers}`);
+
   const idIndex = group.indexOf(identity.commitment);
   console.log(`idIndex: ${  idIndex}`);
   console.log(`Group Members: ${  group.members}`);
@@ -116,7 +123,6 @@ console.log(`Group Members Beginning: ${  group.members}`);
     console.log(`Group MerkleProof Root: ${  thisIdsGroupMerkleProof.root}`);
     console.log("*******  End of Group Info *********************************");
 
-   
     await provider.send("eth_requestAccounts", []);
         const contract = new ethers.Contract(
       semaphoreContractAddress,
@@ -171,17 +177,18 @@ console.log(`vProof: ${  vProof}`);
   //   fullProof.proof, { gasLimit: 1000000, nonce: nonce || undefined }
   // );
 
+  const calcNullifierHash = calculateNullifierHash(identity.nullifier, externalNullifier);
+
   console.log("******* Publishing Signal With: *********************************");
   console.log(`groupId: ${  _entityID }`);
-  console.log(`merkleTreeRoot: ${  fullProof.merkleTreeRoot}`);
+  console.log(`fullProof.merkleTreeRoot: ${  fullProof.merkleTreeRoot}`);
   console.log(`signal: ${  _leakMessage}`);
-  console.log(`nullifierHash: ${  fullProof.nullifierHash}`);
-  console.log(`externalNullifier: ${  externalNullifier}`);
-  console.log(`proof: ${  fullProof.proof}`);
+  console.log(`calcNullifierHash: ${  calcNullifierHash }`);
+  console.log(`externalNullifier: ${  externalNullifier }`);
+  console.log(`fullProof.proof: ${  fullProof.proof}`);
   console.log("*******  End of Publishing Leak With: *********************************");
 
-
-  const tx = await contract.verifyProof(_entityID, fullProof.merkleTreeRoot, _leakMessage, fullProof.nullifierHash, externalNullifier, fullProof.proof)
+  const tx = await contract.verifyProof(_entityID, fullProof.merkleTreeRoot, _leakMessage, calcNullifierHash, externalNullifier, fullProof.proof, { gasLimit: 1000000, nonce: nonce || undefined })
 
   console.log("Success!");
   console.log(`Transaction hash: https://goerli.etherscan.io/tx/${tx.hash}`);
