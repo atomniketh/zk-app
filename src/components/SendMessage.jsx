@@ -38,8 +38,8 @@ const checkGroupInfo = async () => {
     SemaphoreCommunitiesABI.abi,
     signer
   );
-  const groupMTRoot = await contract.getMerkleTreeRoot(_entityID);
-  console.log(`Group MTRoot: ${  groupMTRoot}`);
+  // const groupMTRoot = await contract.getMerkleTreeRoot(_entityID);
+  // console.log(`Group MTRoot: ${  groupMTRoot}`);
 
   const semaphoreSubgraph = new SemaphoreSubgraph("goerli");
   const groupIds = await semaphoreSubgraph.getGroupIds();
@@ -98,9 +98,21 @@ console.log(`Group Members Beginning: ${  group.members}`);
   const identity = new Identity(localStorage.getItem("signedData"));
   console.log(`identity.commitment: ${  identity.commitment}`);
   
-  const externalNullifier = utils.formatBytes32String("Topic")
+  // const externalNullifier = utils.formatBytes32String("Topic1")
 
-  const allMembers = await semaphoreEthers.getGroupMembers(_entityIDStr);
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let result = '';
+  
+  for (let i = 0; i < 12; i++) {
+    result += characters.charAt(Math.floor(Math.random() * characters.length));
+  }
+  
+  const externalNullifier = utils.formatBytes32String(result);
+  console.log(`random string: ${ result}`); 
+  console.log(`externalNullifer: ${ externalNullifier}`);
+
+
+   const allMembers = await semaphoreEthers.getGroupMembers(_entityIDStr);
   group.addMembers(allMembers);
   console.log(`allMembers: ${ allMembers}`);
 
@@ -119,6 +131,7 @@ console.log(`Group Members Beginning: ${  group.members}`);
     console.log(`Group Depth: ${  group.depth}`);
     console.log(`Group zeroValue: ${  group.zeroValue}`);
     const thisIdsGroupMerkleProof = group.generateMerkleProof(idIndex)
+    console.log(`Group MerkleProof: ${  thisIdsGroupMerkleProof}`);
     console.log(`Group MerkleProof Leaf: ${  thisIdsGroupMerkleProof.leaf}`);
     console.log(`Group MerkleProof Root: ${  thisIdsGroupMerkleProof.root}`);
     console.log("*******  End of Group Info *********************************");
@@ -131,7 +144,14 @@ console.log(`Group Members Beginning: ${  group.members}`);
     );
 
     const groupMTRoot = await contract.getMerkleTreeRoot(_entityID);
-    console.log(`GroupMTRoot: ${  groupMTRoot}`);
+    console.log(`GroupMTRoot from on-chain: ${  groupMTRoot}`);
+
+if (groupMTRoot == thisIdsGroupMerkleProof.root) {
+    console.log('The Roots match, message can be sent.')
+} else  {
+  console.log('The Roots DO NOT match, message can not be sent.')
+}
+
     console.log(`Raw is: ${  typeof groupMTRoot}`);
       // eslint-disable-next-line no-undef
     const groupMTRootInt = BigInt(groupMTRoot);
@@ -139,10 +159,10 @@ console.log(`Group Members Beginning: ${  group.members}`);
     const groupMTDepth = await contract.getMerkleTreeDepth(_entityID);
     console.log(`GroupMTDepth: ${  groupMTDepth}`);
     
-
     console.log("******* Generating Proof With: *********************************");
     console.log(`identity: ${  identity}`);
     console.log(`thisIdsGroupMerkleProof: ${  thisIdsGroupMerkleProof }`);
+    //console.log(`Which matches GroupMTRoot from on-chain: ${  groupMTRoot}`);
     console.log(`externalNullifier: ${  externalNullifier}`);
     console.log(`_leakMessage: ${  _leakMessage}`);
     console.log("*******  End of Generating Proof With: *********************************");
@@ -181,14 +201,15 @@ console.log(`vProof: ${  vProof}`);
 
   console.log("******* Publishing Signal With: *********************************");
   console.log(`groupId: ${  _entityID }`);
-  console.log(`fullProof.merkleTreeRoot: ${  fullProof.merkleTreeRoot}`);
+  console.log(`thisIdsGroupMerkleProof.root: ${  thisIdsGroupMerkleProof.root}`);
+  console.log(`Which matches GroupMTRoot from on-chain: ${  groupMTRoot}`);
   console.log(`signal: ${  _leakMessage}`);
   console.log(`calcNullifierHash: ${  calcNullifierHash }`);
   console.log(`externalNullifier: ${  externalNullifier }`);
   console.log(`fullProof.proof: ${  fullProof.proof}`);
   console.log("*******  End of Publishing Leak With: *********************************");
 
-  const tx = await contract.verifyProof(_entityID, fullProof.merkleTreeRoot, _leakMessage, calcNullifierHash, externalNullifier, fullProof.proof, { gasLimit: 1000000, nonce: nonce || undefined })
+  const tx = await contract.verifyProof(_entityID, thisIdsGroupMerkleProof.root, _leakMessage, calcNullifierHash, externalNullifier, fullProof.proof, { gasLimit: 1000000, nonce: nonce || undefined })
 
   console.log("Success!");
   console.log(`Transaction hash: https://goerli.etherscan.io/tx/${tx.hash}`);
