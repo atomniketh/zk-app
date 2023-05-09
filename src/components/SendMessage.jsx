@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import React from "react";
 import { Link } from "react-router-dom";
-import { BigNumber, ethers, utils } from "ethers";
+import { ethers, utils } from "ethers";
 import { Identity } from "@semaphore-protocol/identity";
 import { Group } from "@semaphore-protocol/group";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -31,13 +31,13 @@ const clearCookie = async () => {
 
 // Remove after testing ++++++++++++++++++++++++++++++++++++++++++++++++
 const checkGroupInfo = async () => {
-  const queryParams = new URLSearchParams(window.location.search);
-  const _entityID = queryParams.get("entityID");
-  const contract = new ethers.Contract(
-    semaphoreCommunitiesAddress,
-    SemaphoreCommunitiesABI.abi,
-    signer
-  );
+  // const queryParams = new URLSearchParams(window.location.search);
+  // const _entityID = queryParams.get("entityID");
+  // const contract = new ethers.Contract(
+  //   semaphoreCommunitiesAddress,
+  //   SemaphoreCommunitiesABI.abi,
+  //   signer
+  // );
   // const groupMTRoot = await contract.getMerkleTreeRoot(_entityID);
   // console.log(`Group MTRoot: ${  groupMTRoot}`);
 
@@ -204,12 +204,12 @@ console.log(`vProof: ${  vProof}`);
   console.log(`thisIdsGroupMerkleProof.root: ${  thisIdsGroupMerkleProof.root}`);
   console.log(`Which matches GroupMTRoot from on-chain: ${  groupMTRoot}`);
   console.log(`signal: ${  _leakMessage}`);
-  console.log(`calcNullifierHash: ${  calcNullifierHash }`);
+  console.log(`fullProof.nullifierHash: ${  fullProof.nullifierHash }`);
   console.log(`externalNullifier: ${  externalNullifier }`);
   console.log(`fullProof.proof: ${  fullProof.proof}`);
   console.log("*******  End of Publishing Leak With: *********************************");
 
-  const tx = await contract.verifyProof(_entityID, thisIdsGroupMerkleProof.root, _leakMessage, calcNullifierHash, externalNullifier, fullProof.proof, { gasLimit: 1000000, nonce: nonce || undefined })
+  const tx = await contract.verifyProof(_entityID, thisIdsGroupMerkleProof.root, _leakMessage, fullProof.nullifierHash, externalNullifier, fullProof.proof, { gasLimit: 1000000, nonce: nonce || undefined })
 
   console.log("Success!");
   console.log(`Transaction hash: https://goerli.etherscan.io/tx/${tx.hash}`);

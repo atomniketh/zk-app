@@ -6,9 +6,9 @@ import { generateProof } from "@semaphore-protocol/proof";
 import { ethers, utils } from "ethers"
 // import FeedbackContractABI from '../abi/Feedback.json';
 import SemaphoreContractABI from "../abi/Semaphore.json";
-import { SemaphoreEthers } from "@semaphore-protocol/data";
+// import { SemaphoreEthers } from "@semaphore-protocol/data";
 
-const semaphoreEthers = new SemaphoreEthers("goerli");
+// const semaphoreEthers = new SemaphoreEthers("goerli");
 const semaphoreContractAddress = process.env.REACT_APP_SEMAPHORE;
 
 // console.log("Identity: " + localStorage.getItem('myIdentity'));

@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-unresolved
 /* eslint-disable import/no-unresolved */
 import './App.css';
 import './w3.css'
