@@ -94,6 +94,8 @@ console.log(`Group Members Beginning: ${  group.members}`);
   // const externalNullifier = group.root;
   const signal = document.getElementById("leakMessage").value;
   const _leakMessage = utils.formatBytes32String(signal).toString();
+  console.log("Formatted Signal: " + ethers.BigNumber.from(_leakMessage).toBigInt());
+
   console.log(`localStorage.getItem(signedData): ${  localStorage.getItem("signedData")}`);
   const identity = new Identity(localStorage.getItem("signedData"));
   console.log(`identity.commitment: ${  identity.commitment}`);
@@ -163,8 +165,8 @@ if (groupMTRoot == thisIdsGroupMerkleProof.root) {
     console.log(`identity: ${  identity}`);
     console.log(`thisIdsGroupMerkleProof: ${  thisIdsGroupMerkleProof }`);
     //console.log(`Which matches GroupMTRoot from on-chain: ${  groupMTRoot}`);
-    console.log(`externalNullifier: ${  externalNullifier}`);
-    console.log(`_leakMessage: ${  _leakMessage}`);
+    console.log(`externalNullifier: ${  ethers.BigNumber.from(externalNullifier).toBigInt()}`);
+    console.log(`_leakMessage: ${  ethers.BigNumber.from(_leakMessage).toBigInt()}`);
     console.log("*******  End of Generating Proof With: *********************************");
 
 
@@ -172,7 +174,7 @@ if (groupMTRoot == thisIdsGroupMerkleProof.root) {
       identity,
       group,
       _entityID,
-      _leakMessage
+      ethers.BigNumber.from(_leakMessage).toBigInt()
   )
 
   console.log(`fullProof: ${ fullProof.proof }`);
@@ -197,19 +199,19 @@ console.log(`vProof: ${  vProof}`);
   //   fullProof.proof, { gasLimit: 1000000, nonce: nonce || undefined }
   // );
 
-  const calcNullifierHash = calculateNullifierHash(identity.nullifier, externalNullifier);
+  // const calcNullifierHash = calculateNullifierHash(identity.nullifier, externalNullifier);
 
   console.log("******* Publishing Signal With: *********************************");
   console.log(`groupId: ${  _entityID }`);
   console.log(`thisIdsGroupMerkleProof.root: ${  thisIdsGroupMerkleProof.root}`);
   console.log(`Which matches GroupMTRoot from on-chain: ${  groupMTRoot}`);
-  console.log(`signal: ${  _leakMessage}`);
+  console.log(`signal: ${ ethers.BigNumber.from(_leakMessage).toBigInt() }`);
   console.log(`fullProof.nullifierHash: ${  fullProof.nullifierHash }`);
-  console.log(`externalNullifier: ${  externalNullifier }`);
+  console.log(`externalNullifier: ${  ethers.BigNumber.from(externalNullifier).toBigInt()  }`);
   console.log(`fullProof.proof: ${  fullProof.proof}`);
   console.log("*******  End of Publishing Leak With: *********************************");
 
-  const tx = await contract.verifyProof(_entityID, thisIdsGroupMerkleProof.root, _leakMessage, fullProof.nullifierHash, externalNullifier, fullProof.proof, { gasLimit: 1000000, nonce: nonce || undefined })
+  const tx = await contract.verifyProof(_entityID, thisIdsGroupMerkleProof.root, ethers.BigNumber.from(_leakMessage).toBigInt(), fullProof.nullifierHash, ethers.BigNumber.from(externalNullifier).toBigInt(), fullProof.proof, { gasLimit: 1000000, nonce: nonce || undefined })
 
   console.log("Success!");
   console.log(`Transaction hash: https://goerli.etherscan.io/tx/${tx.hash}`);
