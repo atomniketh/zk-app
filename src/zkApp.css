@@ -1,0 +1,57 @@
+/* Input Fields */
+input[type='text'], input[type='email'], input[type='password'] {
+    background-color: #F4F4F4;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    padding: 10px 15px;
+  }
+  
+  /* Buttons */
+  button {
+    background-color: #2F80ED;
+    border: none;
+    border-radius: 5px;
+    color: #FFFFFF;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 10px 15px;
+    transition: background-color 0.3s ease;
+  }
+  
+  button:hover {
+      background-color: #1E52C9;
+  }
+  
+  /* Tables */
+  table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+  }
+  
+  th {
+    background-color: #F4F4F4;
+  }
+
+  /* tr:nth-child(even) {
+    background-color: #f2f2f2;
+  } */
+  
+  /* Backgrounds */
+  body {
+    background-color: #F0F2F5;
+  }
+  
+  /* Fonts */
+  body {
+    color: #2E384D;
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+  }
