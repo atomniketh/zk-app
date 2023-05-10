@@ -2,6 +2,7 @@
 import React from 'react';
 import { Link } from "react-router-dom";
 import { SemaphoreEthers, SemaphoreSubgraph } from "@semaphore-protocol/data";
+import { utils } from "ethers";
 import Web3 from "web3";
 
 // const semaphoreEthers = new SemaphoreEthers();
@@ -32,17 +33,17 @@ class ComponentPage extends React.Component {
       try {
         const queryParams = new URLSearchParams(window.location.search);
         const groupIDNum = queryParams.get("entityID");
-         const graphIDs = await semaphoreSubgraph.getGroupIds();
-         console.log(graphIDs);
-         const groups = await semaphoreSubgraph.getGroups()
-          console.log(groups);
-          const myGroup = await semaphoreSubgraph.getGroup(groupIDNum, { admin: true, members: true, verifiedProofs: true });
-          console.log(myGroup);
-          console.log(`Group Admin: ${  myGroup.admin}`);
-          console.log(`Group Members: ${  myGroup.members}`);
-          console.log(`Group verifiedProofs: ${  myGroup.verifiedProofs}`);
-          console.log(`Group merkleTree: ${  myGroup.merkleTree}`);
-          console.log(`Group merkleTree.root: ${  myGroup.merkleTree.root}`);
+        //  const graphIDs = await semaphoreSubgraph.getGroupIds();
+        //  console.log(graphIDs);
+        //  const groups = await semaphoreSubgraph.getGroups()
+          // console.log(groups);
+          // const myGroup = await semaphoreSubgraph.getGroup(groupIDNum, { admin: true, members: true, verifiedProofs: true });
+          // console.log(myGroup);
+          // console.log(`Group Admin: ${  myGroup.admin}`);
+          // console.log(`Group Members: ${  myGroup.members}`);
+          // console.log(`Group verifiedProofs: ${  myGroup.verifiedProofs}`);
+          // console.log(`Group merkleTree: ${  myGroup.merkleTree}`);
+          // console.log(`Group merkleTree.root: ${  myGroup.merkleTree.root}`);
           const admin = await semaphoreEthers.getGroupAdmin(groupIDNum);
           this.setState({ groupAdmin: admin });
           const urlLink = `https://goerli.etherscan.io/address/${  this.state.groupAdmin}`;
@@ -72,6 +73,11 @@ class ComponentPage extends React.Component {
              // eslint-disable-next-line no-plusplus
              for (let index = 0; index < verifiedProofs.length; index++) {
                  theMessages[index] = Web3.utils.hexToAscii(Web3.utils.toHex(verifiedProofs[index].signal));
+                //  try {
+                //   console.log(verifiedProofs[index].signal);
+                //  } catch (error) {
+                //   console.log("Not a hex.");
+                //  }
             }
             this.setState({ verifiedProofs:theMessages });
            }, []); 

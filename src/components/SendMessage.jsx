@@ -5,209 +5,129 @@ import { ethers, utils, BigNumber } from "ethers";
 import { Identity } from "@semaphore-protocol/identity";
 import { Group } from "@semaphore-protocol/group";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { generateProof, verifyProof, calculateNullifierHash } from "@semaphore-protocol/proof";
-import { SemaphoreEthers, SemaphoreSubgraph } from "@semaphore-protocol/data"
+import { generateProof, verifyProof } from "@semaphore-protocol/proof";
+import { SemaphoreEthers } from "@semaphore-protocol/data"
 import "font-awesome/css/font-awesome.min.css";
-// import SemaphoreCommunitiesABI from "../abi/SemaphoreCommunities.json";
 import SemaphoreContractABI from "../abi/Semaphore.json";
-
 
 const semaphoreEthers = new SemaphoreEthers("goerli");
 const semaphoreContractAddress = process.env.REACT_APP_SEMAPHORE;
-
-
-// const semaphoreCommunitiesAddress = process.env.REACT_APP_WBCONTRACT;
-
 const provider = new ethers.providers.Web3Provider(window.ethereum);
 const signer = provider.getSigner();
-
-// Remove after testing ++++++++++++++++++++++++++++++++++++++++++++++++
-const clearCookie = async () => {
-  localStorage.clear();
-  console.log("Cookies cleared");
-  window.location.reload();
-};
-// Remove after testing ++++++++++++++++++++++++++++++++++++++++++++++++
-
-// Remove after testing ++++++++++++++++++++++++++++++++++++++++++++++++
-const checkGroupInfo = async () => {
-  // const queryParams = new URLSearchParams(window.location.search);
-  // const _entityID = queryParams.get("entityID");
-  // const contract = new ethers.Contract(
-  //   semaphoreCommunitiesAddress,
-  //   SemaphoreCommunitiesABI.abi,
-  //   signer
-  // );
-  // const groupMTRoot = await contract.getMerkleTreeRoot(_entityID);
-  // console.log(`Group MTRoot: ${  groupMTRoot}`);
-
-  const semaphoreSubgraph = new SemaphoreSubgraph("goerli");
-  const groupIds = await semaphoreSubgraph.getGroupIds();
-  console.log(`Group IDs: ${  groupIds}`);
-
-  const semaphoreEthers = new SemaphoreEthers("goerli", {
-    address: process.env.REACT_APP_CONTRACT,
-    startBlock: 0
-  })
-  const members = await semaphoreEthers.getGroupMembers("1")
-  console.log(`Group Members: ${  members}`);
-
-  };
-  // Remove after testing ++++++++++++++++++++++++++++++++++++++++++++++++
-
-
-async function signANewMessage() {
-  // const queryParams = new URLSearchParams(window.location.search);
-  // const _entityID = queryParams.get("entityID");
-  // const _entityName = queryParams.get("entityName");
-  // const groupToJoin = `identity${  _entityID}`;
-
-  const messageToSign = "zkCommunities";
-
-  const signedData = await signer.signMessage(messageToSign);
-  // setSignedMessage(signedData);
-  // alert("Signed message: " + signedMessage);
-
-  const { commitment } = new Identity(signedData);
-  // alert("New Identity: " + commitment.toString());
-  console.log(`New Identity: ${  commitment.toString()}`);
-  // const identityInfo = commitment;
-  localStorage.setItem("groupToJoin", commitment.toString());
-  // console.log(
-  //   "Identity now is updated in local storage as: " + localStorage.getItem(groupToJoin)
-  // );
-}
 
 const submitMessage = async () => {
   const queryParams = new URLSearchParams(window.location.search);
   const _entityID = parseInt(queryParams.get("entityID"), 10);
   const _entityIDStr = queryParams.get("entityID");
-    // eslint-disable-next-line no-undef
-  console.log(`entityID Value: ${  BigInt(_entityID)}`);
-  // console.log(_entityID + " " + _memberCommitment);
+  // eslint-disable-next-line no-undef
   const group = new Group(parseInt(_entityID, 10), 20);
-console.log(`Group Members Beginning: ${  group.members}`);
-  console.log(`Group root: ${  group.root}`);
-  console.log(`Group size: ${  group.depth}`);
-
-  // const externalNullifier = utils.formatBytes32String("Topic");
-  // const externalNullifier = group.root;
-  // const signal = document.getElementById("leakMessage").value;
   const signal = BigNumber.from(utils.formatBytes32String(document.getElementById("leakMessage").value)).toString();
 
-  // const _leakMessage = utils.formatBytes32String(signal).toString();
-
-  console.log("Formatted Signal: " + signal);
-
-  console.log(`localStorage.getItem(signedData): ${  localStorage.getItem("signedData")}`);
+  // console.log("Formatted Signal: " + signal);
+  // console.log(`localStorage.getItem(signedData): ${localStorage.getItem("signedData")}`);
   const identity = new Identity(localStorage.getItem("signedData"));
-  console.log(`identity.commitment: ${  identity.commitment}`);
-  
-  // const externalNullifier = utils.formatBytes32String("Topic1")
 
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  let result = '';
-  
+  let randomString = '';
+  // eslint-disable-next-line no-plusplus
   for (let i = 0; i < 12; i++) {
-    result += characters.charAt(Math.floor(Math.random() * characters.length));
+    randomString += characters.charAt(Math.floor(Math.random() * characters.length));
   }
-  
-  const externalNullifier = utils.formatBytes32String(result);
-  console.log(`random string: ${ result}`);
-  console.log(`externalNullifer: ${ externalNullifier}`);
 
+  const externalNullifier = utils.formatBytes32String(randomString);
+  // console.log(`random string: ${result}`);
+  // console.log(`externalNullifer: ${externalNullifier}`);
 
-   const allMembers = await semaphoreEthers.getGroupMembers(_entityIDStr);
+  const allMembers = await semaphoreEthers.getGroupMembers(_entityIDStr);
   group.addMembers(allMembers);
-  console.log(`allMembers: ${ allMembers}`);
+  // console.log(`allMembers: ${allMembers}`);
 
   const idIndex = group.indexOf(identity.commitment);
-  console.log(`idIndex: ${  idIndex}`);
-  console.log(`Group Members: ${  group.members}`);
+  // console.log(`idIndex: ${idIndex}`);
+  // console.log(`Group Members: ${group.members}`);
 
-  const groupProof = group.generateMerkleProof(idIndex);
-    console.log(`groupProof leaf: ${  groupProof.leaf}`);
-    console.log(`groupProof root: ${  groupProof.root}`);
-    console.log(`_entityID: ${  _entityID}`);
+  // const groupProof = group.generateMerkleProof(idIndex);
+  const thisIdsGroupMerkleProof = group.generateMerkleProof(idIndex)
 
-    console.log("******* Group Info: *********************************");
-    console.log(`GroupID: ${  group.id}`);
-    console.log(`Group Root: ${  group.root}`);
-    console.log(`Group Depth: ${  group.depth}`);
-    console.log(`Group zeroValue: ${  group.zeroValue}`);
-    const thisIdsGroupMerkleProof = group.generateMerkleProof(idIndex)
-    console.log(`Group MerkleProof: ${  thisIdsGroupMerkleProof}`);
-    console.log(`Group MerkleProof Leaf: ${  thisIdsGroupMerkleProof.leaf}`);
-    console.log(`Group MerkleProof Root: ${  thisIdsGroupMerkleProof.root}`);
-    console.log("*******  End of Group Info *********************************");
+  // console.log(`groupProof leaf: ${groupProof.leaf}`);
+  // console.log(`groupProof root: ${groupProof.root}`);
+  // console.log(`_entityID: ${_entityID}`);
 
-    await provider.send("eth_requestAccounts", []);
-        const contract = new ethers.Contract(
-      semaphoreContractAddress,
-      SemaphoreContractABI.abi,
-      signer
-    );
+  // console.log("******* Group Info: *********************************");
+  // console.log(`GroupID: ${group.id}`);
+  // console.log(`Group Root: ${group.root}`);
+  // console.log(`Group Depth: ${group.depth}`);
+  // console.log(`Group zeroValue: ${group.zeroValue}`);
+  // console.log(`Group MerkleProof: ${thisIdsGroupMerkleProof}`);
+  // console.log(`Group MerkleProof Leaf: ${thisIdsGroupMerkleProof.leaf}`);
+  // console.log(`Group MerkleProof Root: ${thisIdsGroupMerkleProof.root}`);
+  // console.log("*******  End of Group Info *********************************");
 
-    const groupMTRoot = await contract.getMerkleTreeRoot(_entityID);
-    console.log(`GroupMTRoot from on-chain: ${  groupMTRoot}`);
+  await provider.send("eth_requestAccounts", []);
+  const contract = new ethers.Contract(
+    semaphoreContractAddress,
+    SemaphoreContractABI.abi,
+    signer
+  );
 
-if (groupMTRoot == thisIdsGroupMerkleProof.root) {
+  const groupMTRoot = await contract.getMerkleTreeRoot(_entityID);
+  // console.log(`GroupMTRoot from on-chain: ${groupMTRoot}`);
+
+  if (groupMTRoot == thisIdsGroupMerkleProof.root) {
     console.log('The Roots match, message can be sent.')
-} else  {
-  console.log('The Roots DO NOT match, message can not be sent.')
-}
+  } else {
+    console.log('The Roots DO NOT match, message can not be sent.')
+  }
 
-    console.log(`Raw is: ${  typeof groupMTRoot}`);
-      // eslint-disable-next-line no-undef
-    const groupMTRootInt = BigInt(groupMTRoot);
-    console.log(`Int is: ${  typeof groupMTRootInt}`);
-    const groupMTDepth = await contract.getMerkleTreeDepth(_entityID);
-    console.log(`GroupMTDepth: ${  groupMTDepth}`);
-    
-    console.log("******* Generating Proof With: *********************************");
-    console.log(`identity: ${  identity}`);
-    console.log(`thisIdsGroupMerkleProof: ${  thisIdsGroupMerkleProof }`);
-    //console.log(`Which matches GroupMTRoot from on-chain: ${  groupMTRoot}`);
-    console.log(`externalNullifier: ${  externalNullifier }`);
-    console.log(`signal: ${  signal }`);
-    console.log("*******  End of Generating Proof With: *********************************");
+  // console.log(`Raw is: ${typeof groupMTRoot}`);
+  // eslint-disable-next-line no-undef
+  // const groupMTRootInt = BigInt(groupMTRoot);
+  // console.log(`Int is: ${typeof groupMTRootInt}`);
+  // const groupMTDepth = await contract.getMerkleTreeDepth(_entityID);
+  // console.log(`GroupMTDepth: ${groupMTDepth}`);
 
-    const fullProof = await generateProof(
-   // const { proof, merkleTreeRoot, nullifierHash } = await generateProof(
-      identity,
-      group,
-      externalNullifier,
-      signal
+  // console.log("******* Generating Proof With: *********************************");
+  // console.log(`identity: ${identity}`);
+  // console.log(`thisIdsGroupMerkleProof: ${thisIdsGroupMerkleProof}`);
+  // console.log(`externalNullifier: ${externalNullifier}`);
+  // console.log(`signal: ${signal}`);
+  // console.log("*******  End of Generating Proof With: *********************************");
+
+  const fullProof = await generateProof(
+    identity,
+    group,
+    externalNullifier,
+    signal
   )
 
-  console.log(`fullProof: ${ fullProof }`);
+  const vProof = await verifyProof(fullProof, 20);
+  // console.log(`Verified Proof: ${vProof}`);
 
-const vProof = await verifyProof(fullProof, 20);
-console.log(`vProof: ${  vProof}`);
+  if (vProof) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const nonce = await signer.getTransactionCount();
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const nonce = await signer.getTransactionCount();
+    console.log("******* Publishing Signal With: *********************************");
+    console.log(`groupId: ${_entityID}`);
+    console.log(`thisIdsGroupMerkleProof.root: ${thisIdsGroupMerkleProof.root}`);
+    console.log(`Which matches GroupMTRoot from on-chain: ${groupMTRoot}`);
+    console.log(`Proofs merkleTreeRoot: ${fullProof.merkleTreeRoot}`);
+    console.log(`signal: ${signal}`);
+    console.log(`fullProof.nullifierHash: ${fullProof.nullifierHash}`);
+    console.log(`externalNullifier: ${externalNullifier}`);
+    console.log(`fullProof.proof: ${fullProof.proof}`);
+    console.log("*******  End of Publishing Leak With: *********************************");
 
-  console.log("******* Publishing Signal With: *********************************");
-  console.log(`groupId: ${  _entityID }`);
-  console.log(`thisIdsGroupMerkleProof.root: ${  thisIdsGroupMerkleProof.root}`);
-  console.log(`Which matches GroupMTRoot from on-chain: ${  groupMTRoot}`);
-  console.log(`Proofs merkleTreeRoot: ${  fullProof.merkleTreeRoot}`);
-  console.log(`signal: ${ signal }`);
-  console.log(`fullProof.nullifierHash: ${  fullProof.nullifierHash }`);
-  console.log(`externalNullifier: ${  externalNullifier }`);
-  console.log(`fullProof.proof: ${  fullProof.proof}`);
-  console.log("*******  End of Publishing Leak With: *********************************");
-
-  const tx = await contract.verifyProof(_entityID, thisIdsGroupMerkleProof.root, signal, fullProof.nullifierHash, externalNullifier, fullProof.proof, { gasLimit: 1000000, nonce: nonce || undefined })
-  // const tx = await contract.verifyProof(_entityID, thisIdsGroupMerkleProof.root, ethers.BigNumber.from(_leakMessage).toBigInt(), nullifierHash, ethers.BigNumber.from(externalNullifier).toBigInt(), proof, { gasLimit: 1000000, nonce: nonce || undefined })
-
-  console.log("Success!");
-  console.log(`Transaction hash: https://goerli.etherscan.io/tx/${tx.hash}`);
-  document.getElementById("leakMessage").value = "";
-  const receipt = await tx.wait();
-  console.log(`Transaction confirmed in block ${receipt.blockNumber}`);
-  console.log(`Gas used: ${receipt.gasUsed.toString()}`);
+    const tx = await contract.verifyProof(_entityID, thisIdsGroupMerkleProof.root, signal, fullProof.nullifierHash, externalNullifier, fullProof.proof, { gasLimit: 1000000, nonce: nonce || undefined })
+    console.log("Success!");
+    console.log(`Transaction hash: https://goerli.etherscan.io/tx/${tx.hash}`);
+    document.getElementById("leakMessage").value = "";
+    const receipt = await tx.wait();
+    console.log(`Transaction confirmed in block ${receipt.blockNumber}`);
+    console.log(`Gas used: ${receipt.gasUsed.toString()}`);
+  } else {
+    console.log("Proof was not verified. Cannot send message.")
+  }
 };
 
 const sendMessage = () => {
@@ -215,7 +135,7 @@ const sendMessage = () => {
   const groupName = queryParams.get("entityName");
 
   console.log(
-    `Identity now in local storage is: ${  localStorage.getItem("groupToJoin")}`
+    `Identity now in local storage is: ${localStorage.getItem("groupToJoin")}`
   );
 
   return (
@@ -235,7 +155,7 @@ const sendMessage = () => {
         <h2 className="w3-center">Send Message to '{groupName}' Group: </h2>
 
         <div className="w3-row w3-section">
-          <div className="w3-col" style={{ width: `${50  }px` }}>
+          <div className="w3-col" style={{ width: `${50}px` }}>
             <i className="w3-xxlarge fa fa-envelope-o"></i>
           </div>
           <div className="w3-rest">
@@ -254,25 +174,6 @@ const sendMessage = () => {
         >
           Submit Message
         </button>
-        <button
-          onClick={signANewMessage}
-          className="w3-button w3-block w3-section w3-blue w3-ripple w3-padding"
-        >
-          Sign Message
-        </button>
-        <button
-          onClick={checkGroupInfo}
-          className="w3-button w3-block w3-section w3-blue w3-ripple w3-padding"
-        >
-          Verify Group Info
-        </button>
-        <button
-          onClick={clearCookie}
-          className="w3-button w3-block w3-section w3-blue w3-ripple w3-padding"
-        >
-          Clear Cookies
-        </button>
-
       </div>
     </div>
   );
