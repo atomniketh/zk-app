@@ -78,7 +78,7 @@ class ComponentPage extends React.Component {
                   <td>{item.entityName.toString()} {" "} {item.root}
                   </td>
 
-                  <td> <a href={`/CreateIdentity?entityID=${item.idEntity.toString()}&entityName=${item.entityName.toString()}&entityEditor=${item.entityEditor.toString()}`}>Request Access</a> | <a href={`/SendMessage?entityID=${item.idEntity.toString()}&entityName=${item.entityName.toString()}`}>Send Message</a> | <a href={`/Messages?entityID=${item.idEntity.toString()}`}>See Messages</a></td>
+                  <td> <a href={`/CreateIdentity?entityID=${item.idEntity.toString()}&entityName=${item.entityName.toString()}&entityEditor=${item.entityEditor.toString()}`}>Request Access</a> | <a href={`/SendMessage?entityID=${item.idEntity.toString()}&entityName=${item.entityName.toString()}`}>Send Message</a> | <a href={`/Messages?entityID=${item.idEntity.toString()}&entityName=${item.entityName.toString()}`}>See Messages</a></td>
                   <td> <a href={`/UpdateGroupName?index=${index}&entityID=${item.idEntity.toString()}&entityName=${item.entityName.toString()}`} >Rename</a> | <a href={`/UpdateEditor?entityID=${item.idEntity.toString()}`} >Reassign</a> | <a href={`/AddMember?entityID=${item.idEntity.toString()}&entityEditor=${item.entityEditor.toString()}&entityName=${item.entityName.toString()}`}>Add Member</a> | Remove Member </td>
                 </tr>
               </React.Fragment>

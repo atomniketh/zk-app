@@ -5,7 +5,7 @@ import { ethers } from "ethers";
 import SemaphoreContractABI from "../abi/Semaphore.json";
 import { SemaphoreEthers } from "@semaphore-protocol/data";
 
-const semaphoreEthers = new SemaphoreEthers("goerli");
+const semaphoreEthers = new SemaphoreEthers(process.env.REACT_APP_NETWORK);
 const semaphoreContractAddress = process.env.REACT_APP_SEMAPHORE;
 
 async function checkEditor() {

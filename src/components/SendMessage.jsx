@@ -10,7 +10,7 @@ import { SemaphoreEthers } from "@semaphore-protocol/data"
 import "font-awesome/css/font-awesome.min.css";
 import SemaphoreContractABI from "../abi/Semaphore.json";
 
-const semaphoreEthers = new SemaphoreEthers("goerli");
+const semaphoreEthers = new SemaphoreEthers(process.env.REACT_APP_NETWORK);
 const semaphoreContractAddress = process.env.REACT_APP_SEMAPHORE;
 const provider = new ethers.providers.Web3Provider(window.ethereum);
 const signer = provider.getSigner();
@@ -134,9 +134,17 @@ const sendMessage = () => {
   const queryParams = new URLSearchParams(window.location.search);
   const groupName = queryParams.get("entityName");
 
-  console.log(
-    `Identity now in local storage is: ${localStorage.getItem("groupToJoin")}`
-  );
+  // console.log(
+  //   `Identity now in local storage is: ${localStorage.getItem("groupToJoin")}`
+  // );
+
+  if (localStorage.getItem("groupToJoin") === null) {
+    console.log(`Identity is null`);
+  } else {
+    console.log(
+      `Identity is stored as: ${localStorage.getItem("groupToJoin")}`
+    );
+  }
 
   return (
     <div>

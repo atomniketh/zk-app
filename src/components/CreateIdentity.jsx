@@ -32,18 +32,18 @@ function CreateIdentity() {
     console.log(`Identity is null`);
   } else {
     console.log(
-      `Identity is already stored as: ${localStorage.getItem("groupToJoin")}`
+      `Identity is stored as: ${localStorage.getItem("groupToJoin")}`
     );
   }
 
   const groupToJoinValue = localStorage.getItem(groupToJoin);
   const signMessage = async () => {
-    const messageToSign = "zkCommunities";
+    const messageToSign = "zkCommunities Group " + _entityID;
     const signedData = await signer.signMessage(messageToSign);
     setSignedMessage(signedData);
-    console.log(`Signed Data: ${signedData}`);
+    // console.log(`Signed Data: ${signedData}`);
     localStorage.setItem("signedData", signedData);
-    console.log(`signedMessage is now: ${signedMessage}`);
+    // console.log(`signedMessage is now: ${signedMessage}`);
     const { commitment } = new Identity(signedData);
     const identityInfo = commitment;
     localStorage.setItem("groupToJoin", identityInfo.toString());
@@ -84,14 +84,14 @@ function CreateIdentity() {
         {groupToJoinValue === null ? (
           <div className="w3-center w3-row w3-section">
             <div className="w3-rest">
-              <i className="w3-center w3-xxlarge fa fa-pencil"></i>&nbsp;&nbsp;
+              <i className="w3-xxlarge fa fa-pencil"></i>&nbsp;&nbsp;
               <button
                 className="w3-button w3-block w3-section w3-blue w3-ripple w3-padding"
                 onClick={signMessage}
               >
                 Sign Message
               </button>
-              &nbsp;&nbsp;<i className="w3-center w3-xxlarge fa fa-pencil"></i>
+              {/* &nbsp;&nbsp;<i className="w3-center w3-xxlarge fa fa-pencil"></i> */}
             </div>
           </div>
         ) : (

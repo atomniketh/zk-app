@@ -1,13 +1,12 @@
 /* eslint-disable no-console */
 import React from 'react';
 import { Link } from "react-router-dom";
-import { SemaphoreEthers, SemaphoreSubgraph } from "@semaphore-protocol/data";
-import { utils } from "ethers";
+import { SemaphoreEthers } from "@semaphore-protocol/data";
+import Blockies from 'react-blockies';
+// import { utils } from "ethers";
 import Web3 from "web3";
 
-// const semaphoreEthers = new SemaphoreEthers();
-const semaphoreSubgraph = new SemaphoreSubgraph("goerli");
-const semaphoreEthers = new SemaphoreEthers("goerli", {
+const semaphoreEthers = new SemaphoreEthers(process.env.REACT_APP_NETWORK, {
   address: process.env.REACT_APP_WBCONTRACT,
   startBlock: 0
 })
@@ -25,10 +24,11 @@ class ComponentPage extends React.Component {
         numOfMsgs: '',
         verifiedProofs: [],
         allMembers: [],
-        url: ''
+        url: '',
+        isActiveMember: ''
       }
     }
-      
+    
     async componentDidMount() {
       try {
         const queryParams = new URLSearchParams(window.location.search);
@@ -46,9 +46,10 @@ class ComponentPage extends React.Component {
           // console.log(`Group merkleTree.root: ${  myGroup.merkleTree.root}`);
           const admin = await semaphoreEthers.getGroupAdmin(groupIDNum);
           this.setState({ groupAdmin: admin });
+          this.setState({isActiveMember: 'false'});
           const urlLink = `https://goerli.etherscan.io/address/${  this.state.groupAdmin}`;
           this.setState({url: urlLink});
- 
+          
          await semaphoreEthers.getGroup(groupIDNum).then((result) => {
            this.setState({ groupID: result.id });
            const obj = result.merkleTree;
@@ -64,6 +65,16 @@ class ComponentPage extends React.Component {
              this.setState({ allMembers });
            });
 
+          const activeCommitment = localStorage.getItem("groupToJoin");
+          const { allMembers } = this.state;
+          for (let i = 0; i < allMembers.length; i++) {
+            if (allMembers[i] === activeCommitment) {
+              // console.log(`${ activeCommitment } exists in array`);
+              this.setState({isActiveMember: 'true'});
+              break;
+            }
+          }
+           
          await semaphoreEthers
            .getGroupVerifiedProofs(groupIDNum)
            .then((verifiedProofs) => {            
@@ -80,7 +91,7 @@ class ComponentPage extends React.Component {
                 //  }
             }
             this.setState({ verifiedProofs:theMessages });
-           }, []); 
+           }, []);
       } catch (error) {
         console.error(error);
       }
@@ -89,6 +100,11 @@ class ComponentPage extends React.Component {
     render() {
         const { allMembers } = this.state;
         const { verifiedProofs } = this.state;
+        const queryParams = new URLSearchParams(window.location.search);
+        const groupName = queryParams.get("entityName");
+
+        const myBlockies = () => <Blockies seed="Jeremy" />;
+
       return (
         <div>
             <h1>Messages</h1>
@@ -96,15 +112,24 @@ class ComponentPage extends React.Component {
       <br />      <br />
             <table className="w3-table-all">
                 <tbody>
-                <tr><td><strong>Group ID:</strong></td><td>{this.state.groupID}</td></tr>
+                <tr><td><strong>Group Name:</strong></td><td>{ groupName }</td></tr>
                 <tr><td><strong>Group Admin:</strong></td><td><a href={this.state.url}>{this.state.groupAdmin}</a></td></tr>
-                <tr><td><strong>Merkle Tree Root:</strong></td><td> {this.state.root}</td></tr>
+                {/* <tr><td><strong>Merkle Tree Root:</strong></td><td> {this.state.root}</td></tr>
                 <tr><td><strong>depth:</strong></td><td> {this.state.depth}</td></tr>
-                <tr><td><strong>zeroValue:</strong></td><td> {this.state.zeroValue}</td></tr>
-                <tr><td><strong>numberOfLeaves:</strong></td><td>{this.state.numberOfLeaves}</td></tr>
+                <tr><td><strong>zeroValue:</strong></td><td> {this.state.zeroValue}</td></tr> */}
+                <tr><td><strong>Number of Group Members:</strong></td><td>{this.state.numberOfLeaves} { this.state.isActiveMember }</td></tr>
                 <tr><td><strong>Group Members:</strong></td>
                 <td>
-                    {allMembers.map((value) => <p key={value}>{value}</p>)}
+                    {allMembers.map((value) => <div key={value}>
+                      <Blockies 
+                        seed={value} 
+                        size={6}
+                        scale={5}
+                        // bgColor="#aaa"
+                        // color="#dfe" 
+                        spotColor="#000"
+                     />
+                      {value }</div>)}
                 </td>
                 </tr>
                 <tr><td><strong>{this.state.numOfMsgs} Messages:</strong></td>

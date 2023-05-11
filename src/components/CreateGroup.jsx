@@ -34,7 +34,7 @@ async function createGroup() {
       //   SemaphoreABI.abi,
       //   signer
       // );
-      console.log(contract);
+      // console.log(contract);
       const tx = await contract.createGroup(groupName, editor, merkleTreeDepth);
       // const tx = await contract.createGroup(groupName, merkleTreeDepth, editor, 3600);
       
