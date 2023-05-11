@@ -19,6 +19,7 @@ const submitMessage = async () => {
   const queryParams = new URLSearchParams(window.location.search);
   const _entityID = parseInt(queryParams.get("entityID"), 10);
   const _entityIDStr = queryParams.get("entityID");
+
   // eslint-disable-next-line no-undef
   const group = new Group(parseInt(_entityID, 10), 20);
   const signal = BigNumber.from(utils.formatBytes32String(document.getElementById("leakMessage").value)).toString();
@@ -133,16 +134,18 @@ const submitMessage = async () => {
 const sendMessage = () => {
   const queryParams = new URLSearchParams(window.location.search);
   const groupName = queryParams.get("entityName");
+  const groupIDNum = queryParams.get("entityID");
+  const groupToJoin = `group${groupIDNum}`;
 
   // console.log(
-  //   `Identity now in local storage is: ${localStorage.getItem("groupToJoin")}`
+  //   `Identity now in local storage is: ${localStorage.getItem(groupToJoin)}`
   // );
 
-  if (localStorage.getItem("groupToJoin") === null) {
+  if (localStorage.getItem(groupToJoin) === null) {
     console.log(`Identity is null`);
   } else {
     console.log(
-      `Identity is stored as: ${localStorage.getItem("groupToJoin")}`
+      `Identity is stored as: ${localStorage.getItem(groupToJoin)}`
     );
   }
 
