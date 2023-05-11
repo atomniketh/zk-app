@@ -142,8 +142,7 @@ const sendMessage = () => {
     <div>
       <h1>Send Message</h1>
       <p>
-        <Link to="/AllGroups">All Groups</Link> |{" "}
-        <Link to="/CreateGroup">Create Group</Link>
+        <Link to="/AllGroups">All Groups</Link>
       </p>
 
       {/* <p>Send Message to {groupName} Group: </p> */}

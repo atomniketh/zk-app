@@ -46,7 +46,7 @@ function editorComponent() {
     <div>
       <h1>Update Editor Page</h1>
       <br />
-      <Link to="/AllGroups">All Groups</Link> |{" "}
+      <Link to="/AllGroups">All Groups</Link>
       <h2 className="w3-center">
         Current Editor Address: {currentAdmin}{" "}
       </h2>

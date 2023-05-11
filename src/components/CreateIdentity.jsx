@@ -63,8 +63,7 @@ function CreateIdentity() {
 
   return (
     <div>
-      <Link to="/AllGroups">All Groups</Link> |
-
+      <Link to="/AllGroups">All Groups</Link>
       <div
         id="sendMessageForm"
         className="w3-container w3-card-4 w3-light-grey w3-text-blue w3-margin"

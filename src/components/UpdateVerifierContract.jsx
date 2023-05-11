@@ -29,18 +29,13 @@ async function updateVerifierContract() {
 
 const UpdateVerifierContract = () => (
     <div>
-      <h1>Update Verifier Contract Page</h1>
+      <h1>Update Semaphore Contract</h1>
       <br />
-      <Link to="/">Identities</Link> | <Link to="/Groups">On-Chain Groups</Link>{" "}
-      | <Link to="/OffchainGroups">Off-Chain Groups</Link> |{" "}
-      <Link to="/Messages">Messages</Link> |{" "}
-      <Link to="/SendFeedback">Send Feedback</Link> |{" "}
-      <Link to="/AllGroups">All Groups</Link> |{" "}
-      <Link to="/CreateGroup">Create Group</Link>
+      <Link to="/AllGroups">All Groups</Link>
     <p></p>
       <form id="updateVerifierAddressForm">
         <label htmlFor="newVerifierContract">
-          New Verifier Contract Address:
+          New Semaphore Contract Address:
         </label>{" "}
         &nbsp;
         <input

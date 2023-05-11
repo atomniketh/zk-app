@@ -29,11 +29,11 @@ function App() {
           we passes the imported component */}
           {/* <Route path="/" element={<Home />} /> */}
           <Route index element={<AllGroups />} />
-          <Route path='*' element={<Identities />} />
-          <Route path="/Identities" element={<Identities />} />
-          <Route path='/Groups' element={<Groups/>} exact/>
+          <Route path='*' element={<AllGroups />} />
+          {/* <Route path="/Identities" element={<Identities />} /> */}
+          {/* <Route path='/Groups' element={<Groups/>} exact/>
           <Route path='/OffchainGroups' element={<OffchainGroups/>} />
-          <Route path='/SendFeedback' element={<SendFeedback/>} exact/>
+          <Route path='/SendFeedback' element={<SendFeedback/>} exact/> */}
           <Route path='/Messages' element={<Messages/>} />
           <Route path='/AllGroups' element={<AllGroups/>} />
           <Route path='/CreateGroup' element={<CreateGroup/>} />

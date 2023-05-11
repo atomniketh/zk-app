@@ -52,9 +52,8 @@ async function createGroup() {
 
 const CreateGroup = () => (
       <div>
-        <h1>Create Group Page</h1>
-        <br />
-        <Link to="/">Identities</Link> |{" "} <Link to="/Groups">On-Chain Groups</Link> |{" "} <Link to="/OffchainGroups">Off-Chain Groups</Link> |{" "} <Link to="/Messages">Messages</Link> |{" "} <Link to="/SendFeedback">Send Feedback</Link> |{" "} <Link to="/AllGroups">All Groups</Link> |{" "} <Link to="/CreateGroup">Create Group</Link>
+        <h1>Create Group</h1>
+          <Link to="/AllGroups">All Groups</Link>
         <p>Create Group:</p>
         <form id="createGroupForm">
           <label htmlFor="groupName">Group Name:</label> &nbsp;

@@ -36,39 +36,14 @@ class ComponentPage extends React.Component {
 
       const allGroups = [];
       let groupInfo;
-      // let groupMTRoot;
-      // let groupMTDepth;
-      // eslint-disable-next-line no-plusplus
       for (let index = 0; index < numberOfEntities; index++) {
-
         groupInfo = await contract.allEntities(index);
-        // groupMTRoot = await contract.getMerkleTreeRoot(groupInfo.idEntity);
-        // groupMTDepth = await contract.getMerkleTreeDepth(groupInfo.idEntity);
         allGroups[index] = groupInfo;
-        // allGroups[index] = groupMTRoot;
-        // console.log(`Group ${groupInfo.idEntity} MerkleTreeRoot: ${groupMTRoot} MerkleTreeDepth: ${groupMTDepth}`);
-        // console.log(groupInfo);
-        // console.log(`entityName is ${groupInfo.entityName}`);
-        // console.log(`entityEditor is ${groupInfo.entityEditor}`);
-        // console.log(`idEntity is ${groupInfo.root}`);
       }
       this.setState({ allGroups });
     } catch (error) {
       console.error(error);
     }
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    //   const checkGroupInfo = async () => {
-    //     const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
-    //     await provider.send("eth_requestAccounts", []);
-    //     const signer = provider.getSigner();
-    //     const contract = new ethers.Contract(
-    //       semaphoreCommunitiesAddress,
-    //       SemaphoreCommunitiesABI.abi,
-    //       signer
-    //     );
-    //     // eslint-disable-next-line no-undef
-    //     document.getElementById("theProof").value = await contract.getMerkleTreeRoot(item.idEntity);
-    // }
   }
 
   render() {
@@ -80,13 +55,7 @@ class ComponentPage extends React.Component {
       <div className="w3-container">
         <h1>All Groups Page</h1>
         <br />
-        <Link to="/">Identities</Link> |{" "}
-        <Link to="/Groups">On-Chain Groups</Link> |{" "}
-        <Link to="/OffchainGroups">Off-Chain Groups</Link> |{" "}
-        <Link to="/SendFeedback">Send Feedback</Link> |{" "}
-        <br />
-        <Link to="/CreateGroup">Create Group</Link> |{" "}
-
+        <Link to="/CreateGroup">Create Group</Link>{" "}
         <p>
           Current Semaphore Contract Address is: {currentVerifierContract}  <Link to="/UpdateVerifierContract?addr=">(Update)</Link>
         </p>

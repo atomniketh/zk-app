@@ -45,8 +45,7 @@ const UpdateGroupName = () => {
     <div>
       <h1>Update Group Name Page</h1>
       <p>
-      <Link to="/AllGroups">All Groups</Link> |{" "}
-      <Link to="/CreateGroup">Create Group</Link>
+      <Link to="/AllGroups">All Groups</Link>
       </p>
 
       <h2 className="w3-center">Current Group Name: <div id="groupName" name="groupName">{entityNameCurrent}</div> </h2>

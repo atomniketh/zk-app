@@ -91,8 +91,7 @@ class ComponentPage extends React.Component {
         const { verifiedProofs } = this.state;
       return (
         <div>
-            <Link to="/">Identities</Link> | <Link to="/Groups">On-Chain Groups</Link> | <Link to="/OffchainGroups">Off-Chain Groups</Link> | <Link to="/SendFeedback">Send Feedback</Link>
-            <h1>Messages Page</h1>
+            <h1>Messages</h1>
       <Link to="/AllGroups">All Groups</Link> {" "}
       <br />      <br />
             <table className="w3-table-all">
