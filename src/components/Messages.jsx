@@ -33,6 +33,7 @@ class ComponentPage extends React.Component {
       try {
         const queryParams = new URLSearchParams(window.location.search);
         const groupIDNum = queryParams.get("entityID");
+        const groupToJoin = `group${groupIDNum}`;
         //  const graphIDs = await semaphoreSubgraph.getGroupIds();
         //  console.log(graphIDs);
         //  const groups = await semaphoreSubgraph.getGroups()
@@ -65,7 +66,8 @@ class ComponentPage extends React.Component {
              this.setState({ allMembers });
            });
 
-          const activeCommitment = localStorage.getItem("groupToJoin");
+          const activeCommitment = localStorage.getItem(groupToJoin);
+          console.log(`Active Commitment: ${  activeCommitment}`);
           const { allMembers } = this.state;
           for (let i = 0; i < allMembers.length; i++) {
             if (allMembers[i] === activeCommitment) {

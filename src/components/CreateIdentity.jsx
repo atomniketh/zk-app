@@ -22,17 +22,18 @@ function CreateIdentity() {
   const _entityCurrentEditor = queryParams.get("entityEditor");
 
   const [signedMessage, setSignedMessage] = React.useState("");
-  const groupToJoin = `identity${_entityID}`;
+  const groupToJoin = `group${_entityID}`;
+  console.log("groupToJoin: ", groupToJoin);
 
   // console.log(
   //   `Identity is already stored as: ${localStorage.getItem("groupToJoin")}`
   // );
 
-  if (localStorage.getItem("groupToJoin") === null) {
+  if (localStorage.getItem(groupToJoin) === null) {
     console.log(`Identity is null`);
   } else {
     console.log(
-      `Identity is stored as: ${localStorage.getItem("groupToJoin")}`
+      `Identity is stored as: ${localStorage.getItem(groupToJoin)}`
     );
   }
 
@@ -46,9 +47,9 @@ function CreateIdentity() {
     // console.log(`signedMessage is now: ${signedMessage}`);
     const { commitment } = new Identity(signedData);
     const identityInfo = commitment;
-    localStorage.setItem("groupToJoin", identityInfo.toString());
+    localStorage.setItem(groupToJoin, identityInfo.toString());
     console.log(
-      `Identity now in local storage is: ${localStorage.getItem("groupToJoin")}`
+      `Identity now in local storage is: ${localStorage.getItem(groupToJoin)}`
     );
 
     const wallet = Wallet.createRandom();
