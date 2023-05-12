@@ -2,6 +2,10 @@ Does this allow me to turn a long string >32 chars to a UINT256?
         uint256 zeroValue = uint256(keccak256(abi.encodePacked(groupId))) >> 8;
         
 
+yarn deploy --semaphore 0x3889927F0B5Eb1a02C6E2C20b39a1Bd4EAd76131 --group 555 --network goerli
+
+
+
 npm install crypto-browserify
 
 

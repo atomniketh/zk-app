@@ -105,8 +105,6 @@ class ComponentPage extends React.Component {
         const queryParams = new URLSearchParams(window.location.search);
         const groupName = queryParams.get("entityName");
 
-        const myBlockies = () => <Blockies seed="Jeremy" />;
-
       return (
         <div>
             <h1>Messages</h1>
