@@ -2,9 +2,15 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { ethers } from "ethers";
+import { SemaphoreEthers, SemaphoreSubgraph } from "@semaphore-protocol/data";
 import SemaphoreCommunitiesABI from "../abi/SemaphoreCommunities.json";
 
 const semaphoreCommunitiesAddress = process.env.REACT_APP_WBCONTRACT;
+const semaphoreSubgraph = new SemaphoreSubgraph("goerli");
+const semaphoreEthers = new SemaphoreEthers(process.env.REACT_APP_NETWORK, {
+    address: process.env.REACT_APP_WBCONTRACT,
+    startBlock: 0
+  })
 
 class ComponentPage extends React.Component {
   constructor() {
@@ -12,7 +18,6 @@ class ComponentPage extends React.Component {
     this.state = {
       allGroups: [],
       allMembers: [],
-      currentVerifierContract: '',
       isActiveMember: ''
     };
   }
@@ -27,14 +32,8 @@ class ComponentPage extends React.Component {
         SemaphoreCommunitiesABI.abi,
         signer
       );
-      const verifierAddress = await contract.semaphore();
-      // console.log("verifierAddress is: " + verifierAddress);
-      this.setState({ currentVerifierContract: verifierAddress });
 
       const numberOfEntities = await contract.getNumberOfEntities();
-      // console.log("Number of Entities: " + numberOfEntities);
-      // const verifierAddress = await contract.verifier();
-      // console.log("verifierAddress is: " + verifierAddress);
 
       const allGroups = [];
       let groupInfo;
@@ -43,6 +42,46 @@ class ComponentPage extends React.Component {
         allGroups[index] = groupInfo;
       }
       this.setState({ allGroups });
+
+      let allGroupsInfo = [];
+      let GroupInfo = { 
+        groupID: '',
+        userCommittment: '',
+        allGroupMembers: [] 
+      };
+
+            for (let i = 0; i < allGroups.length; i++) {
+            try {
+                let groupToJoin = `group${allGroups[i].idEntity.toString()}`;
+                let GroupInfo = { 
+                    groupID: allGroups[i].idEntity.toString(),
+                    userCommittment: localStorage.getItem(groupToJoin),
+                    allGroupMembers: await semaphoreEthers.getGroupMembers(allGroups[i].idEntity.toString())
+                 }
+                 allGroupsInfo.push(GroupInfo);
+            } catch (error) {
+                console.log("Error: " + error);
+            }
+        }
+
+        console.log(allGroupsInfo);
+
+        const searchString = "15577511158396003008022376827925531939333142473878927343118682111614979793601";
+        // const searchString = "19759682999141591121829027463339362582441675980174830329241909768001406603165";
+//        const found = allGroupsInfo.some(groupInfo => groupInfo.allGroupMembers.includes(searchString));
+
+        const foundGroups = allGroupsInfo.filter(groupInfo => {
+            return groupInfo.allGroupMembers.some(member => member.includes(searchString));
+          });
+          
+          // Now 'foundGroups' is an array of objects that contained the search string in their allGroupMembers array.
+          // You can go through the found groups' objects and log or use their 'groupID' if needed. 
+          for (let foundGroup of foundGroups) {
+            console.log(foundGroup.groupID);
+          }
+
+    //    console.log("allGroupsInfo: " + found);
+
     } catch (error) {
       console.error(error);
     }
@@ -50,17 +89,14 @@ class ComponentPage extends React.Component {
 
   render() {
     // const { allGroups } = this.state;
-    const { currentVerifierContract } = this.state;
 
     return (
 
       <div className="w3-container">
-        <h1>All Groups Page</h1>
+        <h1>My Groups</h1>
         <br />
         <Link to="/CreateGroup">Create Group</Link>{" "} | <Link to="/MyGroups">My Groups</Link>
-        <p>
-          Current Semaphore Contract Address is: {currentVerifierContract}  <Link to="/UpdateVerifierContract?addr=">(Update)</Link>
-        </p>
+        <br />
         <table className="w3-table-all">
           <tbody>
             <tr>
@@ -68,7 +104,6 @@ class ComponentPage extends React.Component {
               <td>Group Name</td>
               {/* <td>Group Editor Address</td> */}
               <td>User Functions</td>
-              <td>Group Admin Functions</td>
 
             </tr>
             {this.state.allGroups.map((item, index) => (
@@ -79,10 +114,10 @@ class ComponentPage extends React.Component {
                   <td>{item.entityName.toString()} {" "} {item.root}
                   </td>
                   <td> <a href={`/CreateIdentity?entityID=${item.idEntity.toString()}&entityName=${item.entityName.toString()}&entityEditor=${item.entityEditor.toString()}`}>Request Access</a> | <a href={`/SendMessage?entityID=${item.idEntity.toString()}&entityName=${item.entityName.toString()}`}>Send Message</a> | <a href={`/Messages?entityID=${item.idEntity.toString()}&entityName=${item.entityName.toString()}`}>See Messages</a></td>
-                  <td> <a href={`/UpdateGroupName?index=${index}&entityID=${item.idEntity.toString()}&entityName=${item.entityName.toString()}`} >Rename</a> | <a href={`/UpdateEditor?entityID=${item.idEntity.toString()}`} >Reassign</a> | <a href={`/AddMember?entityID=${item.idEntity.toString()}&entityEditor=${item.entityEditor.toString()}&entityName=${item.entityName.toString()}`}>Add Member</a> | Remove Member </td>
                 </tr>
               </React.Fragment>
-            ))}
+            ))
+            }
           </tbody>
         </table>
       </div>
