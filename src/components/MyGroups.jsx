@@ -2,11 +2,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { ethers } from "ethers";
-import { SemaphoreEthers, SemaphoreSubgraph } from "@semaphore-protocol/data";
+import { SemaphoreEthers } from "@semaphore-protocol/data";
 import SemaphoreCommunitiesABI from "../abi/SemaphoreCommunities.json";
 
 const semaphoreCommunitiesAddress = process.env.REACT_APP_WBCONTRACT;
-const semaphoreSubgraph = new SemaphoreSubgraph("goerli");
 const semaphoreEthers = new SemaphoreEthers(process.env.REACT_APP_NETWORK, {
   address: process.env.REACT_APP_WBCONTRACT,
   startBlock: 0,
@@ -19,8 +18,9 @@ class ComponentPage extends React.Component {
       allGroups: [],
       allMembers: [],
       isActiveMember: "",
-      myGroups: []
+      myGroups: [],
     };
+    this.render = this.render.bind(this);
   }
 
   async componentDidMount() {
@@ -48,21 +48,10 @@ class ComponentPage extends React.Component {
       this.setState({ allGroups });
 
       let allGroupsInfo = [];
-      // let GroupInfo = {
-      //   groupID: '',
-      //   userCommittment: '',
-      //   allGroupMembers: []
-      // };
 
       for (let i = 0; i < allGroups.length; i++) {
         try {
           let groupToJoin = `group${allGroups[i].idEntity.toString()}`;
-          console.log(
-            "groupToJoin " +
-              groupToJoin +
-              " " +
-              localStorage.getItem(groupToJoin)
-          );
           let GroupInfo = {
             groupID: allGroups[i].idEntity.toString(),
             userCommittment: localStorage.getItem(groupToJoin),
@@ -76,7 +65,6 @@ class ComponentPage extends React.Component {
         }
       }
 
-
       const myGroups = [];
       for (let i = 0; i < allGroupsInfo.length; i++) {
         let groupToJoin = `group${allGroups[i].idEntity.toString()}`;
@@ -89,20 +77,14 @@ class ComponentPage extends React.Component {
           myGroups.push(foundGroup.groupID);
         }
       }
-      console.log("myGroups: " + myGroups);
+      // console.log("myGroups: " + myGroups);
       this.setState({ myGroups });
-      // Now 'foundGroups' is an array of objects that contained the search string in their allGroupMembers array.
-      // You can go through the found groups' objects and log or use their 'groupID' if needed.
-
-      //console.log("foundGroups: " + foundGroups);
     } catch (error) {
       console.error(error);
     }
   }
 
   render() {
-    // const { allGroups } = this.state;
-
     return (
       <div className="w3-container">
         <h1>My Groups</h1>
@@ -113,45 +95,39 @@ class ComponentPage extends React.Component {
         <table className="w3-table-all">
           <tbody>
             <tr>
-              <td>Group ID</td>
               <td>Group Name</td>
               {/* <td>Group Editor Address</td> */}
               <td>User Functions</td>
             </tr>
-            {this.state.allGroups.map((item, index) => (
+            {this.state.allGroups.map((item, index) => {
               // Without the `key`, React will fire a key warning
-              <React.Fragment key={item.idEntity.toString()}>
-                <tr>
-
-                  <td>{item.idEntity.toString()}
-                  {  "blah: " + (this.state.myGroups.includes(item.idEntity.toString())) }
-                  </td>
-                  <td>
-                    {item.entityName.toString()} {item.root}
-                  </td>
-                  <td>
-                    {" "}
-                    <a
-                      href={`/CreateIdentity?entityID=${item.idEntity.toString()}&entityName=${item.entityName.toString()}&entityEditor=${item.entityEditor.toString()}`}
-                    >
-                      Request Access
-                    </a>{" "}
-                    |{" "}
-                    <a
-                      href={`/SendMessage?entityID=${item.idEntity.toString()}&entityName=${item.entityName.toString()}`}
-                    >
-                      Send Message
-                    </a>{" "}
-                    |{" "}
-                    <a
-                      href={`/Messages?entityID=${item.idEntity.toString()}&entityName=${item.entityName.toString()}`}
-                    >
-                      See Messages
-                    </a>
-                  </td>
-                </tr>
-              </React.Fragment>
-            ))}
+              if (this.state.myGroups.includes(item.idEntity.toString())) {
+                return (
+                  <React.Fragment key={item.idEntity.toString()}>
+                    <tr>
+                      <td>
+                        {item.entityName.toString()} {item.root}
+                      </td>
+                      <td>
+                        <a
+                          href={`/SendMessage?entityID=${item.idEntity.toString()}&entityName=${item.entityName.toString()}`}
+                        >
+                          Send Message
+                        </a>{" "}
+                        |{" "}
+                        <a
+                          href={`/Messages?entityID=${item.idEntity.toString()}&entityName=${item.entityName.toString()}`}
+                        >
+                          See Messages
+                        </a>
+                      </td>
+                    </tr>
+                  </React.Fragment>
+                );
+              } else {
+                return null;
+              }
+            })}
           </tbody>
         </table>
       </div>
