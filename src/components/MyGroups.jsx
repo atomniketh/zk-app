@@ -57,7 +57,7 @@ class ComponentPage extends React.Component {
             userCommittment: localStorage.getItem(groupToJoin),
             allGroupMembers: await semaphoreEthers.getGroupMembers(
               allGroups[i].idEntity.toString()
-            ),
+            )
           };
           allGroupsInfo.push(GroupInfo);
         } catch (error) {
@@ -99,7 +99,7 @@ class ComponentPage extends React.Component {
               {/* <td>Group Editor Address</td> */}
               <td>User Functions</td>
             </tr>
-            {this.state.allGroups.map((item, index) => {
+             {this.state.allGroups.map((item) => {
               // Without the `key`, React will fire a key warning
               if (this.state.myGroups.includes(item.idEntity.toString())) {
                 return (

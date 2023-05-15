@@ -23,6 +23,8 @@ const submitMessage = async () => {
   // eslint-disable-next-line no-undef
   const group = new Group(parseInt(_entityID, 10), 20);
   const signal = BigNumber.from(utils.formatBytes32String(document.getElementById("leakMessage").value)).toString();
+  // const signal = ethers.utils.keccak256(utils.toUtf8Bytes(document.getElementById("leakMessage").value)).toString();
+  console.log(`Hash of ${document.getElementById("leakMessage").value.toString()}:`, signal);
 
   // console.log("Formatted Signal: " + signal);
   // console.log(`localStorage.getItem(signedData): ${localStorage.getItem("signedData")}`);
