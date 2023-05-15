@@ -1,13 +1,7 @@
-// eslint-disable-next-line import/no-unresolved
-/* eslint-disable import/no-unresolved */
 import './App.css';
 import './w3.css';
 // import './zkApp.css';
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-// import Identities from "./components/Identities";
-// import Groups from "./components/Groups";
-// import OffchainGroups from "./components/OffchainGroups";
-// import SendFeedback from "./components/SendFeedback";
 import Messages from "./components/Messages";
 import AllGroups from "./components/AllGroups";
 import CreateGroup from "./components/CreateGroup";
@@ -30,12 +24,8 @@ function App() {
           with exact path "/", in component props 
           we passes the imported component */}
           {/* <Route path="/" element={<Home />} /> */}
-          <Route index element={<AllGroups />} />
+          <Route index element={<MyGroups />} />
           <Route path='*' element={<AllGroups />} />
-          {/* <Route path="/Identities" element={<Identities />} /> */}
-          {/* <Route path='/Groups' element={<Groups/>} exact/>
-          <Route path='/OffchainGroups' element={<OffchainGroups/>} />
-          <Route path='/SendFeedback' element={<SendFeedback/>} exact/> */}
           <Route path='/Messages' element={<Messages/>} />
           <Route path='/AllGroups' element={<AllGroups/>} />
           <Route path='/CreateGroup' element={<CreateGroup/>} />
@@ -46,8 +36,6 @@ function App() {
           <Route path='/AddMember' element={<AddMember/>} />
           <Route path='/SendMessage' element={<SendMessage/>} />
           <Route path='/MyGroups' element={<MyGroups/>} />
-          {/* <Route path='/AddUser' element={<AddUser/>} /> */}
-
           {/* If any route mismatches the upper 
           route endpoints then, redirect triggers 
           and redirects app to home component with to="/" */}
