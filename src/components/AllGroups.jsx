@@ -2,6 +2,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { ethers } from "ethers";
+import { sidebar } from './Sidebar';
 import SemaphoreCommunitiesABI from "../abi/SemaphoreCommunities.json";
 
 const semaphoreCommunitiesAddress = process.env.REACT_APP_WBCONTRACT;
@@ -51,61 +52,32 @@ class ComponentPage extends React.Component {
     }
   }
 
+
+
   render() {
     // const { allGroups } = this.state;
     const { currentVerifierContract } = this.state;
 
+ 
     return (
       <>
         <div className="w3-container"
                     style={{ marginLeft: "0", paddingLeft: "0" }}
                     >
-          <div
+          { sidebar }            
+          {/* <div
             className="w3-sidebar w3-collapse w3-white w3-animate-left w3-large"
-            style={{ zIndex: "3", width: "300px", marginLeft: "0", paddingLeft: "0" }}
+            style={{ zIndex: "3", width: "200px", marginLeft: "0", paddingLeft: "0" }}
             id="mySidebar"
           >
-            <div className="w3-bar w3-black w3-center">
-              <a
-                className="w3-bar-item w3-button"
-                style={{ width: "33.33%" }}
-                href="javascript:void(0)"
-              >
-                <i className="fa fa-bars w3-xlarge"></i>
-              </a>
-              <a
-                className="w3-bar-item w3-button"
-                style={{ width: "33.33%" }}
-                href="javascript:void(0)"
-              >
-                <i className="fa fa-file w3-xlarge"></i>
-              </a>
-              <a
-                className="w3-bar-item w3-button"
-                style={{ width: "33.33%" }}
-                href="javascript:void(0)"
-              >
-                <i className="fa fa-camera w3-xlarge"></i>
-              </a>
-            </div>
-
             <div id="nav01" className="w3-bar-block">
-              <a
-                className="w3-button w3-hover-teal w3-hide-large w3-large w3-right"
-                href="javascript:void(0)"
-                onClick={() => document.getElementById("mySidebar").style.display = "none"}
-              >×
-              </a>
               <a
                 className="w3-bar-item w3-button w3-border-bottom w3-large"
                 href="#"
               >
-                <img
-                  src="https://www.w3schools.com/images/w3schools.png"
-                  style={{ width: "80%" }}
-                ></img>
+              <b>zkCommunities</b>
               </a>
-              <a className="w3-bar-item w3-button" href="AllGroups">
+              <a className="w3-bar-item w3-button" href="#">
                 All Groups
               </a>
               <a className="w3-bar-item w3-button" href="MyGroups">
@@ -122,19 +94,13 @@ class ComponentPage extends React.Component {
 
           <div
             className="w3-overlay w3-hide-large"
-            onClick={() => document.getElementById("mySidebar").style.display = "none"}
             style={{ cursor: "pointer" }}
             id="myOverlay"
-          ></div>
+          ></div> */}
 
-          <div className="w3-main" style={{ marginLeft: "300px" }}>
-            <div className="w3-top w3-theme w3-large w3-hide-large">
-              <i
-                className="fa fa-bars w3-button w3-teal w3-xlarge"
-                onClick={() => document.getElementById("mySidebar").style.display = "block"}
-              ></i>
-            </div>
-            <h1>All Groups Page</h1>
+          <div className="w3-main" style={{ marginLeft: "250px" }}>
+
+            <h1>All Groups</h1>
             <br />
             <Link to="/CreateGroup">Create Group</Link> |{" "}
             <Link to="/MyGroups">My Groups</Link>
@@ -209,11 +175,10 @@ class ComponentPage extends React.Component {
   bottom: "0"}}>
               <div>
                 <nav>
-                  <a href="/forum/default.asp" target="_blank">
-                    FORUM
-                  </a>{" "}
+                    &copy; 2023 zkCommunities
+                  {" "}
                   |
-                  <a href="/about/default.asp" target="_top">
+                  <a href="/about" target="_top">
                     ABOUT
                   </a>
                 </nav>

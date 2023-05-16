@@ -2,6 +2,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { ethers } from "ethers";
+import { sidebar } from './Sidebar';
 import { SemaphoreEthers } from "@semaphore-protocol/data";
 import SemaphoreCommunitiesABI from "../abi/SemaphoreCommunities.json";
 
@@ -86,6 +87,14 @@ class ComponentPage extends React.Component {
 
   render() {
     return (
+
+      <div className="w3-container"
+      style={{ marginLeft: "0", paddingLeft: "0" }}
+      >
+{ sidebar }            
+
+<div className="w3-main" style={{ marginLeft: "250px" }}>
+
       <div className="w3-container">
         <h1>My Groups</h1>
         <br />
@@ -130,6 +139,8 @@ class ComponentPage extends React.Component {
             })}
           </tbody>
         </table>
+      </div>
+      </div>
       </div>
     );
   }
