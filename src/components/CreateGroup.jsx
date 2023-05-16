@@ -2,6 +2,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { ethers } from "ethers";
+import { sidebar } from './Sidebar';
 import SemaphoreCommunitiesABI from '../abi/SemaphoreCommunities.json';
 
 const semaphoreCommunitiesAddress = process.env.REACT_APP_WBCONTRACT;
@@ -51,7 +52,13 @@ async function createGroup() {
 
 
 const CreateGroup = () => (
-      <div>
+  <div className="w3-container"
+  style={{ marginLeft: "0", paddingLeft: "0" }}
+  >
+{ sidebar }            
+
+<div className="w3-main" style={{ marginLeft: "250px" }}>
+
         <h1>Create Group</h1>
           <Link to="/AllGroups">All Groups</Link>
         <p>Create Group:</p>
@@ -80,6 +87,7 @@ const CreateGroup = () => (
           </button>
         </p>
       </div>
+    </div>
     );
   
   export default CreateGroup;
