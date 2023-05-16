@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { ethers } from "ethers";
+import { sidebar } from "./Sidebar";
 import SemaphoreCommunitiesABI from "../abi/SemaphoreCommunities.json";
 
 const semaphoreCommunitiesAddress = process.env.REACT_APP_WBCONTRACT;
@@ -28,11 +29,14 @@ async function updateVerifierContract() {
 }
 
 const UpdateVerifierContract = () => (
-    <div>
+  <div className="w3-container" style={{ marginLeft: "0", paddingLeft: "0" }}>
+    {sidebar}
+
+    <div className="w3-main" style={{ marginLeft: "250px" }}>
       <h1>Update Semaphore Contract</h1>
       <br />
       <Link to="/AllGroups">All Groups</Link>
-    <p></p>
+      <p></p>
       <form id="updateVerifierAddressForm">
         <label htmlFor="newVerifierContract">
           New Semaphore Contract Address:
@@ -52,6 +56,7 @@ const UpdateVerifierContract = () => (
         </button>
       </p>
     </div>
-  );
+  </div>
+);
 
 export default UpdateVerifierContract;

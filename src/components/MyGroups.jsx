@@ -2,7 +2,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { ethers } from "ethers";
-import { sidebar } from './Sidebar';
+import { sidebar } from "./Sidebar";
 import { SemaphoreEthers } from "@semaphore-protocol/data";
 import SemaphoreCommunitiesABI from "../abi/SemaphoreCommunities.json";
 
@@ -58,7 +58,7 @@ class ComponentPage extends React.Component {
             userCommittment: localStorage.getItem(groupToJoin),
             allGroupMembers: await semaphoreEthers.getGroupMembers(
               allGroups[i].idEntity.toString()
-            )
+            ),
           };
           allGroupsInfo.push(GroupInfo);
         } catch (error) {
@@ -87,60 +87,57 @@ class ComponentPage extends React.Component {
 
   render() {
     return (
-
-      <div className="w3-container"
-      style={{ marginLeft: "0", paddingLeft: "0" }}
+      <div
+        className="w3-container"
+        style={{ marginLeft: "0", paddingLeft: "0" }}
       >
-{ sidebar }            
+        {sidebar}
 
-<div className="w3-main" style={{ marginLeft: "250px" }}>
+        <div className="w3-main" style={{ marginLeft: "250px" }}>
+          <div className="w3-container">
+            <h1>My Groups</h1>
+            <br />
 
-      <div className="w3-container">
-        <h1>My Groups</h1>
-        <br />
-        <Link to="/CreateGroup">Create Group</Link> |{" "}
-        <Link to="/MyGroups">My Groups</Link>
-        <br />
-        <table className="w3-table-all">
-          <tbody>
-            <tr>
-              <td>Group Name</td>
-              {/* <td>Group Editor Address</td> */}
-              <td>User Functions</td>
-            </tr>
-             {this.state.allGroups.map((item) => {
-              // Without the `key`, React will fire a key warning
-              if (this.state.myGroups.includes(item.idEntity.toString())) {
-                return (
-                  <React.Fragment key={item.idEntity.toString()}>
-                    <tr>
-                      <td>
-                        {item.entityName.toString()} {item.root}
-                      </td>
-                      <td>
-                        <a
-                          href={`/SendMessage?entityID=${item.idEntity.toString()}&entityName=${item.entityName.toString()}`}
-                        >
-                          Send Message
-                        </a>{" "}
-                        |{" "}
-                        <a
-                          href={`/Messages?entityID=${item.idEntity.toString()}&entityName=${item.entityName.toString()}`}
-                        >
-                          See Messages
-                        </a>
-                      </td>
-                    </tr>
-                  </React.Fragment>
-                );
-              } else {
-                return null;
-              }
-            })}
-          </tbody>
-        </table>
-      </div>
-      </div>
+            <table className="w3-table-all">
+              <tbody>
+                <tr>
+                  <td>Group Name</td>
+                  {/* <td>Group Editor Address</td> */}
+                  <td>User Functions</td>
+                </tr>
+                {this.state.allGroups.map((item) => {
+                  // Without the `key`, React will fire a key warning
+                  if (this.state.myGroups.includes(item.idEntity.toString())) {
+                    return (
+                      <React.Fragment key={item.idEntity.toString()}>
+                        <tr>
+                          <td>
+                            {item.entityName.toString()} {item.root}
+                          </td>
+                          <td>
+                            <a
+                              href={`/SendMessage?entityID=${item.idEntity.toString()}&entityName=${item.entityName.toString()}`}
+                            >
+                              Send Message
+                            </a>{" "}
+                            |{" "}
+                            <a
+                              href={`/Messages?entityID=${item.idEntity.toString()}&entityName=${item.entityName.toString()}`}
+                            >
+                              See Messages
+                            </a>
+                          </td>
+                        </tr>
+                      </React.Fragment>
+                    );
+                  } else {
+                    return null;
+                  }
+                })}
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     );
   }

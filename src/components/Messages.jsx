@@ -5,6 +5,7 @@ import { SemaphoreEthers, SemaphoreSubgraph } from "@semaphore-protocol/data";
 import Blockies from "react-blockies";
 // import { utils } from "ethers";
 import Web3 from "web3";
+import { sidebar } from "./Sidebar";
 
 const semaphoreSubgraph = new SemaphoreSubgraph(process.env.REACT_APP_NETWORK);
 const semaphoreEthers = new SemaphoreEthers(process.env.REACT_APP_NETWORK, {
@@ -120,66 +121,73 @@ class ComponentPage extends React.Component {
     const groupName = queryParams.get("entityName");
 
     return (
-      <div>
-        <h1>Messages</h1>
-        <Link to="/AllGroups">All Groups</Link> <br /> <br />
-        <table className="w3-table-all">
-          <tbody>
-            <tr>
-              <td>
-                <strong>Group Name:</strong>
-              </td>
-              <td>{groupName}</td>
-            </tr>
-            <tr>
-              <td>
-                <strong>Group Admin:</strong>
-              </td>
-              <td>
-                <a href={this.state.url}>{this.state.groupAdmin}</a>
-              </td>
-            </tr>
-            {/* <tr><td><strong>Merkle Tree Root:</strong></td><td> {this.state.root}</td></tr>
+      <div
+        className="w3-container"
+        style={{ marginLeft: "0", paddingLeft: "0" }}
+      >
+        {sidebar}
+
+        <div className="w3-main" style={{ marginLeft: "250px" }}>
+          <h1>Messages</h1>
+          <Link to="/AllGroups">All Groups</Link> <br /> <br />
+          <table className="w3-table-all">
+            <tbody>
+              <tr>
+                <td>
+                  <strong>Group Name:</strong>
+                </td>
+                <td>{groupName}</td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>Group Admin:</strong>
+                </td>
+                <td>
+                  <a href={this.state.url}>{this.state.groupAdmin}</a>
+                </td>
+              </tr>
+              {/* <tr><td><strong>Merkle Tree Root:</strong></td><td> {this.state.root}</td></tr>
                 <tr><td><strong>depth:</strong></td><td> {this.state.depth}</td></tr>
                 <tr><td><strong>zeroValue:</strong></td><td> {this.state.zeroValue}</td></tr> */}
-            <tr>
-              <td>
-                <strong>Number of Group Members:</strong>
-              </td>
-              <td>{this.state.numberOfLeaves}</td>
-            </tr>
-            <tr>
-              <td>
-                <strong>Group Members:</strong>
-              </td>
-              <td>
-                {allMembers.map((value, index) => (
-                  <div key={index}>
-                    <Blockies
-                      seed={value}
-                      size={6}
-                      scale={5}
-                      // bgColor="#aaa"
-                      // color="#dfe"
-                      spotColor="#000"
-                    />
-                    {value}
-                  </div>
-                ))}
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <strong>{this.state.numOfMsgs} Messages:</strong>
-              </td>
-              <td>
-                {verifiedProofs.map((value, index) => (
-                    <p key={index}>{ value }</p>   
-                ))}
-              </td>
-            </tr>
-          </tbody>
-        </table>
+              <tr>
+                <td>
+                  <strong>Number of Group Members:</strong>
+                </td>
+                <td>{this.state.numberOfLeaves}</td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>Group Members:</strong>
+                </td>
+                <td>
+                  {allMembers.map((value, index) => (
+                    <div key={index}>
+                      <Blockies
+                        seed={value}
+                        size={6}
+                        scale={5}
+                        // bgColor="#aaa"
+                        // color="#dfe"
+                        spotColor="#000"
+                      />
+                      {value}
+                    </div>
+                  ))}
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>{this.state.numOfMsgs} Messages:</strong>
+                </td>
+                <td>
+                  {verifiedProofs.map((value, index) => (
+                    <p key={index}>{value}</p>
+                  ))}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     );
   }

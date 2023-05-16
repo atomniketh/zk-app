@@ -2,6 +2,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { ethers } from "ethers";
+import { sidebar } from './Sidebar';
 import SemaphoreContractABI from "../abi/Semaphore.json";
 import { SemaphoreEthers } from "@semaphore-protocol/data";
 
@@ -70,7 +71,12 @@ const addMember = () => {
   const queryParams = new URLSearchParams(window.location.search);
   const groupName = queryParams.get("entityName");
   return (
-    <div>
+        <div className="w3-container"
+                    style={{ marginLeft: "0", paddingLeft: "0" }}
+                    >
+          { sidebar }            
+
+          <div className="w3-main" style={{ marginLeft: "250px" }}>
       <h1>Add Member to Group</h1>
       <br />
       <p>
@@ -115,6 +121,7 @@ const addMember = () => {
           </button>
         </p>
       </div>
+    </div>
     </div>
   );
 };

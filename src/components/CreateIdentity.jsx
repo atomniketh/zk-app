@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Identity } from "@semaphore-protocol/identity";
 import { ethers, Wallet } from "ethers";
 import { Client } from "@xmtp/xmtp-js";
+import { sidebar } from './Sidebar';
 
 const provider = new ethers.providers.Web3Provider(window.ethereum);
 const signer = provider.getSigner();
@@ -73,7 +74,12 @@ function CreateIdentity() {
   };
 
   return (
-    <div>
+    <div className="w3-container"
+    style={{ marginLeft: "0", paddingLeft: "0" }}
+    >
+{ sidebar }            
+
+<div className="w3-main" style={{ marginLeft: "250px" }}>
       <Link to="/AllGroups">All Groups</Link>
       <div
         id="sendMessageForm"
@@ -113,6 +119,7 @@ function CreateIdentity() {
           Clear ID in Storage
         </button>
       </div>
+    </div>
     </div>
   );
 }

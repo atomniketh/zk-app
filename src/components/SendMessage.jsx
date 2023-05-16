@@ -7,6 +7,7 @@ import { Group } from "@semaphore-protocol/group";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { generateProof, verifyProof } from "@semaphore-protocol/proof";
 import { SemaphoreEthers } from "@semaphore-protocol/data"
+import { sidebar } from './Sidebar';
 import "font-awesome/css/font-awesome.min.css";
 import SemaphoreContractABI from "../abi/Semaphore.json";
 
@@ -152,7 +153,12 @@ const sendMessage = () => {
   }
 
   return (
-    <div>
+    < div className="w3-container"
+      style={{ marginLeft: "0", paddingLeft: "0" }}
+      >
+      { sidebar }            
+
+      <div className="w3-main" style={{ marginLeft: "250px" }}>
       <h1>Send Message</h1>
       <p>
         <Link to="/AllGroups">All Groups</Link>
@@ -188,6 +194,7 @@ const sendMessage = () => {
         </button>
       </div>
     </div>
+  </div>
   );
 };
 
