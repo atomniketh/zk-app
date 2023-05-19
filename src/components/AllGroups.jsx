@@ -14,7 +14,7 @@ class ComponentPage extends React.Component {
       allGroups: [],
       allMembers: [],
       currentVerifierContract: "",
-      isActiveMember: "",
+      isActiveMember: ""
     };
   }
 
@@ -139,10 +139,7 @@ class ComponentPage extends React.Component {
             >
               <div>
                 <nav>
-                  &copy; 2023 zkCommunities |
-                  <a href="/about" target="_top">
-                    ABOUT
-                  </a>
+                  Report a Bug.
                 </nav>
               </div>
             </footer>

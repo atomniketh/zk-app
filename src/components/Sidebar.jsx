@@ -1,5 +1,8 @@
+import React from "react";
+
 export const sidebar = (
-    <><div
+    <>
+    <div
         className="w3-sidebar w3-collapse w3-white w3-animate-left w3-large"
         style={{ zIndex: "3", width: "200px", marginLeft: "0", paddingLeft: "0" }}
         id="mySidebar"
