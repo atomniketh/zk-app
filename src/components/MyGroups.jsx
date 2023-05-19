@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import React from "react";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import { ethers } from "ethers";
 import { sidebar } from "./Sidebar";
 import { SemaphoreEthers } from "@semaphore-protocol/data";

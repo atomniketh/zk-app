@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import React from "react";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import { ethers } from "ethers";
 import { sidebar } from "./Sidebar";
 import SemaphoreCommunitiesABI from "../abi/SemaphoreCommunities.json";
@@ -20,7 +20,9 @@ async function fillForm() {
 async function createGroup() {
   const groupName = document.getElementById("groupName").value;
   const editor = document.getElementById("editor").value;
-  const merkleTreeDepth = document.getElementById("merkleTreeDepth").value;
+//  const merkleTreeDepth = document.getElementById("merkleTreeDepth").value;
+  const merkleTreeDepth = process.env.REACT_APP_TREEDEPTH;
+  console.log("merkleTreeDepth is: " + merkleTreeDepth);
 
   const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
   await provider.send("eth_requestAccounts", []);
@@ -66,7 +68,7 @@ const CreateGroup = () => (
           Use My Address
         </button>
         <p></p>
-        <label htmlFor="merkleTreeDepth">Merkle Tree Depth:</label> &nbsp;
+        {/* <label htmlFor="merkleTreeDepth">Merkle Tree Depth:</label> &nbsp;
         <select name="merkleTreeDepth" id="merkleTreeDepth">
           <option value="16">16</option>
           <option value="20">20</option>
@@ -74,7 +76,7 @@ const CreateGroup = () => (
           <option value="28">28</option>
           <option value="32">32</option>
         </select>
-        <p></p>
+        <p></p> */}
       </form>
       <p>
         <button type="button" onClick={createGroup}>

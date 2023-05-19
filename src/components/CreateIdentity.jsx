@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import { Identity } from "@semaphore-protocol/identity";
 import { ethers, Wallet } from "ethers";
 import { Client } from "@xmtp/xmtp-js";
@@ -22,13 +22,11 @@ function CreateIdentity() {
   const _entityName = queryParams.get("entityName");
   const _entityCurrentEditor = queryParams.get("entityEditor");
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [signedMessage, setSignedMessage] = React.useState("");
+  // const [setSignedMessage] = React.useState("");
+  
   const groupToJoin = `group${_entityID}`;
-  console.log("groupToJoin: ", groupToJoin);
-
-  // console.log(
-  //   `Identity is already stored as: ${localStorage.getItem("groupToJoin")}`
-  // );
 
   if (localStorage.getItem(groupToJoin) === null) {
     console.log(`Identity is null`);
@@ -80,7 +78,7 @@ function CreateIdentity() {
 { sidebar }            
 
 <div className="w3-main" style={{ marginLeft: "250px" }}>
-      <Link to="/AllGroups">All Groups</Link>
+
       <div
         id="sendMessageForm"
         className="w3-container w3-card-4 w3-light-grey w3-text-blue w3-margin"
