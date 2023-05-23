@@ -90,7 +90,6 @@ class ComponentPage extends React.Component {
                           size={8}
                           scale={5}
                           defaultBackgroundColor='red'
-                          className='rounded'
                       />}
                       </td>
                       <td>

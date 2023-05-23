@@ -118,7 +118,6 @@ class ComponentPage extends React.Component {
                           size={8}
                           scale={5}
                           defaultBackgroundColor='white'
-                          className='rounded'
                           /> {" "}
                             {item.entityName.toString()} {item.root}
                           </td>

@@ -168,6 +168,7 @@ class ComponentPage extends React.Component {
                           size={6}
                           scale={5}
                           bgcolor="white"
+                          className='rounded'
                       />
                       {value}
                     </div>
