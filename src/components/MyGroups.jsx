@@ -5,6 +5,7 @@ import { ethers } from "ethers";
 import { sidebar } from "./Sidebar";
 import { SemaphoreEthers } from "@semaphore-protocol/data";
 import SemaphoreCommunitiesABI from "../abi/SemaphoreCommunities.json";
+import BlockiesSvg from 'blockies-react-svg';
 
 const semaphoreCommunitiesAddress = process.env.REACT_APP_WBCONTRACT;
 const semaphoreEthers = new SemaphoreEthers(process.env.REACT_APP_NETWORK, {
@@ -112,6 +113,13 @@ class ComponentPage extends React.Component {
                       <React.Fragment key={item.idEntity.toString()}>
                         <tr>
                           <td>
+                           <BlockiesSvg 
+                          address={item.idEntity.toString()}
+                          size={8}
+                          scale={5}
+                          defaultBackgroundColor='white'
+                          className='rounded'
+                          /> {" "}
                             {item.entityName.toString()} {item.root}
                           </td>
                           <td>

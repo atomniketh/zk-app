@@ -2,7 +2,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { SemaphoreEthers, SemaphoreSubgraph } from "@semaphore-protocol/data";
-import Blockies from "react-blockies";
+import BlockiesSvg from 'blockies-react-svg';
+
 // import { utils } from "ethers";
 import Web3 from "web3";
 import { sidebar } from "./Sidebar";
@@ -162,13 +163,11 @@ class ComponentPage extends React.Component {
                 <td>
                   {allMembers.map((value, index) => (
                     <div key={index}>
-                      <Blockies
-                        seed={value}
-                        size={6}
-                        scale={5}
-                        // bgColor="#aaa"
-                        // color="#dfe"
-                        spotColor="#000"
+                         <BlockiesSvg 
+                          address={value}
+                          size={6}
+                          scale={5}
+                          bgcolor="white"
                       />
                       {value}
                     </div>

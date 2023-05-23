@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { ethers } from "ethers";
 import { sidebar } from "./Sidebar";
 import SemaphoreCommunitiesABI from "../abi/SemaphoreCommunities.json";
+import BlockiesSvg from 'blockies-react-svg';
 
 const semaphoreCommunitiesAddress = process.env.REACT_APP_WBCONTRACT;
 
@@ -83,7 +84,15 @@ class ComponentPage extends React.Component {
                   // Without the `key`, React will fire a key warning
                   <React.Fragment key={item.idEntity.toString()}>
                     <tr>
-                      <td>{item.idEntity.toString()}</td>
+                      <td>
+                      { <BlockiesSvg 
+                          address={item.idEntity.toString()}
+                          size={8}
+                          scale={5}
+                          defaultBackgroundColor='red'
+                          className='rounded'
+                      />}
+                      </td>
                       <td>
                         {item.entityName.toString()} {item.root}
                       </td>
