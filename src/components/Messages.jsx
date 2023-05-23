@@ -180,9 +180,11 @@ class ComponentPage extends React.Component {
                   <strong>{this.state.numOfMsgs} Messages:</strong>
                 </td>
                 <td>
+                  <ul>
                   {verifiedProofs.map((value, index) => (
-                    <p key={index}>{value}</p>
+                    <li className='w3-monospace' key={index}>{value}</li>
                   ))}
+                  </ul>
                 </td>
               </tr>
             </tbody>
