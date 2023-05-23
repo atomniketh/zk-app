@@ -2,7 +2,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { SemaphoreEthers, SemaphoreSubgraph } from "@semaphore-protocol/data";
-import BlockiesSvg from 'blockies-react-svg';
+import BlockiesSvg from "blockies-react-svg";
 
 // import { utils } from "ethers";
 import Web3 from "web3";
@@ -163,12 +163,12 @@ class ComponentPage extends React.Component {
                 <td>
                   {allMembers.map((value, index) => (
                     <div key={index}>
-                         <BlockiesSvg 
-                          address={value}
-                          size={6}
-                          scale={5}
-                          bgcolor="white"
-                          className='rounded'
+                      <BlockiesSvg
+                        address={value}
+                        size={6}
+                        scale={5}
+                        bgcolor="white"
+                        className="rounded"
                       />
                       {value}
                     </div>
@@ -180,15 +180,18 @@ class ComponentPage extends React.Component {
                   <strong>{this.state.numOfMsgs} Messages:</strong>
                 </td>
                 <td>
-                  <ul>
-                  {verifiedProofs.map((value, index) => (
-                    <li className='w3-monospace' key={index}>{value}</li>
-                  ))}
+                  <ul className="w3-ul">
+                    {verifiedProofs.map((value, index) => (
+                      <li className="w3-xlarge w3-monospace" key={index}>
+                        {value}
+                      </li>
+                    ))}
                   </ul>
                 </td>
               </tr>
             </tbody>
           </table>
+          <br></br>
         </div>
       </div>
     );
