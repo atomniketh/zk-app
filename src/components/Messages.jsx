@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import React from "react";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import { SemaphoreEthers, SemaphoreSubgraph } from "@semaphore-protocol/data";
 import BlockiesSvg from "blockies-react-svg";
 
@@ -127,18 +127,18 @@ class ComponentPage extends React.Component {
         style={{ marginLeft: "0", paddingLeft: "0" }}
       >
         {sidebar}
-
         <div className="w3-main" style={{ marginLeft: "250px" }}>
-          <h1>Messages</h1>
-          <Link to="/AllGroups">All Groups</Link> <br /> <br />
+          <h1>{groupName} Messages</h1>
+          {/* <Link to="/AllGroups">All Groups</Link> <br /> <br /> */}
+
           <table className="w3-table-all">
             <tbody>
-              <tr>
+              {/* <tr>
                 <td>
                   <strong>Group Name:</strong>
                 </td>
                 <td>{groupName}</td>
-              </tr>
+              </tr> */}
               <tr>
                 <td>
                   <strong>Group Admin:</strong>
@@ -150,29 +150,43 @@ class ComponentPage extends React.Component {
               {/* <tr><td><strong>Merkle Tree Root:</strong></td><td> {this.state.root}</td></tr>
                 <tr><td><strong>depth:</strong></td><td> {this.state.depth}</td></tr>
                 <tr><td><strong>zeroValue:</strong></td><td> {this.state.zeroValue}</td></tr> */}
-              <tr>
+              {/* <tr>
                 <td>
                   <strong>Number of Group Members:</strong>
                 </td>
                 <td>{this.state.numberOfLeaves}</td>
-              </tr>
+              </tr> */}
               <tr>
                 <td>
-                  <strong>Group Members:</strong>
+                  <strong>{this.state.numberOfLeaves} Group Members:</strong>
                 </td>
                 <td>
-                  {allMembers.map((value, index) => (
-                    <div key={index}>
-                      <BlockiesSvg
-                        address={value}
-                        size={6}
-                        scale={5}
-                        bgcolor="white"
-                        className="rounded"
-                      />
-                      {value}
-                    </div>
-                  ))}
+                  <table className="w3-table-all">
+                    <tbody>
+                      <tr>
+                        <td>
+                          {allMembers.map((value, theIndex) => (
+                            <React.Fragment key={theIndex}>
+                              <BlockiesSvg
+                                address={value}
+                                size={12}
+                                scale={5}
+                                bgcolor="white"
+                                className="rounded"
+                              />
+                              {theIndex % 4 === 3 ? (
+                                <div
+                                  dangerouslySetInnerHTML={{
+                                    __html: "</td></tr><td>",
+                                  }}
+                                />
+                              ) : null}
+                            </React.Fragment>
+                          ))}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
                 </td>
               </tr>
               <tr>
