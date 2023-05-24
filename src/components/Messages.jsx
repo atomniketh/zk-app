@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import React from "react";
-// import { Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { SemaphoreEthers, SemaphoreSubgraph } from "@semaphore-protocol/data";
 import BlockiesSvg from "blockies-react-svg";
 
@@ -120,6 +120,13 @@ class ComponentPage extends React.Component {
     const { verifiedProofs } = this.state;
     const queryParams = new URLSearchParams(window.location.search);
     const groupName = queryParams.get("entityName");
+    const entID = queryParams.get("entityID");
+
+const url = new URL("/SendMessage", window.location);
+url.searchParams.set("entityID", entID);
+url.searchParams.set("entityName", groupName);
+
+
 
     return (
       <div
@@ -129,7 +136,8 @@ class ComponentPage extends React.Component {
         {sidebar}
         <div className="w3-main" style={{ marginLeft: "250px" }}>
           <h1>{groupName} Messages</h1>
-          {/* <Link to="/AllGroups">All Groups</Link> <br /> <br /> */}
+          
+          <Link to={url.toString()}>Send Message</Link><br /> <br />
 
           <table className="w3-table-all">
             <tbody>
@@ -173,10 +181,8 @@ class ComponentPage extends React.Component {
                                 scale={5}
                                 bgcolor="white"
                                 className="rounded"
+                                title={value}
                               />
-
-{value}
-
                               {theIndex % 4 === 3 ? (
                                 <div
                                   dangerouslySetInnerHTML={{
