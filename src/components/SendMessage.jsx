@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import React from "react";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import { ethers, utils, BigNumber } from "ethers";
 import { Identity } from "@semaphore-protocol/identity";
 import { Group } from "@semaphore-protocol/group";
@@ -10,6 +10,8 @@ import { SemaphoreEthers } from "@semaphore-protocol/data"
 import { sidebar } from './Sidebar';
 import "font-awesome/css/font-awesome.min.css";
 import SemaphoreContractABI from "../abi/Semaphore.json";
+// import { DefenderRelaySigner, DefenderRelayProvider } from 'defender-relay-client/lib/ethers';
+
 
 const semaphoreEthers = new SemaphoreEthers(process.env.REACT_APP_NETWORK);
 const semaphoreContractAddress = process.env.REACT_APP_SEMAPHORE;
@@ -28,7 +30,7 @@ const submitMessage = async () => {
   console.log(`Hash of ${document.getElementById("leakMessage").value.toString()}:`, signal);
 
   // console.log("Formatted Signal: " + signal);
-  // console.log(`localStorage.getItem(signedData): ${localStorage.getItem("signedData")}`);
+  console.log(`localStorage.getItem(signedData): ${localStorage.getItem("signedData")}`);
   const identity = new Identity(localStorage.getItem("signedData"));
 
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -44,28 +46,32 @@ const submitMessage = async () => {
 
   const allMembers = await semaphoreEthers.getGroupMembers(_entityIDStr);
   group.addMembers(allMembers);
-  // console.log(`allMembers: ${allMembers}`);
+  console.log(`allMembers: ${allMembers}`);
 
   const idIndex = group.indexOf(identity.commitment);
-  // console.log(`idIndex: ${idIndex}`);
-  // console.log(`Group Members: ${group.members}`);
+
+const testIndex = group.indexOf("16948514235341957898454876473214737047419402240398321289450170535251226167324");
+console.log(`testIndex: ${testIndex}`);
+
+  console.log(`idIndex: ${idIndex}`);
+  console.log(`Group Members: ${group.members}`);
 
   // const groupProof = group.generateMerkleProof(idIndex);
   const thisIdsGroupMerkleProof = group.generateMerkleProof(idIndex)
 
-  // console.log(`groupProof leaf: ${groupProof.leaf}`);
-  // console.log(`groupProof root: ${groupProof.root}`);
-  // console.log(`_entityID: ${_entityID}`);
+  console.log(`groupProof leaf: ${thisIdsGroupMerkleProof.leaf}`);
+  console.log(`groupProof root: ${thisIdsGroupMerkleProof.root}`);
+  console.log(`_entityID: ${_entityID}`);
 
-  // console.log("******* Group Info: *********************************");
-  // console.log(`GroupID: ${group.id}`);
-  // console.log(`Group Root: ${group.root}`);
-  // console.log(`Group Depth: ${group.depth}`);
-  // console.log(`Group zeroValue: ${group.zeroValue}`);
-  // console.log(`Group MerkleProof: ${thisIdsGroupMerkleProof}`);
-  // console.log(`Group MerkleProof Leaf: ${thisIdsGroupMerkleProof.leaf}`);
-  // console.log(`Group MerkleProof Root: ${thisIdsGroupMerkleProof.root}`);
-  // console.log("*******  End of Group Info *********************************");
+  console.log("******* Group Info: *********************************");
+  console.log(`GroupID: ${group.id}`);
+  console.log(`Group Root: ${group.root}`);
+  console.log(`Group Depth: ${group.depth}`);
+  console.log(`Group zeroValue: ${group.zeroValue}`);
+  console.log(`Group MerkleProof: ${thisIdsGroupMerkleProof}`);
+  console.log(`Group MerkleProof Leaf: ${thisIdsGroupMerkleProof.leaf}`);
+  console.log(`Group MerkleProof Root: ${thisIdsGroupMerkleProof.root}`);
+  console.log("*******  End of Group Info *********************************");
 
   await provider.send("eth_requestAccounts", []);
   const contract = new ethers.Contract(
@@ -122,6 +128,16 @@ const submitMessage = async () => {
     console.log(`fullProof.proof: ${fullProof.proof}`);
     console.log("*******  End of Publishing Leak With: *********************************");
 
+    // const credentials = { apiKey: process.env.REACT_APP_OZ_API_KEY, apiSecret: process.env.REACT_APP_OZ_SEC_KEY };
+    // const OZprovider = new DefenderRelayProvider(credentials);
+    // const OZsigner = new DefenderRelaySigner(credentials, OZprovider, { speed: 'fast' });
+
+    // const OZcontract = new ethers.Contract(
+    //   process.env.REACT_APP_OZ_ETH_ADDRESS,
+    //   SemaphoreContractABI.abi,
+    //   OZsigner
+    // );
+
     const tx = await contract.verifyProof(_entityID, thisIdsGroupMerkleProof.root, signal, fullProof.nullifierHash, externalNullifier, fullProof.proof, { gasLimit: 1000000, nonce: nonce || undefined })
     console.log("Success!");
     console.log(`Transaction hash: https://goerli.etherscan.io/tx/${tx.hash}`);
@@ -160,11 +176,8 @@ const sendMessage = () => {
 
       <div className="w3-main" style={{ marginLeft: "250px" }}>
       <h1>Send Message</h1>
-      <p>
-        <Link to="/AllGroups">All Groups</Link>
-      </p>
 
-      {/* <p>Send Message to {groupName} Group: </p> */}
+      {/* <h1>Send Message to {groupName} Group: </h1> */}
 
       <div
         id="sendMessageForm"

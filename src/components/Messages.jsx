@@ -174,6 +174,9 @@ class ComponentPage extends React.Component {
                                 bgcolor="white"
                                 className="rounded"
                               />
+
+{value}
+
                               {theIndex % 4 === 3 ? (
                                 <div
                                   dangerouslySetInnerHTML={{

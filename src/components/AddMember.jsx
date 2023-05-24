@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import React from "react";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import { ethers } from "ethers";
 import { sidebar } from './Sidebar';
 import SemaphoreContractABI from "../abi/Semaphore.json";
@@ -77,12 +77,10 @@ const addMember = () => {
           { sidebar }            
 
           <div className="w3-main" style={{ marginLeft: "250px" }}>
-      <h1>Add Member to Group</h1>
+      <h1>Add Member to {groupName} Group</h1>
       <br />
-      <p>
-        <Link to="/AllGroups">All Groups</Link>
-      </p>
-      <h2>Add Member to {groupName} Group: </h2>
+
+      <h2>Add Member: </h2>
 
       <div
         id="addMemberForm"
