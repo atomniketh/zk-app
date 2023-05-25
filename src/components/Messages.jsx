@@ -123,11 +123,9 @@ class ComponentPage extends React.Component {
     const groupName = queryParams.get("entityName");
     const entID = queryParams.get("entityID");
 
-const url = new URL("/SendMessage", window.location);
-url.searchParams.set("entityID", entID);
-url.searchParams.set("entityName", groupName);
-
-
+    const url = new URL("/SendMessage", window.location);
+    url.searchParams.set("entityID", entID);
+    url.searchParams.set("entityName", groupName);
 
     return (
       <div
@@ -137,7 +135,6 @@ url.searchParams.set("entityName", groupName);
         {sidebar}
         <div className="w3-main" style={{ marginLeft: "250px" }}>
           <h1>{groupName} Messages</h1>
-          
           <table className="w3-table-all">
             <tbody>
               {/* <tr>
@@ -175,6 +172,11 @@ url.searchParams.set("entityName", groupName);
                           {allMembers.map((value, theIndex) => (
                             <React.Fragment key={theIndex}>
                               <BlockiesSvg
+                                onClick={() =>
+                                  (document.getElementById(
+                                    theIndex
+                                  ).style.display = "block")
+                                }
                                 address={value}
                                 size={12}
                                 scale={5}
@@ -182,6 +184,22 @@ url.searchParams.set("entityName", groupName);
                                 className="rounded"
                                 title={value}
                               />
+                              <div id={theIndex} className="w3-modal">
+                                <div className="w3-modal-content w3-animate-top w3-card-4">
+                                  <span
+                                    onClick={() =>
+                                      (document.getElementById(
+                                        theIndex
+                                      ).style.display = "none")
+                                    }
+                                    className="w3-button w3-display-topright"
+                                  >
+                                    &times;
+                                  </span>
+                                  Commitment is:<br></br>
+                                  {value}
+                                </div>
+                              </div>
                               {theIndex % 4 === 3 ? (
                                 <div
                                   dangerouslySetInnerHTML={{
@@ -214,7 +232,11 @@ url.searchParams.set("entityName", groupName);
             </tbody>
           </table>
           <br></br>
-          <div className="w3-right-align"><Link to={url.toString()}><i className="w3-xxlarge fa fa-pencil"></i> Send Message</Link></div>
+          <div className="w3-right-align">
+            <Link to={url.toString()}>
+              <i className="w3-xxlarge fa fa-pencil"></i> Send Message
+            </Link>
+          </div>
           <br /> <br />
         </div>
       </div>

@@ -80,18 +80,17 @@ const addMember = () => {
       <h1>Add Member to {groupName} Group</h1>
       <br />
 
-      <h2>Add Member: </h2>
-
       <div
         id="addMemberForm"
-        className="w3-container w3-card-4 w3-light-grey w3-text-blue w3-margin"
+        className="w3-container w3-card-4 w3-light-grey w3-text-black w3-margin"
       >
+      <h2>Add Member: </h2>
         {/* <input type="hidden" id="entityID" name="entityID" value={queryParams.get("entityID")} /> */}
         <p></p>
         <label htmlFor="memberCommitment">Commitment:</label> &nbsp;
-        <div className="w3-col" style={{ width: `${50}px` }}>
+        {/* <div className="w3-col" style={{ width: `${50}px` }}>
           <i className="w3-xxlarge fa fa-pencil"></i>
-        </div>
+        </div> */}
         <input
           type="text"
           id="memberCommitment"
@@ -104,7 +103,7 @@ const addMember = () => {
           <button
             type="button"
             onClick={checkEditor}
-            className="w3-button w3-block w3-section w3-blue w3-ripple w3-padding"
+            className="w3-button w3-block w3-section w3-black w3-ripple w3-padding"
           >
             Click here to Check if the editor is you.
           </button>
@@ -113,7 +112,7 @@ const addMember = () => {
           <button
             type="button"
             onClick={addMemberToGroup}
-            className="w3-button w3-block w3-section w3-blue w3-ripple w3-padding"
+            className="w3-button w3-block w3-section w3-black w3-ripple w3-padding"
           >
             Click here to Add User to Group.
           </button>

@@ -54,10 +54,12 @@ async function createGroup() {
 const CreateGroup = () => (
   <div className="w3-container" style={{ marginLeft: "0", paddingLeft: "0" }}>
     {sidebar}
-
     <div className="w3-main" style={{ marginLeft: "250px" }}>
       <h1>Create Group</h1>
-
+      <div
+          id="createGroupForm1"
+          className="w3-container w3-card-4 w3-light-grey w3-text-black w3-margin"
+        >
       <form id="createGroupForm">
         <label htmlFor="groupName">Group Name:</label> &nbsp;
         <input type="text" id="groupName" name="groupName" size="30" />
@@ -79,11 +81,13 @@ const CreateGroup = () => (
         <p></p> */}
       </form>
       <p>
-        <button type="button" onClick={createGroup}>
-          Click here to create a new Group.
+        <button className="w3-button w3-black" type="button" onClick={createGroup}>
+          Create Group
         </button>
       </p>
+      </div>
     </div>
+    <br />
   </div>
 );
 

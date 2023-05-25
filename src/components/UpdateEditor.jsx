@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import { ethers } from "ethers";
 import { SemaphoreSubgraph } from "@semaphore-protocol/data";
 import { sidebar } from "./Sidebar";
@@ -50,17 +50,17 @@ function editorComponent() {
       {sidebar}
 
       <div className="w3-main" style={{ marginLeft: "250px" }}>
-        <h1>Update Editor Page</h1>
+        <h1>Update Editor</h1>
         <br />
-        <Link to="/AllGroups">All Groups</Link>
-        <h2 className="w3-center">Current Editor Address: {currentAdmin} </h2>
         <div
           id="updateEditorForm"
-          className="w3-container w3-card-4 w3-light-grey w3-text-blue w3-margin"
+          className="w3-container w3-card-4 w3-light-grey w3-text-black w3-margin"
         >
-          <div className="w3-col" style={{ width: `${50}px` }}>
+        <h2 className="w3-center">Current Editor Address: {currentAdmin} </h2>
+
+          {/* <div className="w3-col" style={{ width: `${50}px` }}>
             <i className="w3-xxlarge fa fa-pencil"></i>
-          </div>
+          </div> */}
           <div className="w3-rest">
             <p></p>
             <label htmlFor="newEditorAddress">New Editor Address:</label> &nbsp;
@@ -71,12 +71,13 @@ function editorComponent() {
               size="50"
             />
           </div>
+          <br></br>
         </div>
         <p>
           <button
             type="button"
             onClick={updateEditor}
-            className="w3-button w3-block w3-section w3-blue w3-ripple w3-padding"
+            className="w3-button w3-block w3-section w3-black w3-ripple w3-padding"
           >
             Click here to update Editor Address.
           </button>

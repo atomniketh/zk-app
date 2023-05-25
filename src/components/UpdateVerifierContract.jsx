@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import { ethers } from "ethers";
 import { sidebar } from "./Sidebar";
 import SemaphoreCommunitiesABI from "../abi/SemaphoreCommunities.json";
@@ -35,8 +35,8 @@ const UpdateVerifierContract = () => (
     <div className="w3-main" style={{ marginLeft: "250px" }}>
       <h1>Update Semaphore Contract</h1>
       <br />
-      <Link to="/AllGroups">All Groups</Link>
-      <p></p>
+      {/* <Link to="/AllGroups">All Groups</Link>
+      <p></p> */}
       <form id="updateVerifierAddressForm">
         <label htmlFor="newVerifierContract">
           New Semaphore Contract Address:
@@ -51,8 +51,8 @@ const UpdateVerifierContract = () => (
         <p></p>
       </form>
       <p>
-        <button type="button" onClick={updateVerifierContract}>
-          Click here to update Verifier Contract.
+        <button type="button" onClick={updateVerifierContract} className="w3-button w3-block w3-section w3-black w3-ripple w3-padding" >
+          Click here to update Semaphore Contract.
         </button>
       </p>
     </div>

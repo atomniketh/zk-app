@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import React from "react";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import { ethers } from "ethers";
 import { sidebar } from "./Sidebar";
 import SemaphoreCommunitiesABI from "../abi/SemaphoreCommunities.json";
@@ -47,25 +47,22 @@ const UpdateGroupName = () => {
       {sidebar}
 
       <div className="w3-main" style={{ marginLeft: "250px" }}>
-        <h1>Update Group Name Page</h1>
-        <p>
-          <Link to="/AllGroups">All Groups</Link>
-        </p>
+        <h1>Update Group Name</h1>
 
-        <h2 className="w3-center">
-          Current Group Name:{" "}
-          <div id="groupName" name="groupName">
-            {entityNameCurrent}
-          </div>{" "}
-        </h2>
         <div
           id="updateGroupNameForm"
-          className="w3-container w3-card-4 w3-light-grey w3-text-blue w3-margin"
+          className="w3-container w3-card-4 w3-light-grey w3-text-black w3-margin"
         >
-          <div className="w3-col" style={{ width: `${50}px` }}>
+          {/* <div className="w3-col" style={{ width: `${50}px` }}>
             <i className="w3-xxlarge fa fa-pencil"></i>
-          </div>
+          </div> */}
           <div className="w3-rest">
+          <h2>
+          
+          <div id="groupName" name="groupName">
+          Current Name:{" "}{entityNameCurrent}
+          </div>
+        </h2>
             <p></p>
             <label htmlFor="newGroupName">New Group Name:</label> &nbsp;
             <input
@@ -80,7 +77,7 @@ const UpdateGroupName = () => {
             <button
               type="button"
               onClick={updateGroupName}
-              className="w3-button w3-block w3-section w3-blue w3-ripple w3-padding"
+              className="w3-button w3-block w3-section w3-black w3-ripple w3-padding"
             >
               Click here to update Group Name.
             </button>

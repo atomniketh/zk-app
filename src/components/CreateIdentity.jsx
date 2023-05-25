@@ -41,8 +41,8 @@ function CreateIdentity() {
     const messageToSign = "zkCommunities Group " + _entityID;
     const signedData = await signer.signMessage(messageToSign);
     setSignedMessage(signedData);
+    localStorage.setItem("signedData" + _entityID, signedData);
     // console.log(`Signed Data: ${signedData}`);
-    localStorage.setItem("signedData", signedData);
     // console.log(`signedMessage is now: ${signedMessage}`);
     const { commitment } = new Identity(signedData);
     const identityInfo = commitment;
