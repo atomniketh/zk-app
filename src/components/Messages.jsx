@@ -3,6 +3,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { SemaphoreEthers, SemaphoreSubgraph } from "@semaphore-protocol/data";
 import BlockiesSvg from "blockies-react-svg";
+import "font-awesome/css/font-awesome.min.css";
 
 // import { utils } from "ethers";
 import Web3 from "web3";
@@ -137,8 +138,6 @@ url.searchParams.set("entityName", groupName);
         <div className="w3-main" style={{ marginLeft: "250px" }}>
           <h1>{groupName} Messages</h1>
           
-          <Link to={url.toString()}>Send Message</Link><br /> <br />
-
           <table className="w3-table-all">
             <tbody>
               {/* <tr>
@@ -215,6 +214,8 @@ url.searchParams.set("entityName", groupName);
             </tbody>
           </table>
           <br></br>
+          <div class="w3-right-align"><Link to={url.toString()}><i className="w3-xxlarge fa fa-pencil"></i> Send Message</Link></div>
+          <br /> <br />
         </div>
       </div>
     );
