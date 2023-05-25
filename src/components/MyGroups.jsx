@@ -131,7 +131,13 @@ class ComponentPage extends React.Component {
                             <a
                               href={`/Messages?entityID=${item.idEntity.toString()}&entityName=${item.entityName.toString()}`}
                             >
-                              See Messages
+                              See Activity
+                            </a>{" "}
+                            |{" "}
+                            <a
+                              href={`/MessageAdmin?entityID=${item.idEntity.toString()}&entityName=${item.entityName.toString()}`}
+                            >
+                              Message Admin
                             </a>
                           </td>
                         </tr>

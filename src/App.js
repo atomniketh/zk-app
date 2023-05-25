@@ -12,6 +12,7 @@ import CreateIdentity from "./components/CreateIdentity";
 import AddMember from "./components/AddMember";
 import SendMessage from "./components/SendMessage";
 import MyGroups from "./components/MyGroups";
+import MessageAdmin from "./components/MessageAdmin";
 
 // import AddUser from "./components/AddUser";
 function App() {
@@ -36,6 +37,7 @@ function App() {
           <Route path='/AddMember' element={<AddMember/>} />
           <Route path='/SendMessage' element={<SendMessage/>} />
           <Route path='/MyGroups' element={<MyGroups/>} />
+          <Route path='/MessageAdmin' element={<MessageAdmin/>} />
           {/* If any route mismatches the upper 
           route endpoints then, redirect triggers 
           and redirects app to home component with to="/" */}
