@@ -214,7 +214,7 @@ url.searchParams.set("entityName", groupName);
             </tbody>
           </table>
           <br></br>
-          <div class="w3-right-align"><Link to={url.toString()}><i className="w3-xxlarge fa fa-pencil"></i> Send Message</Link></div>
+          <div className="w3-right-align"><Link to={url.toString()}><i className="w3-xxlarge fa fa-pencil"></i> Send Message</Link></div>
           <br /> <br />
         </div>
       </div>
