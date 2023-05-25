@@ -60,6 +60,7 @@ const CreateGroup = () => (
           id="createGroupForm1"
           className="w3-container w3-card-4 w3-light-grey w3-text-black w3-margin"
         >
+          <br />
       <form id="createGroupForm">
         <label htmlFor="groupName">Group Name:</label> &nbsp;
         <input type="text" id="groupName" name="groupName" size="30" />

@@ -148,7 +148,12 @@ class ComponentPage extends React.Component {
                   <strong>Group Admin:</strong>
                 </td>
                 <td>
-                  <a href={this.state.url}>{this.state.groupAdmin}</a>
+                  {/* <a href={this.state.url}>{this.state.groupAdmin}</a> */}
+                  <Link
+                    to={`/MessageAdmin?entityID=${entID}&entityName=${groupName}`}
+                  >
+                    {this.state.groupAdmin}
+                  </Link>
                 </td>
               </tr>
               {/* <tr><td><strong>Merkle Tree Root:</strong></td><td> {this.state.root}</td></tr>
