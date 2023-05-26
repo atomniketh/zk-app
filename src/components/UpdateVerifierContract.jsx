@@ -52,7 +52,7 @@ const UpdateVerifierContract = () => (
       </form>
       <p>
         <button type="button" onClick={updateVerifierContract} className="w3-button w3-block w3-section w3-black w3-ripple w3-padding" >
-          Click here to update Semaphore Contract.
+          Click here to u``pdate Semaphore Contract.
         </button>
       </p>
     </div>
