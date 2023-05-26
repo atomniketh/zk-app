@@ -33,7 +33,8 @@ const submitMessage = async () => {
   // console.log(`Hash of ${document.getElementById("leakMessage").value.toString()}:`, signal);
 
   // console.log("Formatted Signal: " + signal);
-  // console.log(`localStorage.getItem(signedData + _entityID): ${localStorage.getItem("signedData"+ _entityID)}`);
+  console.log(`localStorage.getItem(signedData${_entityID}): ${localStorage.getItem("signedData"+ _entityID)}`);
+
   const identity = new Identity(localStorage.getItem("signedData" + _entityID));
 
   const characters =

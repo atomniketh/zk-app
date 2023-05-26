@@ -42,8 +42,8 @@ function CreateIdentity() {
     const signedData = await signer.signMessage(messageToSign);
     setSignedMessage(signedData);
     localStorage.setItem("signedData" + _entityID, signedData);
-    // console.log(`Signed Data: ${signedData}`);
-    // console.log(`signedMessage is now: ${signedMessage}`);
+    console.log(`Signed Data: ${signedData}`);
+    console.log(`signedMessage is now: ${signedMessage}`);
     const { commitment } = new Identity(signedData);
     const identityInfo = commitment;
     localStorage.setItem(groupToJoin, identityInfo.toString());
@@ -81,17 +81,18 @@ function CreateIdentity() {
 
       <div
         id="sendMessageForm"
-        className="w3-container w3-card-4 w3-light-grey w3-text-blue w3-margin"
+        className="w3-container w3-card-4 w3-light-grey w3-text-black w3-margin"
       >
         <h2 className="w3-center">
           Create an Identity to Join '{_entityName}' Group:{" "}
         </h2>
-        {groupToJoinValue === null ? (
+        {/* {groupToJoinValue === null ? ( */}
+        { localStorage.getItem("signedData" + _entityID) === null ? (
           <div className="w3-center w3-row w3-section">
             <div className="w3-rest">
               <i className="w3-xxlarge fa fa-pencil"></i>&nbsp;&nbsp;
               <button
-                className="w3-button w3-block w3-section w3-blue w3-ripple w3-padding"
+                className="w3-button w3-block w3-section w3-black w3-ripple w3-padding"
                 onClick={signMessage}
               >
                 Sign Message
@@ -101,7 +102,7 @@ function CreateIdentity() {
           </div>
         ) : (
           <div className="w3-center">
-            <button className="w3-button w3-block w3-section w3-blue w3-ripple w3-padding">
+            <button className="w3-button w3-block w3-section w3-black w3-ripple w3-padding">
               Request Access
             </button>
           </div>
@@ -109,14 +110,14 @@ function CreateIdentity() {
         <p></p>
       </div>
       <p></p>
-      <div className="w3-center">
+      {/* <div className="w3-center">
         <button
-          className="w3-button w3-block w3-section w3-blue w3-ripple w3-padding"
+          className="w3-button w3-block w3-section w3-black w3-ripple w3-padding"
           onClick={clearCookie}
         >
           Clear ID in Storage
         </button>
-      </div>
+      </div> */}
     </div>
     </div>
   );
