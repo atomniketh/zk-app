@@ -28,9 +28,7 @@ const submitMessage = async () => {
   // **************** IPFS Section ***************
   // **************************************************************
 
-  // const projectId = "24zqnXiXeV5lA3LmcXAW0lcgBCc";
   const projectId = process.env.REACT_APP_IPFS_PROJECTID;
-  // const projectSecret = "9ac2e2af900be19372ad73debea4191a";
   const projectSecret = process.env.REACT_APP_IPFS_PROJECTSECRET;
   const auth =
     "Basic " + window.btoa(projectId + ":" + projectSecret).toString("base64");
@@ -53,12 +51,11 @@ const submitMessage = async () => {
     type: "application/json",
   });
   const fileHash = await client.add(jsonFile);
-  console.log(`File hash (CID): ${fileHash.cid.toString()}`);
-  const contentH = contentHash.fromIpfs(fileHash.cid.toString());
-  console.log(`Content Hash: ${contentH}`);
-  const contentD = contentHash.decode(contentH);
-  console.log(`Content Hash Decoded: ${contentD}`);
-
+  // console.log(`File hash (CID): ${fileHash.cid.toString()}`);
+  const hashedContent = contentHash.fromIpfs(fileHash.cid.toString());
+  console.log(`Content Hash: ${hashedContent}`);
+  // const contentD = contentHash.decode(contentH);
+  // console.log(`Content Hash Decoded: ${contentD}`);
   // **************************************************************
   // **************** End of IPFS Section ***************
   // **************************************************************
@@ -69,11 +66,8 @@ const submitMessage = async () => {
     utils.formatBytes32String(document.getElementById("leakMessage").value)
   ).toString();
   // const signal = BigNumber.from(
-  //   utils.formatBytes32String(contentH)
+  //   utils.formatBytes32String(hashedContent)
   // ).toString();
-
-  // const signal = ethers.utils.keccak256(utils.toUtf8Bytes(document.getElementById("leakMessage").value)).toString();
-  // console.log(`Hash of ${document.getElementById("leakMessage").value.toString()}:`, signal);
 
   console.log("Formatted Signal: " + signal);
   // console.log(
