@@ -9,11 +9,11 @@ const provider = new ethers.providers.Web3Provider(window.ethereum);
 const signer = provider.getSigner();
 
 // Remove after testing ++++++++++++++++++++++++++++++++++++++++++++++++
-const clearCookie = async () => {
-  localStorage.clear();
-  console.log("Cookies cleared");
-  window.location.reload();
-};
+// const clearCookie = async () => {
+//   localStorage.clear();
+//   console.log("Cookies cleared");
+//   window.location.reload();
+// };
 // Remove after testing ++++++++++++++++++++++++++++++++++++++++++++++++
 
 function CreateIdentity() {
@@ -36,7 +36,7 @@ function CreateIdentity() {
     );
   }
 
-  const groupToJoinValue = localStorage.getItem(groupToJoin);
+  // const groupToJoinValue = localStorage.getItem(groupToJoin);
   const signMessage = async () => {
     const messageToSign = "zkCommunities Group " + _entityID;
     const signedData = await signer.signMessage(messageToSign);

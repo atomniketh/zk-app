@@ -23,16 +23,18 @@ const submitMessage = async () => {
   const _entityID = parseInt(queryParams.get("entityID"), 10);
   const _entityIDStr = queryParams.get("entityID");
   const groupName = queryParams.get("entityName");
-  const groupToJoin = `group${_entityIDStr}`;
+  // const groupToJoin = `group${_entityIDStr}`;
   // **************************************************************
   // **************** IPFS Section ***************
   // **************************************************************
 
-  const projectId = "24zqnXiXeV5lA3LmcXAW0lcgBCc";
-  const projectSecret = "9ac2e2af900be19372ad73debea4191a";
+  // const projectId = "24zqnXiXeV5lA3LmcXAW0lcgBCc";
+  const projectId = process.env.REACT_APP_IPFS_PROJECTID;
+  // const projectSecret = "9ac2e2af900be19372ad73debea4191a";
+  const projectSecret = process.env.REACT_APP_IPFS_PROJECTSECRET;
   const auth =
     "Basic " + window.btoa(projectId + ":" + projectSecret).toString("base64");
-  console.log("Auth String is: " + auth);
+  // console.log("Auth String is: " + auth);
   const client = await create({
     host: "ipfs.infura.io",
     port: 5001,
@@ -46,13 +48,11 @@ const submitMessage = async () => {
   // console.log("IPFS Node Version:", version.version);
   const text = document.getElementById("leakMessage").value;
   //const data = JSON.stringify({ value: text });
+  //const fileHash = await client.add({ content: data });
   const jsonFile = new Blob([JSON.stringify({ value: text })], {
     type: "application/json",
   });
-  //const fileHash = await client.add({ content: data });
-  
   const fileHash = await client.add(jsonFile);
-
   console.log(`File hash (CID): ${fileHash.cid.toString()}`);
   const contentH = contentHash.fromIpfs(fileHash.cid.toString());
   console.log(`Content Hash: ${contentH}`);
@@ -60,7 +60,7 @@ const submitMessage = async () => {
   console.log(`Content Hash Decoded: ${contentD}`);
 
   // **************************************************************
-  // **************** IPFS Section ***************
+  // **************** End of IPFS Section ***************
   // **************************************************************
 
   // eslint-disable-next-line no-undef
@@ -68,15 +68,19 @@ const submitMessage = async () => {
   const signal = BigNumber.from(
     utils.formatBytes32String(document.getElementById("leakMessage").value)
   ).toString();
+  // const signal = BigNumber.from(
+  //   utils.formatBytes32String(contentH)
+  // ).toString();
+
   // const signal = ethers.utils.keccak256(utils.toUtf8Bytes(document.getElementById("leakMessage").value)).toString();
   // console.log(`Hash of ${document.getElementById("leakMessage").value.toString()}:`, signal);
 
   console.log("Formatted Signal: " + signal);
-  console.log(
-    `localStorage.getItem(signedData${_entityID}): ${localStorage.getItem(
-      "signedData" + _entityID
-    )}`
-  );
+  // console.log(
+  //   `localStorage.getItem(signedData${_entityID}): ${localStorage.getItem(
+  //     "signedData" + _entityID
+  //   )}`
+  // );
 
   const identity = new Identity(localStorage.getItem("signedData" + _entityID));
 
@@ -100,8 +104,8 @@ const submitMessage = async () => {
   // console.log(`ID Commitment: ${identity.commitment}`);
 
   const idIndex = group.indexOf(identity.commitment);
-  const activeCommitment = localStorage.getItem(groupToJoin);
-  console.log(`Active Commitment: ${activeCommitment}`);
+  // const activeCommitment = localStorage.getItem(groupToJoin);
+  // console.log(`Active Commitment: ${activeCommitment}`);
 
   // console.log(`idIndex: ${idIndex}`);
   // console.log(`Group Members: ${group.members}`);
