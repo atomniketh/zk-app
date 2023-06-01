@@ -10,6 +10,7 @@ import { SemaphoreEthers } from "@semaphore-protocol/data";
 import { sidebar } from "./Sidebar";
 import "font-awesome/css/font-awesome.min.css";
 import SemaphoreContractABI from "../abi/Semaphore.json";
+import * as IPFS from "ipfs-core";
 // import { DefenderRelaySigner, DefenderRelayProvider } from 'defender-relay-client/lib/ethers';
 
 const semaphoreEthers = new SemaphoreEthers(process.env.REACT_APP_NETWORK);
@@ -23,6 +24,13 @@ const submitMessage = async () => {
   const _entityIDStr = queryParams.get("entityID");
   const groupName = queryParams.get("entityName");
   const groupToJoin = `group${_entityIDStr}`;
+
+const ipfs = await IPFS.create();
+const { cid } = await ipfs.add(document.getElementById("leakMessage").value);
+console.log(`IPFS CID: ${cid}`);
+
+
+
 
   // eslint-disable-next-line no-undef
   const group = new Group(parseInt(_entityID, 10), 20);
