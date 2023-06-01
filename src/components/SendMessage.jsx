@@ -4,13 +4,13 @@ import React from "react";
 import { ethers, utils, BigNumber } from "ethers";
 import { Identity } from "@semaphore-protocol/identity";
 import { Group } from "@semaphore-protocol/group";
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { generateProof, verifyProof } from "@semaphore-protocol/proof";
 import { SemaphoreEthers } from "@semaphore-protocol/data";
 import { sidebar } from "./Sidebar";
 import "font-awesome/css/font-awesome.min.css";
 import SemaphoreContractABI from "../abi/Semaphore.json";
-import * as IPFS from "ipfs-core";
+import { create } from "ipfs-http-client";
+import contentHash from "content-hash";
 // import { DefenderRelaySigner, DefenderRelayProvider } from 'defender-relay-client/lib/ethers';
 
 const semaphoreEthers = new SemaphoreEthers(process.env.REACT_APP_NETWORK);
@@ -24,13 +24,44 @@ const submitMessage = async () => {
   const _entityIDStr = queryParams.get("entityID");
   const groupName = queryParams.get("entityName");
   const groupToJoin = `group${_entityIDStr}`;
+  // **************************************************************
+  // **************** IPFS Section ***************
+  // **************************************************************
 
-const ipfs = await IPFS.create();
-const { cid } = await ipfs.add(document.getElementById("leakMessage").value);
-console.log(`IPFS CID: ${cid}`);
+  const projectId = "24zqnXiXeV5lA3LmcXAW0lcgBCc";
+  const projectSecret = "9ac2e2af900be19372ad73debea4191a";
+  const auth =
+    "Basic " + window.btoa(projectId + ":" + projectSecret).toString("base64");
+  console.log("Auth String is: " + auth);
+  const client = await create({
+    host: "ipfs.infura.io",
+    port: 5001,
+    protocol: "https",
+    apiPath: "/api/v0",
+    headers: {
+      authorization: auth,
+    },
+  });
+  // const version = await client.version();
+  // console.log("IPFS Node Version:", version.version);
+  const text = document.getElementById("leakMessage").value;
+  //const data = JSON.stringify({ value: text });
+  const jsonFile = new Blob([JSON.stringify({ value: text })], {
+    type: "application/json",
+  });
+  //const fileHash = await client.add({ content: data });
+  
+  const fileHash = await client.add(jsonFile);
 
+  console.log(`File hash (CID): ${fileHash.cid.toString()}`);
+  const contentH = contentHash.fromIpfs(fileHash.cid.toString());
+  console.log(`Content Hash: ${contentH}`);
+  const contentD = contentHash.decode(contentH);
+  console.log(`Content Hash Decoded: ${contentD}`);
 
-
+  // **************************************************************
+  // **************** IPFS Section ***************
+  // **************************************************************
 
   // eslint-disable-next-line no-undef
   const group = new Group(parseInt(_entityID, 10), 20);
@@ -40,8 +71,12 @@ console.log(`IPFS CID: ${cid}`);
   // const signal = ethers.utils.keccak256(utils.toUtf8Bytes(document.getElementById("leakMessage").value)).toString();
   // console.log(`Hash of ${document.getElementById("leakMessage").value.toString()}:`, signal);
 
-  // console.log("Formatted Signal: " + signal);
-  console.log(`localStorage.getItem(signedData${_entityID}): ${localStorage.getItem("signedData"+ _entityID)}`);
+  console.log("Formatted Signal: " + signal);
+  console.log(
+    `localStorage.getItem(signedData${_entityID}): ${localStorage.getItem(
+      "signedData" + _entityID
+    )}`
+  );
 
   const identity = new Identity(localStorage.getItem("signedData" + _entityID));
 
@@ -167,7 +202,8 @@ console.log(`IPFS CID: ${cid}`);
     const receipt = await tx.wait();
     console.log(`Transaction confirmed in block ${receipt.blockNumber}`);
     console.log(`Gas used: ${receipt.gasUsed.toString()}`);
-    const newURL = '/Messages?entityID=' + _entityID + '&entityName=' + groupName;
+    const newURL =
+      "/Messages?entityID=" + _entityID + "&entityName=" + groupName;
     console.log(`New URL: ${newURL}`);
     document.location.href = newURL;
   } else {
