@@ -1,12 +1,15 @@
 /* eslint-disable no-console */
-import React from "react";
+import React, { useState, useEffect } from "react";
+import ReactDOM from "react-dom/client";
 import { Link } from "react-router-dom";
+import { utils, BigNumber } from "ethers";
+import multihash from "multihashes";
 import { SemaphoreEthers, SemaphoreSubgraph } from "@semaphore-protocol/data";
 import BlockiesSvg from "blockies-react-svg";
 import "font-awesome/css/font-awesome.min.css";
 
 // import { utils } from "ethers";
-import Web3 from "web3";
+// import Web3 from "web3";
 import { sidebar } from "./Sidebar";
 
 const semaphoreSubgraph = new SemaphoreSubgraph(process.env.REACT_APP_NETWORK);
@@ -14,7 +17,6 @@ const semaphoreEthers = new SemaphoreEthers(process.env.REACT_APP_NETWORK, {
   address: process.env.REACT_APP_WBCONTRACT,
   startBlock: 0,
 });
-
 class ComponentPage extends React.Component {
   constructor() {
     super();
@@ -30,10 +32,11 @@ class ComponentPage extends React.Component {
       allMembers: [],
       url: "",
       isActiveMember: "",
+      listItems: [],
     };
   }
 
-  async componentDidMount() {
+  async componentDidMount(props) {
     try {
       const queryParams = new URLSearchParams(window.location.search);
       const groupIDNum = queryParams.get("entityID");
@@ -98,16 +101,20 @@ class ComponentPage extends React.Component {
           const theMessages = [];
           // eslint-disable-next-line no-plusplus
           for (let index = 0; index < verifiedProofs.length; index++) {
-            theMessages[index] = Web3.utils.hexToAscii(
-              Web3.utils.toHex(verifiedProofs[index].signal)
+            // **************************************************************
+            // Convert the signal back to the original CID
+            const tmpBNtoHex = utils.hexlify(
+              BigNumber.from(verifiedProofs[index].signal)
             );
-            //  try {
-            //   console.log(verifiedProofs[index].signal);
-            //   utils.toUtf8String(utils.arrayify(value));
-            //  } catch (error) {
-            //   console.log("Not a hex.");
-            //  }
-            //  utils.toUtf8String(utils.arrayify(value)
+            const tmpHextoBytes = utils.arrayify(tmpBNtoHex);
+            const tmpBytestoArr = multihash.encode(tmpHextoBytes, "sha2-256");
+            const mhBuf = multihash.encode(tmpBytestoArr, "sha2-256");
+            const decodedBuf = multihash.decode(mhBuf);
+            const encodedStr = multihash.toB58String(decodedBuf.digest);
+            // console.log("Recovered CID Value: ", encodedStr);
+            // **************************************************************
+
+            theMessages[index] = encodedStr;
           }
           this.setState({ verifiedProofs: theMessages });
         }, []);
@@ -122,7 +129,6 @@ class ComponentPage extends React.Component {
     const queryParams = new URLSearchParams(window.location.search);
     const groupName = queryParams.get("entityName");
     const entID = queryParams.get("entityID");
-
     const url = new URL("/SendMessage", window.location);
     url.searchParams.set("entityID", entID);
     url.searchParams.set("entityName", groupName);
@@ -225,12 +231,25 @@ class ComponentPage extends React.Component {
                   <strong>{this.state.numOfMsgs} Messages:</strong>
                 </td>
                 <td>
-                  <ul className="w3-ul">
-                    {verifiedProofs.map((value, index) => (
-                      <li className="w3-xlarge w3-monospace" key={index}>
-                        {value}
-                      </li>
-                    ))}
+                  <ul className="w3-ul" id="my-list">
+                    { verifiedProofs.map((value, index) => {
+                       const ipfsURL = process.env.REACT_APP_IPFS_URL + value;
+                      fetch(ipfsURL)
+                        .then((response) => response.json())
+                        .then((data) => {
+                          const root = ReactDOM.createRoot(document.getElementById("my-list"))
+                          const jsonValue = data.value;
+                          const listItem = React.createElement(
+                            "li",
+                            { className: "w3-xlarge w3-monospace", key: index },
+                            jsonValue
+                          );
+                          console.log("listItem: ", jsonValue);
+                          root.render(listItem);
+                        })
+                        .catch((error) => console.log(error));
+                    })}
+
                   </ul>
                 </td>
               </tr>

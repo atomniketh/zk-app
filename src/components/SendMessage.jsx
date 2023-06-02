@@ -10,8 +10,6 @@ import { sidebar } from "./Sidebar";
 import "font-awesome/css/font-awesome.min.css";
 import SemaphoreContractABI from "../abi/Semaphore.json";
 import { CID, create } from "ipfs-http-client";
-import contentHash from "content-hash";
-import bs58 from "bs58";
 import multihash from "multihashes";
 // import { DefenderRelaySigner, DefenderRelayProvider } from 'defender-relay-client/lib/ethers';
 
@@ -53,61 +51,50 @@ const submitMessage = async () => {
     type: "application/json",
   });
   const fileHash = await client.add(jsonFile);
-  console.log(`File hash (CID): ${fileHash.cid.toString()}`);
-  // const hashedContent = contentHash.fromIpfs(fileHash.cid.toString());
-  // console.log(`Content Hash: ${hashedContent}`);
   const theCID = fileHash.cid.toString();
-  console.log("The CID: ", theCID.toString());
-  console.log("The CID Length: ", theCID.length);
-
-
-  
-//   const contentD = contentHash.decode(hashedContent);
-//   console.log(`Content Hash Decoded: ${contentD}`);
+  //   const contentD = contentHash.decode(hashedContent);
+  //   console.log(`Content Hash Decoded: ${contentD}`);
 
   // **************************************************************
   // **************** End of IPFS Section ***************
   // **************************************************************
 
-const newCID = CID.parse(theCID);
-console.log("New CID: ", newCID.toString());
-const cidV1 = newCID.toV1();
+  // **************************************************************
+  // **************** Convert CID to Big Number ***************
+  // requires CID from ipfs-http-client, multihash and ethers
+  console.log("Origin CID: ", CID.parse(theCID).toString());
+  const tmpArray = multihash.fromB58String(CID.parse(theCID).toString());
+  const b58decoded = multihash.decode(tmpArray).digest;
+  const tmpHexStr = utils.hexlify(b58decoded);
+  const tmpSignal = BigNumber.from(tmpHexStr, 16).toString();
+  console.log("Signal to use: ", tmpSignal);
+  // **************************************************************
 
-const mh = multihash.fromB58String(Buffer.from(newCID.toString()));
-console.log("Mh: ", mh.toString());
-const theHash = '0x' + mh.slice(0, 2).toString('hex');
-console.log("New Hash: ", theHash);
-const digest = '0x' + mh.slice(2).toString('hex');
-console.log("Digest: ", digest);
-const size =  mh.length - 2;
-console.log("Size: ", size);
+  // **************************************************************
+  // Convert the signal back to the original CID
+  const tmpBNtoHex = utils.hexlify(BigNumber.from(tmpSignal));
+  const tmpHextoBytes = utils.arrayify(tmpBNtoHex);
+  const tmpBytestoArr = multihash.encode(tmpHextoBytes, "sha2-256");
+  const mhBuf = multihash.encode(tmpBytestoArr, "sha2-256");
+  const decodedBuf = multihash.decode(mhBuf);
+  const encodedStr = multihash.toB58String(decodedBuf.digest);
+  console.log("Recovered CID Value: ", encodedStr);
+  // **************************************************************
 
-const hashFunction = theHash.substring(2);
-console.log("Hash Function: ", hashFunction);
-const newDigest = digest.substring(2);
-console.log("New Digest: ", newDigest);
-const newHash = multihash.toB58String(multihash.fromHexString(newDigest));
-console.log("New Hash: ", newHash);
+  // const signalCID = BigNumber.from(
+  //   newCID.toString()
+  // ).toString();
+  // console.log("Signal CID: ", signalCID);
 
-
-
-
-// const signalCID = BigNumber.from(
-//   newCID.toString()
-// ).toString();
-// console.log("Signal CID: ", signalCID);
-
-// eslint-disable-next-line no-undef
+  // eslint-disable-next-line no-undef
   const group = new Group(parseInt(_entityID, 10), 20);
-  const signal = BigNumber.from(
-    utils.formatBytes32String(document.getElementById("leakMessage").value)
-  ).toString();
+  // const signal = BigNumber.from(
+  //   utils.formatBytes32String(document.getElementById("leakMessage").value)
+  // ).toString();
 
+  console.log("Formatted Signal: " + tmpSignal);
 
-
-console.log("Formatted Signal: " + signal);
-
-// console.log(
+  // console.log(
   //   `localStorage.getItem(signedData${_entityID}): ${localStorage.getItem(
   //     "signedData" + _entityID
   //   )}`
@@ -192,7 +179,7 @@ console.log("Formatted Signal: " + signal);
     identity,
     group,
     externalNullifier,
-    signal
+    tmpSignal
   );
 
   const vProof = await verifyProof(fullProof, 20);
@@ -226,7 +213,7 @@ console.log("Formatted Signal: " + signal);
     const tx = await contract.verifyProof(
       _entityID,
       thisIdsGroupMerkleProof.root,
-      signal,
+      tmpSignal,
       fullProof.nullifierHash,
       externalNullifier,
       fullProof.proof,
