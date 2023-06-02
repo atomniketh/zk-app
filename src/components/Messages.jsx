@@ -1,6 +1,5 @@
 /* eslint-disable no-console */
-import React, { useState, useEffect } from "react";
-import ReactDOM from "react-dom/client";
+import React from "react";
 import { Link } from "react-router-dom";
 import { utils, BigNumber } from "ethers";
 import multihash from "multihashes";
@@ -32,11 +31,11 @@ class ComponentPage extends React.Component {
       allMembers: [],
       url: "",
       isActiveMember: "",
-      listItems: [],
+      messagesArr: [],
     };
   }
 
-  async componentDidMount(props) {
+  async componentDidMount() {
     try {
       const queryParams = new URLSearchParams(window.location.search);
       const groupIDNum = queryParams.get("entityID");
@@ -73,7 +72,7 @@ class ComponentPage extends React.Component {
       });
 
       const activeCommitment = localStorage.getItem(groupToJoin);
-      console.log(`Active Commitment: ${activeCommitment}`);
+      // console.log(`Active Commitment: ${activeCommitment}`);
       // const { allMembers } = this.state;
       // for (let i = 0; i < allMembers.length; i++) {
       //   if (allMembers[i] === activeCommitment) {
@@ -126,6 +125,7 @@ class ComponentPage extends React.Component {
   render() {
     const { allMembers } = this.state;
     const { verifiedProofs } = this.state;
+    const { messagesArr } = this.state;
     const queryParams = new URLSearchParams(window.location.search);
     const groupName = queryParams.get("entityName");
     const entID = queryParams.get("entityID");
@@ -230,25 +230,20 @@ class ComponentPage extends React.Component {
                 <td>
                   <strong>{this.state.numOfMsgs} Messages:</strong>
                 </td>
-                <td>
+                <td id="allMessages">
                   <ul className="w3-ul" id="my-list">
                     { verifiedProofs.map((value, index) => {
                        const ipfsURL = process.env.REACT_APP_IPFS_URL + value;
                       fetch(ipfsURL)
                         .then((response) => response.json())
-                        .then((data) => {
-                          const root = ReactDOM.createRoot(document.getElementById("my-list"))
-                          const jsonValue = data.value;
-                          const listItem = React.createElement(
-                            "li",
-                            { className: "w3-xlarge w3-monospace", key: index },
-                            jsonValue
-                          );
-                          console.log("listItem: ", jsonValue);
-                          root.render(listItem);
-                        })
+                        .then((data) => messagesArr[index] = data.value)
                         .catch((error) => console.log(error));
                     })}
+                    {messagesArr.map((value, index) => (
+                      <li className="w3-xlarge w3-monospace" key={index}>
+                        {value}
+                      </li>
+                    ))}
 
                   </ul>
                 </td>
