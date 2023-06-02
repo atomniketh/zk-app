@@ -9,8 +9,10 @@ import { SemaphoreEthers } from "@semaphore-protocol/data";
 import { sidebar } from "./Sidebar";
 import "font-awesome/css/font-awesome.min.css";
 import SemaphoreContractABI from "../abi/Semaphore.json";
-import { create } from "ipfs-http-client";
+import { CID, create } from "ipfs-http-client";
 import contentHash from "content-hash";
+import bs58 from "bs58";
+import multihash from "multihashes";
 // import { DefenderRelaySigner, DefenderRelayProvider } from 'defender-relay-client/lib/ethers';
 
 const semaphoreEthers = new SemaphoreEthers(process.env.REACT_APP_NETWORK);
@@ -51,26 +53,61 @@ const submitMessage = async () => {
     type: "application/json",
   });
   const fileHash = await client.add(jsonFile);
-  // console.log(`File hash (CID): ${fileHash.cid.toString()}`);
-  const hashedContent = contentHash.fromIpfs(fileHash.cid.toString());
-  console.log(`Content Hash: ${hashedContent}`);
-  // const contentD = contentHash.decode(contentH);
-  // console.log(`Content Hash Decoded: ${contentD}`);
+  console.log(`File hash (CID): ${fileHash.cid.toString()}`);
+  // const hashedContent = contentHash.fromIpfs(fileHash.cid.toString());
+  // console.log(`Content Hash: ${hashedContent}`);
+  const theCID = fileHash.cid.toString();
+  console.log("The CID: ", theCID.toString());
+  console.log("The CID Length: ", theCID.length);
+
+
+  
+//   const contentD = contentHash.decode(hashedContent);
+//   console.log(`Content Hash Decoded: ${contentD}`);
+
   // **************************************************************
   // **************** End of IPFS Section ***************
   // **************************************************************
 
-  // eslint-disable-next-line no-undef
+const newCID = CID.parse(theCID);
+console.log("New CID: ", newCID.toString());
+const cidV1 = newCID.toV1();
+
+const mh = multihash.fromB58String(Buffer.from(newCID.toString()));
+console.log("Mh: ", mh.toString());
+const theHash = '0x' + mh.slice(0, 2).toString('hex');
+console.log("New Hash: ", theHash);
+const digest = '0x' + mh.slice(2).toString('hex');
+console.log("Digest: ", digest);
+const size =  mh.length - 2;
+console.log("Size: ", size);
+
+const hashFunction = theHash.substring(2);
+console.log("Hash Function: ", hashFunction);
+const newDigest = digest.substring(2);
+console.log("New Digest: ", newDigest);
+const newHash = multihash.toB58String(multihash.fromHexString(newDigest));
+console.log("New Hash: ", newHash);
+
+
+
+
+// const signalCID = BigNumber.from(
+//   newCID.toString()
+// ).toString();
+// console.log("Signal CID: ", signalCID);
+
+// eslint-disable-next-line no-undef
   const group = new Group(parseInt(_entityID, 10), 20);
   const signal = BigNumber.from(
     utils.formatBytes32String(document.getElementById("leakMessage").value)
   ).toString();
-  // const signal = BigNumber.from(
-  //   utils.formatBytes32String(hashedContent)
-  // ).toString();
 
-  console.log("Formatted Signal: " + signal);
-  // console.log(
+
+
+console.log("Formatted Signal: " + signal);
+
+// console.log(
   //   `localStorage.getItem(signedData${_entityID}): ${localStorage.getItem(
   //     "signedData" + _entityID
   //   )}`
