@@ -72,13 +72,13 @@ const submitMessage = async () => {
 
   // **************************************************************
   // Convert the signal back to the original CID
-  const tmpBNtoHex = utils.hexlify(BigNumber.from(tmpSignal));
-  const tmpHextoBytes = utils.arrayify(tmpBNtoHex);
-  const tmpBytestoArr = multihash.encode(tmpHextoBytes, "sha2-256");
-  const mhBuf = multihash.encode(tmpBytestoArr, "sha2-256");
-  const decodedBuf = multihash.decode(mhBuf);
-  const encodedStr = multihash.toB58String(decodedBuf.digest);
-  console.log("Recovered CID Value: ", encodedStr);
+  // const tmpBNtoHex = utils.hexlify(BigNumber.from(tmpSignal));
+  // const tmpHextoBytes = utils.arrayify(tmpBNtoHex);
+  // const tmpBytestoArr = multihash.encode(tmpHextoBytes, "sha2-256");
+  // const mhBuf = multihash.encode(tmpBytestoArr, "sha2-256");
+  // const decodedBuf = multihash.decode(mhBuf);
+  // const encodedStr = multihash.toB58String(decodedBuf.digest);
+  // console.log("Recovered CID Value: ", encodedStr);
   // **************************************************************
 
   // const signalCID = BigNumber.from(
