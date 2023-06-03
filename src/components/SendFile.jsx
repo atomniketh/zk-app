@@ -58,7 +58,7 @@ const submitFile = async (event) => {
     };
 
     const options = {
-      wrapWithDirectory: true,
+      wrapWithDirectory: false,
       progress: (prog) => console.log(`received: ${prog}`),
     };
     const fileAdd = await client.add(fileDetails, options);

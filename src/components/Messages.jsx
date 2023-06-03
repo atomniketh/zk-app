@@ -136,7 +136,6 @@ class ComponentPage extends React.Component {
     urlFiles.searchParams.set("entityID", entID);
     urlFiles.searchParams.set("entityName", groupName);
 
-
     return (
       <div
         className="w3-container"
@@ -236,19 +235,72 @@ class ComponentPage extends React.Component {
                 </td>
                 <td id="allMessages">
                   <ul className="w3-ul" id="my-list">
-                    { verifiedProofs.map((value, index) => {
-                       const ipfsURL = process.env.REACT_APP_IPFS_URL + value;
+                    {verifiedProofs.map((value, index) => {
+                      const ipfsURL = process.env.REACT_APP_IPFS_URL + value;
                       fetch(ipfsURL)
-                        .then((response) => response.json())
-                        .then((data) => messagesArr[index] = data.value)
+                        .then((response) => {
+                          // console.log('Content:', response.headers.get("Content-Type"))
+                          if (
+                            response.headers
+                              .get("Content-Type")
+                              .includes("application/json")
+                          ) {
+                            response
+                              .json()
+                              .then(
+                                (data) => (messagesArr[index] = data.value)
+                              );
+                          } else if (
+                            response.headers
+                              .get("Content-Type")
+                              .includes("text/html")
+                          ) {
+                            response
+                              .text()
+                              .then((html) => {
+                                const document =
+                                  new DOMParser().parseFromString(
+                                    html,
+                                    "text/html"
+                                  );
+                                const title =
+                                  document.querySelector("title").innerText;
+                                const thisCID = title.split("/")[2].toString();
+                                messagesArr[index] =
+                                  process.env.REACT_APP_IPFS_URL + thisCID;
+                                // console.log('messagesArr:' + index, messagesArr[index])
+                              })
+                              // .then(() => {
+                              //   // console.log('messagesArr[index]:', messagesArr[index])
+                              //   // const ipfsURL2 = process.env.REACT_APP_IPFS_URL + messagesArr[index];
+                              //   // console.log('ipfsURL:', ipfsURL2)
+                              // })
+                          } else if (
+                            response.headers
+                              .get("Content-Type")
+                              .includes("image/jpeg")
+                          ) {
+                            // response.text()
+                            // .then((data) => messagesArr[index] = data)
+                            messagesArr[index] = "Image is Here";
+                          } else {
+                            console.log("Unknown Content Type");
+                            messagesArr[index] = "Unknown Content Type";
+                          }
+                        })
                         .catch((error) => console.log(error));
                     })}
-                    {messagesArr.map((value, index) => (
-                      <li className="w3-xlarge w3-monospace" key={index}>
-                        {value}
-                      </li>
-                    ))}
 
+                    {messagesArr.map(
+                      (value, index) => (
+                        // console.log("index: ", messagesArr.length),
+                        (
+                          <li className="w3-xlarge w3-monospace" key={index}>
+                            {value}
+                          </li>
+                        )
+                      )
+                    )}
                   </ul>
                 </td>
               </tr>
@@ -259,7 +311,7 @@ class ComponentPage extends React.Component {
             <Link to={url.toString()}>
               <i className="w3-xlarge fa fa-pencil-square-o"></i> Send Message
             </Link>
-            { " | " }
+            {" | "}
             <Link to={urlFiles.toString()}>
               <i className="w3-xlarge fa fa-file-text-o"></i> Send File
             </Link>
