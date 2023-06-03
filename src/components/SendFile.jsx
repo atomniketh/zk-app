@@ -43,7 +43,7 @@ const submitFile = async () => {
   });
   // const version = await client.version();
   // console.log("IPFS Node Version:", version.version);
-  const text = document.getElementById("leakMessage").value;
+  const text = document.getElementById("leakFile").value;
   const jsonFile = new Blob([JSON.stringify({ value: text })], {
     type: "application/json",
   });
@@ -127,7 +127,7 @@ const submitFile = async () => {
       { gasLimit: 1000000, nonce: nonce || undefined }
     );
     console.log(`Transaction hash: https://goerli.etherscan.io/tx/${tx.hash}`);
-    document.getElementById("leakMessage").value = "";
+    document.getElementById("leakFile").value = "";
     const receipt = await tx.wait();
     console.log(`Transaction confirmed in block ${receipt.blockNumber}`);
     console.log(`Gas used: ${receipt.gasUsed.toString()}`);
@@ -157,20 +157,25 @@ const sendFile = () => {
           id="sendMessageForm"
           className="w3-container w3-card-4 w3-light-grey w3-text-black w3-margin"
         >
-          <h2 className="w3-center">Send File to '{groupName}' Group: </h2>
+          <h2 className="w3-center">Send File to '{groupName}': </h2>
 
           <div className="w3-row w3-section">
             <div className="w3-col" style={{ width: `${50}px` }}>
-              <i className="w3-xxlarge fa fa-envelope-o"></i>
+              <i className="w3-xxlarge fa fa-file-text-o"></i>
             </div>
             <div className="w3-rest">
-              <textarea
+              {/* <textarea
                 className="w3-input w3-border"
                 id="leakMessage"
                 name="leakMessage"
                 rows="4"
                 cols="50"
-              />
+              /> */}
+
+<input type="file" className="w3-input w3-border"
+                id="leakFile"
+                name="leakFile" />
+
             </div>{" "}
           </div>
           <button
