@@ -255,34 +255,28 @@ class ComponentPage extends React.Component {
                               .get("Content-Type")
                               .includes("text/html")
                           ) {
-                            response
-                              .text()
-                              .then((html) => {
-                                const document =
-                                  new DOMParser().parseFromString(
-                                    html,
-                                    "text/html"
-                                  );
-                                const title =
-                                  document.querySelector("title").innerText;
-                                const thisCID = title.split("/")[2].toString();
-                                messagesArr[index] =
-                                  process.env.REACT_APP_IPFS_URL + thisCID;
-                                // console.log('messagesArr:' + index, messagesArr[index])
-                              })
-                              // .then(() => {
-                              //   // console.log('messagesArr[index]:', messagesArr[index])
-                              //   // const ipfsURL2 = process.env.REACT_APP_IPFS_URL + messagesArr[index];
-                              //   // console.log('ipfsURL:', ipfsURL2)
-                              // })
+                            messagesArr[index] = "HTML is Here: " + ipfsURL;
+                            // response
+                            //   .text()
+                            //   .then((html) => {
+                            //     const document =
+                            //       new DOMParser().parseFromString(
+                            //         html,
+                            //         "text/html"
+                            //       );
+                            //     const title =
+                            //       document.querySelector("title").innerText;
+                            //     const thisCID = title.split("/")[2].toString();
+                            //     messagesArr[index] =
+                            //       process.env.REACT_APP_IPFS_URL + thisCID;
+                            //     // console.log('messagesArr:' + index, messagesArr[index])
+                            //   })
                           } else if (
                             response.headers
                               .get("Content-Type")
                               .includes("image/jpeg")
                           ) {
-                            // response.text()
-                            // .then((data) => messagesArr[index] = data)
-                            messagesArr[index] = "Image is Here";
+                            messagesArr[index] = "Image is Here: " + ipfsURL;
                           } else {
                             console.log("Unknown Content Type");
                             messagesArr[index] = "Unknown Content Type";
