@@ -239,7 +239,7 @@ class ComponentPage extends React.Component {
                       const ipfsURL = process.env.REACT_APP_IPFS_URL + value;
                       fetch(ipfsURL)
                         .then((response) => {
-                          // console.log('Content:', response.headers.get("Content-Type"))
+                          console.log('Content:', response.headers.get("Content-Type"))
                           if (
                             response.headers
                               .get("Content-Type")
@@ -250,27 +250,27 @@ class ComponentPage extends React.Component {
                               .then(
                                 (data) => (messagesArr[index] = data.value)
                               );
-                          } else if (
-                            response.headers
-                              .get("Content-Type")
-                              .includes("text/html")
-                          ) {
-                            messagesArr[index] = "HTML is Here: " + ipfsURL;
-                            // response
-                            //   .text()
-                            //   .then((html) => {
-                            //     const document =
-                            //       new DOMParser().parseFromString(
-                            //         html,
-                            //         "text/html"
-                            //       );
-                            //     const title =
-                            //       document.querySelector("title").innerText;
-                            //     const thisCID = title.split("/")[2].toString();
-                            //     messagesArr[index] =
-                            //       process.env.REACT_APP_IPFS_URL + thisCID;
-                            //     // console.log('messagesArr:' + index, messagesArr[index])
-                            //   })
+                          // } else if (
+                          //   response.headers
+                          //     .get("Content-Type")
+                          //     .includes("text/html")
+                          // ) {
+                          //   messagesArr[index] = "HTML is Here: " + ipfsURL;
+                          //   // response
+                          //   //   .text()
+                          //   //   .then((html) => {
+                          //   //     const document =
+                          //   //       new DOMParser().parseFromString(
+                          //   //         html,
+                          //   //         "text/html"
+                          //   //       );
+                          //   //     const title =
+                          //   //       document.querySelector("title").innerText;
+                          //   //     const thisCID = title.split("/")[2].toString();
+                          //   //     messagesArr[index] =
+                          //   //       process.env.REACT_APP_IPFS_URL + thisCID;
+                          //   //     // console.log('messagesArr:' + index, messagesArr[index])
+                          //   //   })
                           } else if (
                             response.headers
                               .get("Content-Type")
@@ -279,7 +279,8 @@ class ComponentPage extends React.Component {
                             messagesArr[index] = "Image is Here: " + ipfsURL;
                           } else {
                             console.log("Unknown Content Type");
-                            messagesArr[index] = "Unknown Content Type";
+                            messagesArr[index] = "Unknown Content Type is Here: " + ipfsURL;
+
                           }
                         })
                         .catch((error) => console.log(error));
