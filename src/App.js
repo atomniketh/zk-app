@@ -11,8 +11,10 @@ import UpdateVerifierContract from "./components/UpdateVerifierContract";
 import CreateIdentity from "./components/CreateIdentity";
 import AddMember from "./components/AddMember";
 import SendMessage from "./components/SendMessage";
+import SendFile from "./components/SendFile";
 import MyGroups from "./components/MyGroups";
 import MessageAdmin from "./components/MessageAdmin";
+
 
 // import AddUser from "./components/AddUser";
 function App() {
@@ -36,6 +38,7 @@ function App() {
           <Route path='/CreateIdentity' element={<CreateIdentity/>} />
           <Route path='/AddMember' element={<AddMember/>} />
           <Route path='/SendMessage' element={<SendMessage/>} />
+          <Route path='/SendFile' element={<SendFile/>} />
           <Route path='/MyGroups' element={<MyGroups/>} />
           <Route path='/MessageAdmin' element={<MessageAdmin/>} />
           {/* If any route mismatches the upper 

@@ -132,6 +132,10 @@ class ComponentPage extends React.Component {
     const url = new URL("/SendMessage", window.location);
     url.searchParams.set("entityID", entID);
     url.searchParams.set("entityName", groupName);
+    const urlFiles = new URL("/SendFile", window.location);
+    urlFiles.searchParams.set("entityID", entID);
+    urlFiles.searchParams.set("entityName", groupName);
+
 
     return (
       <div
@@ -253,7 +257,11 @@ class ComponentPage extends React.Component {
           <br></br>
           <div className="w3-right-align">
             <Link to={url.toString()}>
-              <i className="w3-xxlarge fa fa-pencil"></i> Send Message
+              <i className="w3-xlarge fa fa-pencil-square-o"></i> Send Message
+            </Link>
+            { " | " }
+            <Link to={urlFiles.toString()}>
+              <i className="w3-xlarge fa fa-file-text-o"></i> Send File
             </Link>
           </div>
           <br /> <br />
