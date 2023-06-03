@@ -18,7 +18,11 @@ const semaphoreContractAddress = process.env.REACT_APP_SEMAPHORE;
 const provider = new ethers.providers.Web3Provider(window.ethereum);
 const signer = provider.getSigner();
 
-const submitFile = async () => {
+
+const submitFile = async (event) => {
+  event.preventDefault();
+  var input = document.getElementById("leakFile");
+  console.log("File Name: " + input.files.length);
   const queryParams = new URLSearchParams(window.location.search);
   const _entityID = parseInt(queryParams.get("entityID"), 10);
   const _entityIDStr = queryParams.get("entityID");
@@ -43,12 +47,23 @@ const submitFile = async () => {
   });
   // const version = await client.version();
   // console.log("IPFS Node Version:", version.version);
-  const text = document.getElementById("leakFile").value;
-  const jsonFile = new Blob([JSON.stringify({ value: text })], {
-    type: "application/json",
-  });
-  const fileHash = await client.add(jsonFile);
-  const theCID = fileHash.cid.toString();
+
+
+    console.log("Input Name: " + input.files.item(0).name);
+
+  const fileDetails = {
+      path: input.files.item(0).name,
+      content: input.files.item(0),
+      type: "application/file"
+    };
+
+    const options = {
+      wrapWithDirectory: true,
+      progress: (prog) => console.log(`received: ${prog}`),
+    };
+    const fileAdd = await client.add(fileDetails, options);
+    const theCID = fileAdd.cid.toString();
+//    await client.pin.add(file.cid).then((res) => {});
 
   // **************************************************************
   // **************** End of IPFS Section ***************
@@ -56,7 +71,6 @@ const submitFile = async () => {
 
   // **************************************************************
   // **************** Convert CID to Big Number ***************
-  // requires CID from ipfs-http-client, multihash and ethers
   console.log("Origin CID: ", CID.parse(theCID).toString());
   const tmpArray = multihash.fromB58String(CID.parse(theCID).toString());
   const b58decoded = multihash.decode(tmpArray).digest;
@@ -172,10 +186,13 @@ const sendFile = () => {
                 cols="50"
               /> */}
 
-<input type="file" className="w3-input w3-border"
+              <input
+                type="file"
+                className="w3-input w3-border"
+                accept=".jpg, .png, .gif, .heic, .jpeg, .zip, .mp3, .mov, .avi, .wav, .wma, .wmv, .csv, .txt, .doc, .docx, .pdf, .xls, .xlsx, .ppt, .pptx"
                 id="leakFile"
-                name="leakFile" />
-
+                name="leakFile"
+                />
             </div>{" "}
           </div>
           <button
