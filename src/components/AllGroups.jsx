@@ -3,7 +3,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { ethers } from "ethers";
 import { sidebar } from "./Sidebar";
-import { SemaphoreEthers } from "@semaphore-protocol/data";
+import { SemaphoreSubgraph, SemaphoreEthers } from "@semaphore-protocol/data";
 import SemaphoreCommunitiesABI from "../abi/SemaphoreCommunities.json";
 import BlockiesSvg from 'blockies-react-svg';
 
@@ -61,6 +61,7 @@ class ComponentPage extends React.Component {
       this.setState({ allGroups });
 
       let allGroupsInfo = [];
+      const semaphoreSubgraph = new SemaphoreSubgraph();
 
       for (let i = 0; i < allGroups.length; i++) {
         try {
@@ -68,6 +69,9 @@ class ComponentPage extends React.Component {
           let GroupInfo = {
             groupID: allGroups[i].idEntity.toString(),
             userCommitment: localStorage.getItem(groupToJoin),
+            groupAdmin: await semaphoreSubgraph.getGroup(allGroups[i].idEntity.toString(), {
+              admin: true,
+            }),
             allGroupMembers: await semaphoreEthers.getGroupMembers(
               allGroups[i].idEntity.toString()
             ),
@@ -156,7 +160,9 @@ class ComponentPage extends React.Component {
                         }
 
                       </td>
-                      {item.entityEditor.toString() === this.state.accountAddress ? (
+                      {/* THIS IS WHAT YOU NEED TO FIX: GET GROUP ADMIN TO COMPARE TO ACTIVE ADDRESS */}
+                      {/* { console.log('admin is', this.state.myGroups["2"].groupAdmin) } */}
+                      {this.state.myGroups.groupAdmin === this.state.accountAddress ? (
                         <td>
                           {" "}
                           <a

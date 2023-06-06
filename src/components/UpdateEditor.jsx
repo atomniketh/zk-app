@@ -28,7 +28,7 @@ async function UpdateEditor() {
   console.log(`Gas used: ${receipt.gasUsed.toString()}`);
 }
 
-function editorComponent() {
+function EditorComponent() {
   const [currentAdmin, setCurrentAdmin] = useState(null);
 
   useEffect(() => {
@@ -87,4 +87,4 @@ function editorComponent() {
     </div>
   );
 }
-export default editorComponent;
+export default EditorComponent;
