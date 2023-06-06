@@ -18,7 +18,11 @@ const semaphoreContractAddress = process.env.REACT_APP_SEMAPHORE;
 const provider = new ethers.providers.Web3Provider(window.ethereum);
 const signer = provider.getSigner();
 
-const submitMessage = async () => {
+
+const submitFile = async (event) => {
+  event.preventDefault();
+  var input = document.getElementById("leakFile");
+  console.log("File Name: " + input.files.length);
   const queryParams = new URLSearchParams(window.location.search);
   const _entityID = parseInt(queryParams.get("entityID"), 10);
   const _entityIDStr = queryParams.get("entityID");
@@ -32,7 +36,6 @@ const submitMessage = async () => {
   const projectSecret = process.env.REACT_APP_IPFS_PROJECTSECRET;
   const auth =
     "Basic " + window.btoa(projectId + ":" + projectSecret).toString("base64");
-  // console.log("Auth String is: " + auth);
   const client = await create({
     host: "ipfs.infura.io",
     port: 5001,
@@ -44,16 +47,23 @@ const submitMessage = async () => {
   });
   // const version = await client.version();
   // console.log("IPFS Node Version:", version.version);
-  const text = document.getElementById("leakMessage").value;
-  //const data = JSON.stringify({ value: text });
-  //const fileHash = await client.add({ content: data });
-  const jsonFile = new Blob([JSON.stringify({ value: text })], {
-    type: "application/json",
-  });
-  const fileHash = await client.add(jsonFile);
-  const theCID = fileHash.cid.toString();
-  //   const contentD = contentHash.decode(hashedContent);
-  //   console.log(`Content Hash Decoded: ${contentD}`);
+
+
+    console.log("Input Name: " + input.files.item(0).name);
+
+  const fileDetails = {
+      path: input.files.item(0).name,
+      content: input.files.item(0),
+      type: "application/file"
+    };
+
+    const options = {
+      wrapWithDirectory: false,
+      progress: (prog) => console.log(`received: ${prog}`),
+    };
+    const fileAdd = await client.add(fileDetails, options);
+    const theCID = fileAdd.cid.toString();
+//    await client.pin.add(file.cid).then((res) => {});
 
   // **************************************************************
   // **************** End of IPFS Section ***************
@@ -61,7 +71,6 @@ const submitMessage = async () => {
 
   // **************************************************************
   // **************** Convert CID to Big Number ***************
-  // requires CID from ipfs-http-client, multihash and ethers
   console.log("Origin CID: ", CID.parse(theCID).toString());
   const tmpArray = multihash.fromB58String(CID.parse(theCID).toString());
   const b58decoded = multihash.decode(tmpArray).digest;
@@ -70,36 +79,9 @@ const submitMessage = async () => {
   console.log("Signal to use: ", tmpSignal);
   // **************************************************************
 
-  // **************************************************************
-  // Convert the signal back to the original CID
-  // const tmpBNtoHex = utils.hexlify(BigNumber.from(tmpSignal));
-  // const tmpHextoBytes = utils.arrayify(tmpBNtoHex);
-  // const tmpBytestoArr = multihash.encode(tmpHextoBytes, "sha2-256");
-  // const mhBuf = multihash.encode(tmpBytestoArr, "sha2-256");
-  // const decodedBuf = multihash.decode(mhBuf);
-  // const encodedStr = multihash.toB58String(decodedBuf.digest);
-  // console.log("Recovered CID Value: ", encodedStr);
-  // **************************************************************
-
-  // const signalCID = BigNumber.from(
-  //   newCID.toString()
-  // ).toString();
-  // console.log("Signal CID: ", signalCID);
-
   // eslint-disable-next-line no-undef
   const group = new Group(parseInt(_entityID, 10), 20);
-  // const signal = BigNumber.from(
-  //   utils.formatBytes32String(document.getElementById("leakMessage").value)
-  // ).toString();
-
   console.log("Formatted Signal: " + tmpSignal);
-
-  // console.log(
-  //   `localStorage.getItem(signedData${_entityID}): ${localStorage.getItem(
-  //     "signedData" + _entityID
-  //   )}`
-  // );
-
   const identity = new Identity(localStorage.getItem("signedData" + _entityID));
 
   const characters =
@@ -113,37 +95,10 @@ const submitMessage = async () => {
   }
 
   const externalNullifier = utils.formatBytes32String(randomString);
-  // console.log(`random string: ${result}`);
-  // console.log(`externalNullifer: ${externalNullifier}`);
-
   const allMembers = await semaphoreEthers.getGroupMembers(_entityIDStr);
   group.addMembers(allMembers);
-  // console.log(`allMembers: ${allMembers}`);
-  // console.log(`ID Commitment: ${identity.commitment}`);
-
   const idIndex = group.indexOf(identity.commitment);
-  // const activeCommitment = localStorage.getItem(groupToJoin);
-  // console.log(`Active Commitment: ${activeCommitment}`);
-
-  // console.log(`idIndex: ${idIndex}`);
-  // console.log(`Group Members: ${group.members}`);
-
-  // const groupProof = group.generateMerkleProof(idIndex);
   const thisIdsGroupMerkleProof = group.generateMerkleProof(idIndex);
-
-  // console.log(`groupProof leaf: ${thisIdsGroupMerkleProof.leaf}`);
-  // console.log(`groupProof root: ${thisIdsGroupMerkleProof.root}`);
-  // console.log(`_entityID: ${_entityID}`);
-
-  // console.log("******* Group Info: *********************************");
-  // console.log(`GroupID: ${group.id}`);
-  // console.log(`Group Root: ${group.root}`);
-  // console.log(`Group Depth: ${group.depth}`);
-  // console.log(`Group zeroValue: ${group.zeroValue}`);
-  // console.log(`Group MerkleProof: ${thisIdsGroupMerkleProof}`);
-  // console.log(`Group MerkleProof Leaf: ${thisIdsGroupMerkleProof.leaf}`);
-  // console.log(`Group MerkleProof Root: ${thisIdsGroupMerkleProof.root}`);
-  // console.log("*******  End of Group Info *********************************");
 
   await provider.send("eth_requestAccounts", []);
   const contract = new ethers.Contract(
@@ -151,29 +106,6 @@ const submitMessage = async () => {
     SemaphoreContractABI.abi,
     signer
   );
-
-  // const groupMTRoot = await contract.getMerkleTreeRoot(_entityID);
-  // console.log(`GroupMTRoot from on-chain: ${groupMTRoot}`);
-
-  // if (groupMTRoot == thisIdsGroupMerkleProof.root) {
-  //   console.log("The Roots match, message can be sent.");
-  // } else {
-  //   console.log("The Roots DO NOT match, message can not be sent.");
-  // }
-
-  // console.log(`Raw is: ${typeof groupMTRoot}`);
-  // eslint-disable-next-line no-undef
-  // const groupMTRootInt = BigInt(groupMTRoot);
-  // console.log(`Int is: ${typeof groupMTRootInt}`);
-  // const groupMTDepth = await contract.getMerkleTreeDepth(_entityID);
-  // console.log(`GroupMTDepth: ${groupMTDepth}`);
-
-  // console.log("******* Generating Proof With: *********************************");
-  // console.log(`identity: ${identity}`);
-  // console.log(`thisIdsGroupMerkleProof: ${thisIdsGroupMerkleProof}`);
-  // console.log(`externalNullifier: ${externalNullifier}`);
-  // console.log(`signal: ${signal}`);
-  // console.log("*******  End of Generating Proof With: *********************************");
 
   const fullProof = await generateProof(
     identity,
@@ -188,17 +120,6 @@ const submitMessage = async () => {
   if (vProof) {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const nonce = await signer.getTransactionCount();
-
-    // console.log("******* Publishing Signal With: *********************************");
-    // console.log(`groupId: ${_entityID}`);
-    // console.log(`thisIdsGroupMerkleProof.root: ${thisIdsGroupMerkleProof.root}`);
-    // console.log(`Which matches GroupMTRoot from on-chain: ${groupMTRoot}`);
-    // console.log(`Proofs merkleTreeRoot: ${fullProof.merkleTreeRoot}`);
-    // console.log(`signal: ${signal}`);
-    // console.log(`fullProof.nullifierHash: ${fullProof.nullifierHash}`);
-    // console.log(`externalNullifier: ${externalNullifier}`);
-    // console.log(`fullProof.proof: ${fullProof.proof}`);
-    // console.log("*******  End of Publishing Leak With: *********************************");
 
     // const credentials = { apiKey: process.env.REACT_APP_OZ_API_KEY, apiSecret: process.env.REACT_APP_OZ_SEC_KEY };
     // const OZprovider = new DefenderRelayProvider(credentials);
@@ -220,7 +141,7 @@ const submitMessage = async () => {
       { gasLimit: 1000000, nonce: nonce || undefined }
     );
     console.log(`Transaction hash: https://goerli.etherscan.io/tx/${tx.hash}`);
-    document.getElementById("leakMessage").value = "";
+    document.getElementById("leakFile").value = "";
     const receipt = await tx.wait();
     console.log(`Transaction confirmed in block ${receipt.blockNumber}`);
     console.log(`Gas used: ${receipt.gasUsed.toString()}`);
@@ -233,58 +154,52 @@ const submitMessage = async () => {
   }
 };
 
-const sendMessage = () => {
+const sendFile = () => {
   const queryParams = new URLSearchParams(window.location.search);
   const groupName = queryParams.get("entityName");
-  // const groupIDNum = queryParams.get("entityID");
-  // const groupToJoin = `group${groupIDNum}`;
-
-  // console.log(
-  //   `Identity now in local storage is: ${localStorage.getItem(groupToJoin)}`
-  // );
-
-  // if (localStorage.getItem(groupToJoin) === null) {
-  //   console.log(`Identity is null`);
-  // } else {
-  //   console.log(
-  //     `Identity is stored as: ${localStorage.getItem(groupToJoin)}`
-  //   );
-  // }
 
   return (
     <div className="w3-container" style={{ marginLeft: "0", paddingLeft: "0" }}>
       {sidebar}
 
       <div className="w3-main" style={{ marginLeft: "250px" }}>
-        <h1>Send Message</h1>
+        <h1>Send File</h1>
 
-        {/* <h1>Send Message to {groupName} Group: </h1> */}
+        {/* <h1>Send File to {groupName} Group: </h1> */}
 
         <div
           id="sendMessageForm"
           className="w3-container w3-card-4 w3-light-grey w3-text-black w3-margin"
         >
-          <h2 className="w3-center">Send Message to '{groupName}' Group: </h2>
+          <h2 className="w3-center">Send File to '{groupName}': </h2>
 
           <div className="w3-row w3-section">
             <div className="w3-col" style={{ width: `${50}px` }}>
-              <i className="w3-xxlarge fa fa-envelope-o"></i>
+              <i className="w3-xxlarge fa fa-file-text-o"></i>
             </div>
             <div className="w3-rest">
-              <textarea
+              {/* <textarea
                 className="w3-input w3-border"
                 id="leakMessage"
                 name="leakMessage"
                 rows="4"
                 cols="50"
-              />
+              /> */}
+
+              <input
+                type="file"
+                className="w3-input w3-border"
+                accept=".jpg, .png, .gif, .heic, .jpeg, .zip, .mp3, .mov, .avi, .wav, .wma, .wmv, .csv, .txt, .doc, .docx, .pdf, .xls, .xlsx, .ppt, .pptx"
+                id="leakFile"
+                name="leakFile"
+                />
             </div>{" "}
           </div>
           <button
-            onClick={submitMessage}
+            onClick={submitFile}
             className="w3-button w3-block w3-section w3-black w3-ripple w3-padding"
           >
-            Submit Message
+            Send File
           </button>
         </div>
       </div>
@@ -292,4 +207,4 @@ const sendMessage = () => {
   );
 };
 
-export default sendMessage;
+export default sendFile;

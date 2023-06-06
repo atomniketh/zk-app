@@ -1,12 +1,14 @@
 /* eslint-disable no-console */
 import React from "react";
 import { Link } from "react-router-dom";
+import { utils, BigNumber } from "ethers";
+import multihash from "multihashes";
 import { SemaphoreEthers, SemaphoreSubgraph } from "@semaphore-protocol/data";
 import BlockiesSvg from "blockies-react-svg";
 import "font-awesome/css/font-awesome.min.css";
 
 // import { utils } from "ethers";
-import Web3 from "web3";
+// import Web3 from "web3";
 import { sidebar } from "./Sidebar";
 
 const semaphoreSubgraph = new SemaphoreSubgraph(process.env.REACT_APP_NETWORK);
@@ -14,7 +16,6 @@ const semaphoreEthers = new SemaphoreEthers(process.env.REACT_APP_NETWORK, {
   address: process.env.REACT_APP_WBCONTRACT,
   startBlock: 0,
 });
-
 class ComponentPage extends React.Component {
   constructor() {
     super();
@@ -30,6 +31,7 @@ class ComponentPage extends React.Component {
       allMembers: [],
       url: "",
       isActiveMember: "",
+      messagesArr: [],
     };
   }
 
@@ -70,7 +72,7 @@ class ComponentPage extends React.Component {
       });
 
       const activeCommitment = localStorage.getItem(groupToJoin);
-      console.log(`Active Commitment: ${activeCommitment}`);
+      // console.log(`Active Commitment: ${activeCommitment}`);
       // const { allMembers } = this.state;
       // for (let i = 0; i < allMembers.length; i++) {
       //   if (allMembers[i] === activeCommitment) {
@@ -98,16 +100,20 @@ class ComponentPage extends React.Component {
           const theMessages = [];
           // eslint-disable-next-line no-plusplus
           for (let index = 0; index < verifiedProofs.length; index++) {
-            theMessages[index] = Web3.utils.hexToAscii(
-              Web3.utils.toHex(verifiedProofs[index].signal)
+            // **************************************************************
+            // Convert the signal back to the original CID
+            const tmpBNtoHex = utils.hexlify(
+              BigNumber.from(verifiedProofs[index].signal)
             );
-            //  try {
-            //   console.log(verifiedProofs[index].signal);
-            //   utils.toUtf8String(utils.arrayify(value));
-            //  } catch (error) {
-            //   console.log("Not a hex.");
-            //  }
-            //  utils.toUtf8String(utils.arrayify(value)
+            const tmpHextoBytes = utils.arrayify(tmpBNtoHex);
+            const tmpBytestoArr = multihash.encode(tmpHextoBytes, "sha2-256");
+            const mhBuf = multihash.encode(tmpBytestoArr, "sha2-256");
+            const decodedBuf = multihash.decode(mhBuf);
+            const encodedStr = multihash.toB58String(decodedBuf.digest);
+            // console.log("Recovered CID Value: ", encodedStr);
+            // **************************************************************
+
+            theMessages[index] = encodedStr;
           }
           this.setState({ verifiedProofs: theMessages });
         }, []);
@@ -119,13 +125,16 @@ class ComponentPage extends React.Component {
   render() {
     const { allMembers } = this.state;
     const { verifiedProofs } = this.state;
+    const { messagesArr } = this.state;
     const queryParams = new URLSearchParams(window.location.search);
     const groupName = queryParams.get("entityName");
     const entID = queryParams.get("entityID");
-
     const url = new URL("/SendMessage", window.location);
     url.searchParams.set("entityID", entID);
     url.searchParams.set("entityName", groupName);
+    const urlFiles = new URL("/SendFile", window.location);
+    urlFiles.searchParams.set("entityID", entID);
+    urlFiles.searchParams.set("entityName", groupName);
 
     return (
       <div
@@ -137,12 +146,6 @@ class ComponentPage extends React.Component {
           <h1>{groupName} Messages</h1>
           <table className="w3-table-all">
             <tbody>
-              {/* <tr>
-                <td>
-                  <strong>Group Name:</strong>
-                </td>
-                <td>{groupName}</td>
-              </tr> */}
               <tr>
                 <td>
                   <strong>Group Admin:</strong>
@@ -156,15 +159,6 @@ class ComponentPage extends React.Component {
                   </Link>
                 </td>
               </tr>
-              {/* <tr><td><strong>Merkle Tree Root:</strong></td><td> {this.state.root}</td></tr>
-                <tr><td><strong>depth:</strong></td><td> {this.state.depth}</td></tr>
-                <tr><td><strong>zeroValue:</strong></td><td> {this.state.zeroValue}</td></tr> */}
-              {/* <tr>
-                <td>
-                  <strong>Number of Group Members:</strong>
-                </td>
-                <td>{this.state.numberOfLeaves}</td>
-              </tr> */}
               <tr>
                 <td>
                   <strong>{this.state.numberOfLeaves} Group Members:</strong>
@@ -224,13 +218,67 @@ class ComponentPage extends React.Component {
                 <td>
                   <strong>{this.state.numOfMsgs} Messages:</strong>
                 </td>
-                <td>
-                  <ul className="w3-ul">
-                    {verifiedProofs.map((value, index) => (
-                      <li className="w3-xlarge w3-monospace" key={index}>
-                        {value}
-                      </li>
-                    ))}
+                <td id="allMessages">
+                  <ul className="w3-ul" id="my-list">
+                    {verifiedProofs.map((value, index) => {
+                      const ipfsURL = process.env.REACT_APP_IPFS_URL + value;
+                      fetch(ipfsURL)
+                        .then((response) => {
+                          if (response.ok) {
+                            const contentType =
+                              response.headers.get("Content-Type");
+                            switch (contentType) {
+                              case "image/png":
+                              case "image/jpeg":
+                                messagesArr[index] =
+                                  "<img src='" +
+                                  ipfsURL +
+                                  "' alt='Image' width='200' />";
+                                break;
+                              case "application/json":
+                                response
+                                  .json()
+                                  .then(
+                                    (data) => (messagesArr[index] = data.value)
+                                  );
+                                break;
+                              default:
+                                messagesArr[index] =
+                                  "<a href='" +
+                                  ipfsURL +
+                                  "' target='_blank' rel='noopener noreferrer'> Click here to view " +
+                                  contentType.substring(
+                                    contentType.lastIndexOf("/") + 1
+                                  ) +
+                                  "</a>";
+                                break;
+                            }
+                          }
+                        })
+                        .catch((error) => console.log(error));
+                    })}
+
+                    {messagesArr && messagesArr.length > 0 ? (
+                      <>
+                        {messagesArr.map((value, index) => (
+                          <li className="w3-xlarge w3-monospace" key={index}>
+                            {typeof value === "string" ? (
+                              value.indexOf("<") === -1 ? (
+                                value // value does not contain HTML tags, render as text
+                              ) : (
+                                <span
+                                  dangerouslySetInnerHTML={{ __html: value }}
+                                ></span> // value contains HTML tags, render as HTML
+                              )
+                            ) : (
+                              value // value is already HTML, render as is
+                            )}
+                          </li>
+                        ))}
+                      </>
+                    ) : (
+                      <p>Loading messages...</p>
+                    )}
                   </ul>
                 </td>
               </tr>
@@ -239,7 +287,11 @@ class ComponentPage extends React.Component {
           <br></br>
           <div className="w3-right-align">
             <Link to={url.toString()}>
-              <i className="w3-xxlarge fa fa-pencil"></i> Send Message
+              <i className="w3-xlarge fa fa-pencil-square-o"></i> Send Message
+            </Link>
+            {" | "}
+            <Link to={urlFiles.toString()}>
+              <i className="w3-xlarge fa fa-file-text-o"></i> Send File
             </Link>
           </div>
           <br /> <br />
