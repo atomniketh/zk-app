@@ -3,19 +3,26 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { ethers } from "ethers";
 import { sidebar } from "./Sidebar";
+import { SemaphoreEthers } from "@semaphore-protocol/data";
 import SemaphoreCommunitiesABI from "../abi/SemaphoreCommunities.json";
 import BlockiesSvg from 'blockies-react-svg';
 
 const semaphoreCommunitiesAddress = process.env.REACT_APP_WBCONTRACT;
+const semaphoreEthers = new SemaphoreEthers(process.env.REACT_APP_NETWORK, {
+  address: process.env.REACT_APP_WBCONTRACT,
+  startBlock: 0,
+});
 
 class ComponentPage extends React.Component {
   constructor() {
     super();
     this.state = {
       allGroups: [],
+      myGroups: [],
       allMembers: [],
       currentVerifierContract: "",
-      isActiveMember: ""
+      isActiveMember: "",
+      accountAddress: ""
     };
   }
 
@@ -32,6 +39,10 @@ class ComponentPage extends React.Component {
         SemaphoreCommunitiesABI.abi,
         signer
       );
+      const accountAddress = await signer.getAddress();
+      this.setState({ accountAddress });
+
+      // console.log(accountAddress);
       const verifierAddress = await contract.semaphore();
       // console.log("verifierAddress is: " + verifierAddress);
       this.setState({ currentVerifierContract: verifierAddress });
@@ -48,14 +59,52 @@ class ComponentPage extends React.Component {
         allGroups[index] = groupInfo;
       }
       this.setState({ allGroups });
+
+      let allGroupsInfo = [];
+
+      for (let i = 0; i < allGroups.length; i++) {
+        try {
+          let groupToJoin = `group${allGroups[i].idEntity.toString()}`;
+          let GroupInfo = {
+            groupID: allGroups[i].idEntity.toString(),
+            userCommitment: localStorage.getItem(groupToJoin),
+            allGroupMembers: await semaphoreEthers.getGroupMembers(
+              allGroups[i].idEntity.toString()
+            ),
+          };
+          allGroupsInfo.push(GroupInfo);
+        } catch (error) {
+          console.log("Error: " + error);
+        }
+      }
+
+      const myGroups = [];
+      for (let i = 0; i < allGroupsInfo.length; i++) {
+        let groupToJoin = `group${allGroups[i].idEntity.toString()}`;
+        const foundGroups = allGroupsInfo.filter((groupInfo) => {
+          return groupInfo.allGroupMembers.some((member) =>
+            member.includes(localStorage.getItem(groupToJoin))
+          );
+        });
+        for (let foundGroup of foundGroups) {
+          myGroups.push(foundGroup.groupID);
+        }
+      }
+      // console.log("myGroups: " + myGroups);
+      this.setState({ myGroups });
+
     } catch (error) {
       console.error(error);
     }
   }
 
+
+
   render() {
     // const { allGroups } = this.state;
     const { currentVerifierContract } = this.state;
+
+
 
     return (
       <>
@@ -77,65 +126,59 @@ class ComponentPage extends React.Component {
                   <td>Group ID</td>
                   <td>Group Name</td>
                   {/* <td>Group Editor Address</td> */}
-                  <td>User Functions</td>
-                  <td>Group Admin Functions</td>
+                  <td>Functions</td>
+                  <td></td>
                 </tr>
                 {this.state.allGroups.map((item, index) => (
                   // Without the `key`, React will fire a key warning
+                  //  { console.log(this.state.myGroups.includes(item.idEntity.toString())) }
+                  // this.state.myGroups.includes(item.idEntity.toString()) ? () : null
                   <React.Fragment key={item.idEntity.toString()}>
                     <tr>
                       <td>
-                      { <BlockiesSvg 
+                        {<BlockiesSvg
                           address={item.idEntity.toString()}
                           size={8}
                           scale={5}
                           defaultBackgroundColor='red'
-                      />}
+                        />}
                       </td>
                       <td>
                         {item.entityName.toString()} {item.root}
                       </td>
                       <td>
-                        {" "}
-                        <a
-                          href={`/CreateIdentity?entityID=${item.idEntity.toString()}&entityName=${item.entityName.toString()}&entityEditor=${item.entityEditor.toString()}`}
-                        >
-                          Request Access
-                        </a>{" "}
-                        |{" "}
-                        <a
-                          href={`/SendMessage?entityID=${item.idEntity.toString()}&entityName=${item.entityName.toString()}`}
-                        >
-                          Send Message
-                        </a>{" "}
-                        |{" "}
-                        <a
-                          href={`/Messages?entityID=${item.idEntity.toString()}&entityName=${item.entityName.toString()}`}
-                        >
-                          See Messages
-                        </a>
+                        {this.state.myGroups.includes(item.idEntity.toString()) ? (
+                          <span>
+                          <a href={`/SendMessage?entityID=${item.idEntity.toString()}&entityName=${item.entityName.toString()}`} > Send Message</a> | <a href={`/Messages?entityID=${item.idEntity.toString()}&entityName=${item.entityName.toString()}`} > See Messages</a>
+                          </span>)
+                          : (
+                            <a href={`/CreateIdentity?entityID=${item.idEntity.toString()}&entityName=${item.entityName.toString()}&entityEditor=${item.entityEditor.toString()}`} > Request Access</a>)
+                        }
+
                       </td>
-                      <td>
-                        {" "}
-                        <a
-                          href={`/UpdateGroupName?index=${index}&entityID=${item.idEntity.toString()}&entityName=${item.entityName.toString()}`}
-                        >
-                          Rename
-                        </a>{" "}
-                        |{" "}
-                        <a
-                          href={`/UpdateEditor?entityID=${item.idEntity.toString()}`}
-                        >
-                          Reassign
-                        </a>{" "}
-                        |{" "}
-                        <a
-                          href={`/AddMember?entityID=${item.idEntity.toString()}&entityEditor=${item.entityEditor.toString()}&entityName=${item.entityName.toString()}`}
-                        >
-                          Add Member
-                        </a>{" "}
-                        | Remove Member{" "}
-                      </td>
+                      {item.entityEditor.toString() === this.state.accountAddress ? (
+                        <td>
+                          {" "}
+                          <a
+                            href={`/UpdateGroupName?index=${index}&entityID=${item.idEntity.toString()}&entityName=${item.entityName.toString()}`}
+                          >
+                            Rename
+                          </a>{" "}
+                          |{" "}
+                          <a
+                            href={`/UpdateEditor?entityID=${item.idEntity.toString()}`}
+                          >
+                            Reassign
+                          </a>{" "}
+                          |{" "}
+                          <a
+                            href={`/AddMember?entityID=${item.idEntity.toString()}&entityEditor=${item.entityEditor.toString()}&entityName=${item.entityName.toString()}`}
+                          >
+                            Add Member
+                          </a>{" "}
+                          | Remove Member{" "}
+                        </td>
+                      ) : (<td> </td>)}
                     </tr>
                   </React.Fragment>
                 ))}
