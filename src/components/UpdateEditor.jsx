@@ -8,7 +8,7 @@ import SemaphoreContractABI from "../abi/Semaphore.json";
 
 const semaphoreContractAddress = process.env.REACT_APP_SEMAPHORE;
 
-async function updateEditor() {
+async function UpdateEditor() {
   const queryParams = new URLSearchParams(window.location.search);
   const _entityID = queryParams.get("entityID");
   const _newEditor = document.getElementById("newEditorAddress").value;
@@ -40,6 +40,7 @@ function editorComponent() {
       const currentAdmin = await semaphoreSubgraph.getGroup(entityCurrentID, {
         admin: true,
       });
+      console.log(`Current admin: ${currentAdmin.admin}`);
       setCurrentAdmin(currentAdmin.admin);
     }
     fetchEditor();
@@ -76,7 +77,7 @@ function editorComponent() {
         <p>
           <button
             type="button"
-            onClick={updateEditor}
+            onClick={UpdateEditor}
             className="w3-button w3-block w3-section w3-black w3-ripple w3-padding"
           >
             Click here to update Editor Address.
