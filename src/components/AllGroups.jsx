@@ -137,9 +137,8 @@ let tmpGroupAdmin = [];
                   <td></td>
                 </tr>
                 {this.state.allGroups.map((item, index) => (
-                  // Without the `key`, React will fire a key warning
+                  // eslint-disable-next-line no-sequences
                   tmpGroupAdmin = this.state.allGroupsInfo.filter(id => id.groupAdmin.id === item.idEntity.toString()).map((item, index) => (item.groupAdmin.admin)),
-                  // this.state.myGroups.includes(item.idEntity.toString()) ? () : null
                   <React.Fragment key={item.idEntity.toString()}>
                     <tr>
                       <td>
@@ -186,7 +185,14 @@ let tmpGroupAdmin = [];
                           </a>{" "}
                           | Remove Member{" "}
                         </td>
-                      ) : (<td>Send Admin a Message.</td>)}
+                      ) : (
+                        <><td>
+                          <Link
+                              to={`/MessageAdmin?entityID=${item.idEntity.toString()}&entityName=${item.entityName.toString()}`}
+                            >
+                              Send Admin a Message.
+                            </Link></td></>
+                      )}
                     </tr>
                   </React.Fragment>
                 ))}
