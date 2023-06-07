@@ -139,7 +139,6 @@ let tmpGroupAdmin = [];
                 {this.state.allGroups.map((item, index) => (
                   // Without the `key`, React will fire a key warning
                   tmpGroupAdmin = this.state.allGroupsInfo.filter(id => id.groupAdmin.id === item.idEntity.toString()).map((item, index) => (item.groupAdmin.admin)),
-                  console.log(tmpGroupAdmin),
                   // this.state.myGroups.includes(item.idEntity.toString()) ? () : null
                   <React.Fragment key={item.idEntity.toString()}>
                     <tr>
@@ -164,8 +163,7 @@ let tmpGroupAdmin = [];
                         }
 
                       </td>
-                      {/* THIS IS WHAT YOU NEED TO FIX: GET GROUP ADMIN TO COMPARE TO ACTIVE ADDRESS */}
-                      { console.log('Address is:', index, 'for: ', this.state.accountAddress.toLowerCase()) }
+                      {/* { console.log('Address is:', index, 'for: ', this.state.accountAddress.toLowerCase()) } */}
                       {tmpGroupAdmin[0] === this.state.accountAddress.toLowerCase() ? (
                         <td>
                           {" "}
