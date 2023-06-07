@@ -20,6 +20,7 @@ class ComponentPage extends React.Component {
       allGroups: [],
       myGroups: [],
       allMembers: [],
+      allGroupsInfo: [],
       currentVerifierContract: "",
       isActiveMember: "",
       accountAddress: ""
@@ -61,7 +62,7 @@ class ComponentPage extends React.Component {
       this.setState({ allGroups });
 
       let allGroupsInfo = [];
-      const semaphoreSubgraph = new SemaphoreSubgraph();
+      const semaphoreSubgraph = new SemaphoreSubgraph(process.env.REACT_APP_NETWORK);
 
       for (let i = 0; i < allGroups.length; i++) {
         try {
@@ -77,6 +78,8 @@ class ComponentPage extends React.Component {
             ),
           };
           allGroupsInfo.push(GroupInfo);
+          //  console.log('groupAdmin: ', GroupInfo.groupAdmin)
+          this.setState({ allGroupsInfo });
         } catch (error) {
           console.log("Error: " + error);
         }
@@ -107,7 +110,7 @@ class ComponentPage extends React.Component {
   render() {
     // const { allGroups } = this.state;
     const { currentVerifierContract } = this.state;
-
+let tmpGroupAdmin = [];
 
 
     return (
@@ -135,7 +138,8 @@ class ComponentPage extends React.Component {
                 </tr>
                 {this.state.allGroups.map((item, index) => (
                   // Without the `key`, React will fire a key warning
-                  //  { console.log(this.state.myGroups.includes(item.idEntity.toString())) }
+                  tmpGroupAdmin = this.state.allGroupsInfo.filter(id => id.groupAdmin.id === item.idEntity.toString()).map((item, index) => (item.groupAdmin.admin)),
+                  console.log(tmpGroupAdmin),
                   // this.state.myGroups.includes(item.idEntity.toString()) ? () : null
                   <React.Fragment key={item.idEntity.toString()}>
                     <tr>
@@ -161,8 +165,8 @@ class ComponentPage extends React.Component {
 
                       </td>
                       {/* THIS IS WHAT YOU NEED TO FIX: GET GROUP ADMIN TO COMPARE TO ACTIVE ADDRESS */}
-                      {/* { console.log('admin is', this.state.myGroups["2"].groupAdmin) } */}
-                      {this.state.myGroups.groupAdmin === this.state.accountAddress ? (
+                      { console.log('Address is:', index, 'for: ', this.state.accountAddress.toLowerCase()) }
+                      {tmpGroupAdmin[0] === this.state.accountAddress.toLowerCase() ? (
                         <td>
                           {" "}
                           <a
@@ -184,7 +188,7 @@ class ComponentPage extends React.Component {
                           </a>{" "}
                           | Remove Member{" "}
                         </td>
-                      ) : (<td> </td>)}
+                      ) : (<td>Send Admin a Message.</td>)}
                     </tr>
                   </React.Fragment>
                 ))}

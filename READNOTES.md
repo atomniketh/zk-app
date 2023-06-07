@@ -1,3 +1,40 @@
+// IF EVER AN ISSUE WITH THE CID ****************************************************************
+
+export const cidTOSignal = (cid: string): bigint => {
+    const tmpArray = multihash.fromB58String(cid);
+    const b58decoded = multihash.decode(tmpArray).digest;
+    const tmpHexStr = ethers.hexlify(b58decoded);
+    const signal = BigInt(tmpHexStr);
+
+    return signal;
+}
+
+const fromHexString = (hexString) =>
+  Uint8Array.from(hexString.match(/.{1,2}/g).map((byte) => parseInt(byte, 16)));
+
+export const signalToCid = (signal: bigint): string => {
+    let tmpBNtoHex = signal.toString(16);
+    while (tmpBNtoHex.length < 64) {
+        tmpBNtoHex = "0" + tmpBNtoHex;
+    }
+    const tmpHextoBytes = fromHexString(tmpBNtoHex);
+    const tmpBytestoArr = multihash.encode(tmpHextoBytes, "sha2-256");
+    const mhBuf = multihash.encode(tmpBytestoArr, "sha2-256");
+    const decodedBuf = multihash.decode(mhBuf);
+    const cid = multihash.toB58String(decodedBuf.digest);
+
+    return cid;
+}
+
+// IF EVER AN ISSUE WITH THE CID ****************************************************************
+
+
+
+
+
+
+
+
 Does this allow me to turn a long string >32 chars to a UINT256?
         uint256 zeroValue = uint256(keccak256(abi.encodePacked(groupId))) >> 8;
         

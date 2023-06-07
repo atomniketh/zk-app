@@ -33,7 +33,7 @@ function EditorComponent() {
 
   useEffect(() => {
     async function fetchEditor() {
-      const semaphoreSubgraph = new SemaphoreSubgraph();
+      const semaphoreSubgraph = new SemaphoreSubgraph(process.env.REACT_APP_NETWORK);
       const queryParams = new URLSearchParams(window.location.search);
       const entityCurrentID = queryParams.get("entityID");
       // eslint-disable-next-line no-const-assign, @typescript-eslint/no-shadow
