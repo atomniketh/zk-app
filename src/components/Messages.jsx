@@ -254,7 +254,7 @@ class ComponentPage extends React.Component {
                                     contentType.lastIndexOf("/") + 1
                                   ) +
                                   "</a>";
-console.log('value of messagesArr', messagesArr[index]);
+                                console.log('value of messagesArr', messagesArr[index]);
                                 break;
                             }
                           }
