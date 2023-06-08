@@ -21,7 +21,7 @@ class ComponentPage extends React.Component {
       myGroups: [],
       allMembers: [],
       allGroupsInfo: [],
-      currentVerifierContract: "",
+      // currentVerifierContract: "",
       isActiveMember: "",
       accountAddress: ""
     };
@@ -109,7 +109,7 @@ class ComponentPage extends React.Component {
 
   render() {
     // const { allGroups } = this.state;
-    const { currentVerifierContract } = this.state;
+    // const { currentVerifierContract } = this.state;
 let tmpGroupAdmin = [];
 
 
@@ -123,59 +123,59 @@ let tmpGroupAdmin = [];
 
           <div className="w3-main" style={{ marginLeft: "250px" }}>
             <h1>All Groups</h1>
-            <p>
+            {/* <p>
               Current Semaphore Contract Address is: {currentVerifierContract}{" "}
               <Link to="/UpdateVerifierContract?addr=">(Update)</Link>
-            </p>
+            </p> */}
             <table className="w3-table-all">
               <tbody>
                 <tr>
-                  <td>Group ID</td>
-                  <td>Group Name</td>
-                  {/* <td>Group Editor Address</td> */}
-                  <td>Functions</td>
-                  <td></td>
+                  <th>Group Name</th>
+                  <th>Options</th>
+                  <th></th>
+                  <th></th>
                 </tr>
                 {this.state.allGroups.map((item, index) => (
                   // eslint-disable-next-line no-sequences
                   tmpGroupAdmin = this.state.allGroupsInfo.filter(id => id.groupAdmin.id === item.idEntity.toString()).map((item, index) => (item.groupAdmin.admin)),
                   <React.Fragment key={item.idEntity.toString()}>
                     <tr>
-                      <td>
+                          <td style={{ verticalAlign: 'middle' }}>
                         {<BlockiesSvg
                           address={item.idEntity.toString()}
                           size={8}
                           scale={5}
                           defaultBackgroundColor='red'
+                          style={{ verticalAlign: 'middle' }}
                         />}
-                      </td>
-                      <td>
-                        {item.entityName.toString()} {item.root}
-                      </td>
-                      <td>
+                      { " " }
+                      <strong>{item.entityName.toString()} {item.root}
+                          </strong>
+                        </td>
+                      <td style={{ verticalAlign: 'middle' }}>
                         {this.state.myGroups.includes(item.idEntity.toString()) ? (
                           <span>
-                          <a href={`/SendMessage?entityID=${item.idEntity.toString()}&entityName=${item.entityName.toString()}`} > Send Message</a> | <a href={`/Messages?entityID=${item.idEntity.toString()}&entityName=${item.entityName.toString()}`} > See Messages</a>
+                          {/* <a href={`/SendMessage?entityID=${item.idEntity.toString()}&entityName=${item.entityName.toString()}`} > Send Message</a> |  */}
+                          <a href={`/Messages?entityID=${item.idEntity.toString()}&entityName=${item.entityName.toString()}`} > View Messages</a>
                           </span>)
                           : (
                             <a href={`/CreateIdentity?entityID=${item.idEntity.toString()}&entityName=${item.entityName.toString()}&entityEditor=${item.entityEditor.toString()}`} > Request Access</a>)
                         }
-
                       </td>
                       {/* { console.log('Address is:', index, 'for: ', this.state.accountAddress.toLowerCase()) } */}
                       {tmpGroupAdmin[0] === this.state.accountAddress.toLowerCase() ? (
-                        <td>
+                          <td style={{ verticalAlign: 'middle' }}>
                           {" "}
                           <a
                             href={`/UpdateGroupName?index=${index}&entityID=${item.idEntity.toString()}&entityName=${item.entityName.toString()}`}
                           >
-                            Rename
+                            Rename Group
                           </a>{" "}
                           |{" "}
                           <a
                             href={`/UpdateEditor?entityID=${item.idEntity.toString()}`}
                           >
-                            Reassign
+                            Reassign Admin
                           </a>{" "}
                           |{" "}
                           <a
@@ -186,11 +186,11 @@ let tmpGroupAdmin = [];
                           | Remove Member{" "}
                         </td>
                       ) : (
-                        <><td>
+                        <><td style={{ verticalAlign: 'middle' }}>
                           <Link
                               to={`/MessageAdmin?entityID=${item.idEntity.toString()}&entityName=${item.entityName.toString()}`}
                             >
-                              Send Admin a Message.
+                              Message Group Admin
                             </Link></td></>
                       )}
                     </tr>

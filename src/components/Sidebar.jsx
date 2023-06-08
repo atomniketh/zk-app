@@ -23,7 +23,7 @@ export const sidebar = (
             <a className="w3-bar-item w3-button" href="CreateGroup">
                 Create Group
             </a>
-            <a className="w3-bar-item w3-button" href="#" href="Administration">
+            <a className="w3-bar-item w3-button" href="Administration">
                 Administration
             </a>
         </div>

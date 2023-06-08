@@ -234,6 +234,8 @@ class ComponentPage extends React.Component {
                                   "<img src='" +
                                   ipfsURL +
                                   "' alt='Image' width='200' />";
+                                  console.log('value of messagesArr', messagesArr[index]);
+
                                 break;
                               case "application/json":
                                 response
@@ -241,45 +243,51 @@ class ComponentPage extends React.Component {
                                   .then(
                                     (data) => (messagesArr[index] = data.value)
                                   );
+                                  console.log('value of messagesArr', messagesArr[index]);
                                 break;
                               default:
                                 messagesArr[index] =
                                   "<a href='" +
                                   ipfsURL +
-                                  "' target='_blank' rel='noopener noreferrer'> Click here to view " +
+                                  "' target='_blank' rel='noopener noreferrer'>Click here to view " +
                                   contentType.substring(
                                     contentType.lastIndexOf("/") + 1
                                   ) +
                                   "</a>";
+console.log('value of messagesArr', messagesArr[index]);
                                 break;
                             }
                           }
                         })
                         .catch((error) => console.log(error));
+                      return null;
                     })}
-
                     {messagesArr && messagesArr.length > 0 ? (
+                      console.log('value of all', messagesArr),
                       <>
                         {messagesArr.map((value, index) => (
-                          <li className="w3-xlarge w3-monospace" key={index}>
-                            {typeof value === "string" ? (
-                              value.indexOf("<") === -1 ? (
-                                value // value does not contain HTML tags, render as text
+                          <React.Fragment key={index}>
+                            <li className="w3-xlarge w3-monospace">
+                              {typeof value === "string" ? (
+                                value.indexOf("<") === -1 ? (
+                                  value
+                                ) : (
+                                  <span
+                                    dangerouslySetInnerHTML={{
+                                      __html: value,
+                                    }}
+                                  ></span> 
+                                  )
                               ) : (
-                                <span
-                                  dangerouslySetInnerHTML={{ __html: value }}
-                                ></span> // value contains HTML tags, render as HTML
-                              )
-                            ) : (
-                              value // value is already HTML, render as is
-                            )}
-                          </li>
+                                value
+                              )}
+                            </li>
+                          </React.Fragment>
                         ))}
                       </>
                     ) : (
                       <p>Loading messages...</p>
-                    )}
-                  </ul>
+                    )}</ul>
                 </td>
               </tr>
             </tbody>

@@ -1,9 +1,9 @@
 /* eslint-disable no-console */
 import React from "react";
-// import { Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { ethers } from "ethers";
 import { sidebar } from "./Sidebar";
-import { SemaphoreEthers } from "@semaphore-protocol/data";
+import { SemaphoreSubgraph, SemaphoreEthers } from "@semaphore-protocol/data";
 import SemaphoreCommunitiesABI from "../abi/SemaphoreCommunities.json";
 import BlockiesSvg from 'blockies-react-svg';
 
@@ -19,8 +19,10 @@ class ComponentPage extends React.Component {
     this.state = {
       allGroups: [],
       allMembers: [],
+      allGroupsInfo: [],
       isActiveMember: "",
       myGroups: [],
+      accountAddress: ""
     };
     this.render = this.render.bind(this);
   }
@@ -38,6 +40,8 @@ class ComponentPage extends React.Component {
         SemaphoreCommunitiesABI.abi,
         signer
       );
+      const accountAddress = await signer.getAddress();
+      this.setState({ accountAddress });
 
       const numberOfEntities = await contract.getNumberOfEntities();
 
@@ -50,6 +54,8 @@ class ComponentPage extends React.Component {
       this.setState({ allGroups });
 
       let allGroupsInfo = [];
+      const semaphoreSubgraph = new SemaphoreSubgraph(process.env.REACT_APP_NETWORK);
+
 
       for (let i = 0; i < allGroups.length; i++) {
         try {
@@ -57,11 +63,15 @@ class ComponentPage extends React.Component {
           let GroupInfo = {
             groupID: allGroups[i].idEntity.toString(),
             userCommittment: localStorage.getItem(groupToJoin),
+            groupAdmin: await semaphoreSubgraph.getGroup(allGroups[i].idEntity.toString(), {
+              admin: true,
+            }),
             allGroupMembers: await semaphoreEthers.getGroupMembers(
               allGroups[i].idEntity.toString()
             ),
           };
           allGroupsInfo.push(GroupInfo);
+          this.setState({ allGroupsInfo });
         } catch (error) {
           console.log("Error: " + error);
         }
@@ -87,6 +97,8 @@ class ComponentPage extends React.Component {
   }
 
   render() {
+    let tmpGroupAdmin = [];
+
     return (
       <div
         className="w3-container"
@@ -102,46 +114,84 @@ class ComponentPage extends React.Component {
             <table className="w3-table-all">
               <tbody>
                 <tr>
-                  <td>Group Name</td>
-                  {/* <td>Group Editor Address</td> */}
-                  <td>User Functions</td>
+                  <th>Group Name</th>
+                  <th>Options</th>
                 </tr>
-                {this.state.allGroups.map((item) => {
-                  // Without the `key`, React will fire a key warning
+                {this.state.allGroups.map((item, index) => {
+                  tmpGroupAdmin = this.state.allGroupsInfo.filter(id => id.groupAdmin.id === item.idEntity.toString()).map((item, index) => (item.groupAdmin.admin))
+// console.log(tmpGroupAdmin[0]);
                   if (this.state.myGroups.includes(item.idEntity.toString())) {
                     return (
                       <React.Fragment key={item.idEntity.toString()}>
                         <tr>
-                          <td>
+                          <td style={{ verticalAlign: 'middle' }}>
                            <BlockiesSvg 
                           address={item.idEntity.toString()}
                           size={8}
                           scale={5}
                           defaultBackgroundColor='white'
-                          /> {" "}
-                            {item.entityName.toString()} {item.root}
+                          style={{ verticalAlign: 'middle' }}
+                          /> 
+                                                { " " }
+                      <strong>
+                            {item.entityName.toString()} {item.root}</strong>
                           </td>
-                          <td>
-                            <a
+                          <td style={{ verticalAlign: 'middle' }}>
+                            {/* <a
                               href={`/SendMessage?entityID=${item.idEntity.toString()}&entityName=${item.entityName.toString()}`}
                             >
                               Send Message
-                            </a>{" "}
-                            |{" "}
+                            </a>{" "} 
+                            |*/}
                             <a
                               href={`/Messages?entityID=${item.idEntity.toString()}&entityName=${item.entityName.toString()}`}
                             >
-                              See Activity
-                            </a>{" "}
+                              View Messages
+                            </a>
+                            {/* {" "}
                             |{" "}
                             <a
                               href={`/MessageAdmin?entityID=${item.idEntity.toString()}&entityName=${item.entityName.toString()}`}
                             >
                               Message Admin
-                            </a>
+                            </a> */}
                           </td>
+
+                          {tmpGroupAdmin[0] === this.state.accountAddress.toLowerCase() ? (
+                          <td style={{ verticalAlign: 'middle' }}>
+                          {" "}
+                          <a
+                            href={`/UpdateGroupName?index=${index}&entityID=${item.idEntity.toString()}&entityName=${item.entityName.toString()}`}
+                          >
+                            Rename Group
+                          </a>{" "}
+                          |{" "}
+                          <a
+                            href={`/UpdateEditor?entityID=${item.idEntity.toString()}`}
+                          >
+                            Reassign Admin
+                          </a>{" "}
+                          |{" "}
+                          <a
+                            href={`/AddMember?entityID=${item.idEntity.toString()}&entityEditor=${item.entityEditor.toString()}&entityName=${item.entityName.toString()}`}
+                          >
+                            Add Member
+                          </a>{" "}
+                          | Remove Member{" "}
+                        </td>
+                      ) : (
+                        <><td style={{ verticalAlign: 'middle' }}>
+                          <Link
+                              to={`/MessageAdmin?entityID=${item.idEntity.toString()}&entityName=${item.entityName.toString()}`}
+                            >
+                              Message Group Admin
+                            </Link></td></>
+                      )}
                         </tr>
                       </React.Fragment>
+
+
+
                     );
                   } else {
                     return null;
