@@ -14,7 +14,7 @@ const semaphoreEthers = new SemaphoreEthers(process.env.REACT_APP_NETWORK, {
 });
 
 function GroupMessages() {
-  const [groupID, setGroupID] = useState("");
+//   const [groupID, setGroupID] = useState("");
   const [groupAdmin, setGroupAdmin] = useState("");
   const [numberOfLeaves, setNumberOfLeaves] = useState("");
   const [numOfMsgs, setNumOfMsgs] = useState("");
@@ -48,7 +48,7 @@ function GroupMessages() {
 
   async function getGroup() {
     const groupData = await semaphoreEthers.getGroup(groupIDNum);
-    setGroupID(groupIDNum);
+    // setGroupID(groupIDNum);
     setNumberOfLeaves(groupData.merkleTree.numberOfLeaves.toString());
   }
 
@@ -96,20 +96,12 @@ function GroupMessages() {
     getGroupMembers();
     getIsGroupMember();
     getVerifiedProofs();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (!isActiveMember === "true") {
     window.location.href = "/MyGroups";
   }
-
-  console.log("activeCommitment: " + activeCommitment);
-  console.log("groupAdmin: " + groupAdmin);
-  console.log("groupID: " + groupID);
-  console.log("Number of Leaves: " + numberOfLeaves);
-  console.log("All Members: " + allMembers);
-  console.log("isActiveMember: " + isActiveMember);
-  console.log("verifiedProofs: " + verifiedProofs);
-  console.log("numOfMsgs: " + numOfMsgs);
 
   useEffect(() => {
     const fetchMessages = async () => {
@@ -145,7 +137,7 @@ function GroupMessages() {
         }
       }
       setMessagesArr(newMessagesArr);
-      console.log("value of messagesArr", newMessagesArr);
+    //   console.log("value of messagesArr", newMessagesArr);
     };
 
     fetchMessages();
@@ -159,7 +151,7 @@ function GroupMessages() {
       >
         {sidebar}
       </div>
-      <div className="w3-main" style={{ marginLeft: "250px" }}>
+      <div className="w3-main" style={{ marginLeft: "205px" }}>
         <h1>{groupName} Messages</h1>
         <table className="w3-table-all">
           <tbody>

@@ -7,7 +7,7 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import Messages from "./components/Messages";
+// import Messages from "./components/Messages";
 import AllGroups from "./components/AllGroups";
 import CreateGroup from "./components/CreateGroup";
 import UpdateGroupName from "./components/UpdateGroupName";
@@ -35,7 +35,7 @@ function App() {
           {/* <Route path="/" element={<Home />} /> */}
           <Route index element={<MyGroups />} />
           <Route path="*" element={<AllGroups />} />
-          <Route path="/Messages" element={<Messages />} />
+          {/* <Route path="/Messages" element={<Messages />} /> */}
           <Route path="/AllGroups" element={<AllGroups />} />
           <Route path="/CreateGroup" element={<CreateGroup />} />
           <Route path="/UpdateGroupName" element={<UpdateGroupName />} />
