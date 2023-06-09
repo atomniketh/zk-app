@@ -156,7 +156,7 @@ let tmpGroupAdmin = [];
                         {this.state.myGroups.includes(item.idEntity.toString()) ? (
                           <span>
                           {/* <a href={`/SendMessage?entityID=${item.idEntity.toString()}&entityName=${item.entityName.toString()}`} > Send Message</a> |  */}
-                          <a href={`/Messages?entityID=${item.idEntity.toString()}&entityName=${item.entityName.toString()}`} > View Messages</a>
+                          <a href={`/GroupMessages?entityID=${item.idEntity.toString()}&entityName=${item.entityName.toString()}`} > Group Messages</a>
                           </span>)
                           : (
                             <a href={`/CreateIdentity?entityID=${item.idEntity.toString()}&entityName=${item.entityName.toString()}&entityEditor=${item.entityEditor.toString()}`} > Request Access</a>)

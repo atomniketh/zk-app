@@ -20,6 +20,7 @@ import SendFile from "./components/SendFile";
 import MyGroups from "./components/MyGroups";
 import MessageAdmin from "./components/MessageAdmin";
 import Administration from "./components/Administration";
+import GroupMessages from "./components/GroupMessages";
 
 // import AddUser from "./components/AddUser";
 function App() {
@@ -50,6 +51,8 @@ function App() {
           <Route path="/MyGroups" element={<MyGroups />} />
           <Route path="/MessageAdmin" element={<MessageAdmin />} />
           <Route path="/Administration" element={<Administration />} />
+          <Route path="/GroupMessages" element={<GroupMessages />} />
+          
 
           {/* If any route mismatches the upper 
           route endpoints then, redirect triggers 

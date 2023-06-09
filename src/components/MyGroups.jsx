@@ -143,10 +143,16 @@ class ComponentPage extends React.Component {
                               Send Message
                             </a>{" "} 
                             |*/}
-                            <a
+                            {/* <a
                               href={`/Messages?entityID=${item.idEntity.toString()}&entityName=${item.entityName.toString()}`}
                             >
                               View Messages
+                            </a>
+                            {" "} */}
+                            <a
+                              href={`/GroupMessages?entityID=${item.idEntity.toString()}&entityName=${item.entityName.toString()}`}
+                            >
+                              Group Messages
                             </a>
                             {/* {" "}
                             |{" "}

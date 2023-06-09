@@ -1,5 +1,6 @@
 ## H2 To Do Items:
-- [ ] Fix random displaying of messages loading (maybe if () { return ()})
+- [x] Fix random displaying of messages loading
+- [ ] Set filename on upload
 - [ ] Send messages via OZ Relayer
 - [x] Make My Groups match All Groups to display links if group admin
 - [ ] Modals for displaying until page loads (AllGroups.jsx)
