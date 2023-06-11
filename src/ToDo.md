@@ -3,6 +3,7 @@
 - [ ] Set filename on upload / Retrieve filename with Messages
 - [ ] Send messages via OZ Relayer
 - [x] Make My Groups match All Groups to display links if group admin
+- [ ] Group Invite Links
 - [ ] Modals for displaying until page loads (AllGroups.jsx)
 - [ ] Modals for displaying until Transactions complete
 - [ ] Only allow Admin to see "Administration"
