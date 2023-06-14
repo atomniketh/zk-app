@@ -25,7 +25,7 @@ const submitFile = async (event) => {
   const queryParams = new URLSearchParams(window.location.search);
   const _entityID = parseInt(queryParams.get("entityID"), 10);
   const _entityIDStr = queryParams.get("entityID");
-  // const groupName = queryParams.get("entityName");
+  const groupName = queryParams.get("entityName");
   // const groupToJoin = `group${_entityIDStr}`;
   // **************************************************************
   // **************** IPFS Section ***************
@@ -131,8 +131,14 @@ const submitFile = async (event) => {
         ],
       }),
     });
-    // console.log(`Response: ${response}`);
-    console.log(`Response Status: ${response.status}`);
+    // console.log(`Response Status: ${response.status}`);
+    if (response.status === 200) {
+      const newURL =
+        "/GroupMessages?entityID=" + _entityID + "&entityName=" + groupName;
+      document.location.href = newURL;
+    } else {
+      console.log("Some error occurred, please try again!");
+    }
     // ********** via Relayer **********
 
   } else {

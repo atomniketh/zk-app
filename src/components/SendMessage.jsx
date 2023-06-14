@@ -21,7 +21,7 @@ const submitMessage = async () => {
   const queryParams = new URLSearchParams(window.location.search);
   const _entityID = parseInt(queryParams.get("entityID"), 10);
   const _entityIDStr = queryParams.get("entityID");
-  // const groupName = queryParams.get("entityName");
+  const groupName = queryParams.get("entityName");
   // const groupToJoin = `group${_entityIDStr}`;
   // **************************************************************
   // **************** IPFS Section ***************
@@ -66,7 +66,7 @@ const submitMessage = async () => {
   const b58decoded = multihash.decode(tmpArray).digest;
   const tmpHexStr = utils.hexlify(b58decoded);
   const tmpSignal = BigNumber.from(tmpHexStr, 16).toString();
-  console.log("Signal to use: ", tmpSignal);
+  // console.log("Signal to use: ", tmpSignal);
   // **************************************************************
 
   // **************************************************************
@@ -91,7 +91,7 @@ const submitMessage = async () => {
   //   utils.formatBytes32String(document.getElementById("leakMessage").value)
   // ).toString();
 
-  console.log("Formatted Signal: " + tmpSignal);
+  // console.log("Formatted Signal: " + tmpSignal);
 
   // console.log(
   //   `localStorage.getItem(signedData${_entityID}): ${localStorage.getItem(
@@ -152,7 +152,6 @@ const submitMessage = async () => {
   //   signer
   // );
   // **** Not needed if using OZ relayer ****
-
 
   // const groupMTRoot = await contract.getMerkleTreeRoot(_entityID);
   // console.log(`GroupMTRoot from on-chain: ${groupMTRoot}`);
@@ -225,6 +224,14 @@ const submitMessage = async () => {
     });
     console.log(`Response: ${response}`);
     console.log(`Response Status: ${response.status}`);
+
+    if (response.status === 200) {
+      const newURL =
+        "/GroupMessages?entityID=" + _entityID + "&entityName=" + groupName;
+      document.location.href = newURL;
+    } else {
+      console.log("Some error occurred, please try again!");
+    }
     // ********** via Relayer **********
 
     // ********** If not using OZ Relayer **********

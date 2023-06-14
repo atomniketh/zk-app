@@ -112,7 +112,7 @@ function GroupMessages() {
           const response = await fetch(ipfsURL);
           if (response.ok) {
             const contentType = response.headers.get("Content-Type");
-            console.log('content type', contentType);
+            // console.log('content type', contentType);
             switch (contentType) {
               case "image/png":
               case "image/jpeg":
