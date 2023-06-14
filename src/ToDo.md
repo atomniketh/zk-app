@@ -15,4 +15,4 @@
 ## Later
 
 - [ ] Improve UI
-- [ ] Set filename on upload / Retrieve filename with Messages
+- [ ] Set filename on upload / Retrieve filename with Messages (may requiring pulling the file via IPFS rather than Fetch())
