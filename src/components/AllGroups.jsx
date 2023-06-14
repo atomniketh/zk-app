@@ -204,7 +204,7 @@ let tmpGroupAdmin = [];
             >
               <div>
                 <nav>
-                  Report a Bug.
+                  Send Feedback
                 </nav>
               </div>
             </footer>
