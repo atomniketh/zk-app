@@ -48,7 +48,7 @@ async function addMemberToGroup() {
   let memberExists = false;
   for (let key in allMembers) {
     //console.log(key + ": " + allMembers[key]);
-    if (allMembers[key] == _memberCommitment) {
+    if (allMembers[key] === _memberCommitment) {
       memberExists = true;
     }
   }

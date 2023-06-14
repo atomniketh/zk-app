@@ -10,7 +10,7 @@ export const sidebar = (
         <div id="nav01" className="w3-bar-block">
             <a
                 className="w3-bar-item w3-button w3-border-bottom w3-large"
-                href="#"
+                href="AllGroups"
             >
                 <b>zkCommunities</b>
             </a>

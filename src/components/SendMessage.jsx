@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import React from "react";
 // import { Link } from "react-router-dom";
-import { ethers, utils, BigNumber } from "ethers";
+import { utils, BigNumber } from "ethers";
 import { Identity } from "@semaphore-protocol/identity";
 import { Group } from "@semaphore-protocol/group";
 import { generateProof, verifyProof } from "@semaphore-protocol/proof";
@@ -11,18 +11,17 @@ import "font-awesome/css/font-awesome.min.css";
 import SemaphoreContractABI from "../abi/Semaphore.json";
 import { CID, create } from "ipfs-http-client";
 import multihash from "multihashes";
-// import { DefenderRelaySigner, DefenderRelayProvider } from 'defender-relay-client/lib/ethers';
 
 const semaphoreEthers = new SemaphoreEthers(process.env.REACT_APP_NETWORK);
 const semaphoreContractAddress = process.env.REACT_APP_SEMAPHORE;
-const provider = new ethers.providers.Web3Provider(window.ethereum);
-const signer = provider.getSigner();
+// const provider = new ethers.providers.Web3Provider(window.ethereum);
+// const signer = provider.getSigner();
 
 const submitMessage = async () => {
   const queryParams = new URLSearchParams(window.location.search);
   const _entityID = parseInt(queryParams.get("entityID"), 10);
   const _entityIDStr = queryParams.get("entityID");
-  const groupName = queryParams.get("entityName");
+  // const groupName = queryParams.get("entityName");
   // const groupToJoin = `group${_entityIDStr}`;
   // **************************************************************
   // **************** IPFS Section ***************
@@ -145,12 +144,15 @@ const submitMessage = async () => {
   // console.log(`Group MerkleProof Root: ${thisIdsGroupMerkleProof.root}`);
   // console.log("*******  End of Group Info *********************************");
 
-  await provider.send("eth_requestAccounts", []);
-  const contract = new ethers.Contract(
-    semaphoreContractAddress,
-    SemaphoreContractABI.abi,
-    signer
-  );
+  // **** Not needed if using OZ relayer ****
+  // await provider.send("eth_requestAccounts", []);
+  // const contract = new ethers.Contract(
+  //   semaphoreContractAddress,
+  //   SemaphoreContractABI.abi,
+  //   signer
+  // );
+  // **** Not needed if using OZ relayer ****
+
 
   // const groupMTRoot = await contract.getMerkleTreeRoot(_entityID);
   // console.log(`GroupMTRoot from on-chain: ${groupMTRoot}`);
@@ -187,8 +189,6 @@ const submitMessage = async () => {
 
   if (vProof) {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const nonce = await signer.getTransactionCount();
-
     // console.log("******* Publishing Signal With: *********************************");
     // console.log(`groupId: ${_entityID}`);
     // console.log(`thisIdsGroupMerkleProof.root: ${thisIdsGroupMerkleProof.root}`);
@@ -200,34 +200,54 @@ const submitMessage = async () => {
     // console.log(`fullProof.proof: ${fullProof.proof}`);
     // console.log("*******  End of Publishing Leak With: *********************************");
 
-    // const credentials = { apiKey: process.env.REACT_APP_OZ_API_KEY, apiSecret: process.env.REACT_APP_OZ_SEC_KEY };
-    // const OZprovider = new DefenderRelayProvider(credentials);
-    // const OZsigner = new DefenderRelaySigner(credentials, OZprovider, { speed: 'fast' });
+    // ********** via Relayer **********
 
-    // const OZcontract = new ethers.Contract(
-    //   process.env.REACT_APP_OZ_ETH_ADDRESS,
-    //   SemaphoreContractABI.abi,
-    //   OZsigner
+    var response = "";
+    const strBigIntRoot = thisIdsGroupMerkleProof.root.toString();
+    console.log("strBigIntRoot: ", typeof strBigIntRoot);
+    // eslint-disable-next-line no-unused-expressions
+    response = await fetch(process.env.REACT_APP_OZ_WEBHOOK, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        abi: SemaphoreContractABI.abi,
+        address: semaphoreContractAddress,
+        functionName: "verifyProof",
+        functionParameters: [
+          _entityID,
+          strBigIntRoot,
+          tmpSignal,
+          fullProof.nullifierHash,
+          externalNullifier,
+          fullProof.proof,
+        ],
+      }),
+    });
+    console.log(`Response: ${response}`);
+    console.log(`Response Status: ${response.status}`);
+    // ********** via Relayer **********
+
+    // ********** If not using OZ Relayer **********
+    // const nonce = await signer.getTransactionCount();
+    // const tx = await contract.verifyProof(
+    //   _entityID,
+    //   thisIdsGroupMerkleProof.root,
+    //   tmpSignal,
+    //   fullProof.nullifierHash,
+    //   externalNullifier,
+    //   fullProof.proof,
+    //   { gasLimit: 1000000, nonce: nonce || undefined }
     // );
-
-    const tx = await contract.verifyProof(
-      _entityID,
-      thisIdsGroupMerkleProof.root,
-      tmpSignal,
-      fullProof.nullifierHash,
-      externalNullifier,
-      fullProof.proof,
-      { gasLimit: 1000000, nonce: nonce || undefined }
-    );
-    console.log(`Transaction hash: https://goerli.etherscan.io/tx/${tx.hash}`);
-    document.getElementById("leakMessage").value = "";
-    const receipt = await tx.wait();
-    console.log(`Transaction confirmed in block ${receipt.blockNumber}`);
-    console.log(`Gas used: ${receipt.gasUsed.toString()}`);
-    const newURL =
-      "/Messages?entityID=" + _entityID + "&entityName=" + groupName;
-    console.log(`New URL: ${newURL}`);
-    document.location.href = newURL;
+    // console.log(`Transaction hash: https://goerli.etherscan.io/tx/${tx.hash}`);
+    // document.getElementById("leakMessage").value = "";
+    // const receipt = await tx.wait();
+    // console.log(`Transaction confirmed in block ${receipt.blockNumber}`);
+    // console.log(`Gas used: ${receipt.gasUsed.toString()}`);
+    // const newURL =
+    //   "/Messages?entityID=" + _entityID + "&entityName=" + groupName;
+    // console.log(`New URL: ${newURL}`);
+    // document.location.href = newURL;
+    // ********** If not using OZ Relayer **********
   } else {
     console.log("Proof was not verified. Cannot send message.");
   }
