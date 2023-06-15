@@ -17,10 +17,10 @@ import CreateIdentity from "./components/CreateIdentity";
 import AddMember from "./components/AddMember";
 import SendMessage from "./components/SendMessage";
 import SendFile from "./components/SendFile";
-import MyGroups from "./components/MyGroups";
 import MessageAdmin from "./components/MessageAdmin";
 import Administration from "./components/Administration";
 import GroupMessages from "./components/GroupMessages";
+import GroupList from "./components/GroupList";
 
 // import AddUser from "./components/AddUser";
 function App() {
@@ -33,7 +33,7 @@ function App() {
           with exact path "/", in component props 
           we passes the imported component */}
           {/* <Route path="/" element={<Home />} /> */}
-          <Route index element={<MyGroups />} />
+          <Route index element={<GroupList />} />
           <Route path="*" element={<AllGroups />} />
           {/* <Route path="/Messages" element={<Messages />} /> */}
           <Route path="/AllGroups" element={<AllGroups />} />
@@ -48,12 +48,11 @@ function App() {
           <Route path="/AddMember" element={<AddMember />} />
           <Route path="/SendMessage" element={<SendMessage />} />
           <Route path="/SendFile" element={<SendFile />} />
-          <Route path="/MyGroups" element={<MyGroups />} />
           <Route path="/MessageAdmin" element={<MessageAdmin />} />
           <Route path="/Administration" element={<Administration />} />
           <Route path="/GroupMessages" element={<GroupMessages />} />
+          <Route path="/GroupList" element={<GroupList />} />
           
-
           {/* If any route mismatches the upper 
           route endpoints then, redirect triggers 
           and redirects app to home component with to="/" */}

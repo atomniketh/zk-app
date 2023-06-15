@@ -9,7 +9,7 @@ import "font-awesome/css/font-awesome.min.css";
 
 // import { utils } from "ethers";
 // import Web3 from "web3";
-import { sidebar } from "./Sidebar";
+import { sidebar } from "../Sidebar";
 
 const semaphoreSubgraph = new SemaphoreSubgraph(process.env.REACT_APP_NETWORK);
 const semaphoreEthers = new SemaphoreEthers(process.env.REACT_APP_NETWORK, {

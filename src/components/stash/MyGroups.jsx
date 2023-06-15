@@ -2,9 +2,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { ethers } from "ethers";
-import { sidebar } from "./Sidebar";
+import { sidebar } from "../Sidebar";
 import { SemaphoreSubgraph, SemaphoreEthers } from "@semaphore-protocol/data";
-import SemaphoreCommunitiesABI from "../abi/SemaphoreCommunities.json";
+import SemaphoreCommunitiesABI from "../../abi/SemaphoreCommunities.json";
 import BlockiesSvg from 'blockies-react-svg';
 
 const semaphoreCommunitiesAddress = process.env.REACT_APP_WBCONTRACT;

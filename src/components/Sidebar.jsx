@@ -17,7 +17,7 @@ export const sidebar = (
             <a className="w3-bar-item w3-button" href="AllGroups">
                 All Groups
             </a>
-            <a className="w3-bar-item w3-button" href="MyGroups">
+            <a className="w3-bar-item w3-button" href="GroupList">
                 My Groups
             </a>
             <a className="w3-bar-item w3-button" href="CreateGroup">
