@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import React from "react";
+import React, { useEffect } from "react";
 // import { Link } from "react-router-dom";
 import { ethers } from "ethers";
 import { sidebar } from "./Sidebar";
@@ -18,11 +18,12 @@ async function fillForm() {
 }
 
 async function createGroup() {
+  document.getElementById('box').style.display = 'block';
   const groupName = document.getElementById("groupName").value;
   const editor = document.getElementById("editor").value;
 //  const merkleTreeDepth = document.getElementById("merkleTreeDepth").value;
   const merkleTreeDepth = process.env.REACT_APP_TREEDEPTH;
-  console.log("merkleTreeDepth is: " + merkleTreeDepth);
+  // console.log("merkleTreeDepth is: " + merkleTreeDepth);
 
   const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
   await provider.send("eth_requestAccounts", []);
@@ -41,20 +42,36 @@ async function createGroup() {
   const tx = await contract.createGroup(groupName, editor, merkleTreeDepth);
   // const tx = await contract.createGroup(groupName, merkleTreeDepth, editor, 3600);
 
-  console.log("Success!");
+  // console.log("Success!");
   console.log(`Transaction hash: https://goerli.etherscan.io/tx/${tx.hash}`);
 
   document.getElementById("createGroupForm").reset();
 
   const receipt = await tx.wait();
   console.log(`Transaction confirmed in block ${receipt.blockNumber}`);
-  console.log(`Gas used: ${receipt.gasUsed.toString()}`);
+  // console.log(`Gas used: ${receipt.gasUsed.toString()}`);
+  document.getElementById('box').style.display = 'none';
+  const newURL = "/AllGroups";
+  document.location.href = newURL;
 }
 
+
 const CreateGroup = () => (
+  
+  useEffect(() => {
+    document.getElementById('box').style.display = 'none';
+  }, []),
+
   <div className="w3-container" style={{ marginLeft: "0", paddingLeft: "0" }}>
     {sidebar}
     <div className="w3-main" style={{ marginLeft: "250px" }}>
+
+    <div id="box" className="loading">
+  <span>Loading...
+    <img src="https://i.gifer.com/ZZ5H.gif" alt="loading" />  
+  </span>
+  
+</div>
       <h1>Create Group</h1>
       <div
           id="createGroupForm1"
@@ -90,6 +107,7 @@ const CreateGroup = () => (
     </div>
     <br />
   </div>
+
 );
 
 export default CreateGroup;
