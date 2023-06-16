@@ -32,7 +32,7 @@ const MessageGroupAdmin = () => (
   <div className="w3-container" style={{ marginLeft: "0", paddingLeft: "0" }}>
     {sidebar}
     <div className="w3-main" style={{ marginLeft: "250px" }}>
-      <h1>Send a Message to {groupName} Group Administrator</h1>
+      <h1>Send a Message to {groupName} Administrator</h1>
       <div
         id="sendMsgForm1"
         className="w3-container w3-card-4 w3-light-grey w3-text-black w3-margin"

@@ -19,7 +19,7 @@
 - [ ] Update Group Name - use OZ relayer
 - [x] Send File - disable button on click
 - [x] Send Message - disable button on click
-- [ ] Add footer to Sidebar
+- [x] Add footer to Sidebar
 - [ ] When creating a group, instruct on XMTP use
 - [ ] zkMessages Page title and icon in Sidebar
 - [ ] Group Invite Links

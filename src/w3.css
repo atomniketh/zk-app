@@ -774,6 +774,11 @@ a {
   .w3-main {
     margin-left: 0 !important;
     margin-right: 0 !important;
+    flex: 1;
+    padding-bottom: 60px;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh
   }
   .w3-auto {
     max-width: 100%;
@@ -1109,6 +1114,7 @@ a {
 }
 .w3-right-align {
   text-align: right !important;
+  padding-right: 15px;
 }
 .w3-justify {
   text-align: justify !important;
@@ -1699,3 +1705,13 @@ a {
     transform: translateX(-50px);
   }
 } */
+
+.footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+  background-color: #f5f5f5;
+  padding: 0px;
+}
