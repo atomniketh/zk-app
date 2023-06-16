@@ -21,12 +21,12 @@
 - [x] Send Message - disable button on click
 - [x] Add footer to Sidebar
 - [ ] When creating a group, instruct on XMTP use
-- [ ] zkMessages Page title and icon in Sidebar
+- [x] zkMessages Page title and icon in Sidebar
 - [ ] Group Invite Links
 - [x] Modals for displaying until page loads (AllGroups.jsx) if needed
 - [x] Modals for displaying until Transactions complete on all pages
 - [ ] Only allow Admin to see "Administration"
-
+whsprz
 ## Later
 
 - [ ] Add Remove Member from Group functionality (should users be able to remove selves?)
