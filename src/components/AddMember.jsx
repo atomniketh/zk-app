@@ -9,26 +9,26 @@ import { SemaphoreEthers } from "@semaphore-protocol/data";
 const semaphoreEthers = new SemaphoreEthers(process.env.REACT_APP_NETWORK);
 const semaphoreContractAddress = process.env.REACT_APP_SEMAPHORE;
 
-async function checkEditor() {
-  // check if user is the group editor
-  const queryParams = new URLSearchParams(window.location.search);
-  const _entityID = queryParams.get("entityID");
-  const _entityEditor = queryParams.get("entityEditor");
+// async function checkEditor() {
+//   // check if user is the group editor
+//   const queryParams = new URLSearchParams(window.location.search);
+//   const _entityID = queryParams.get("entityID");
+//   const _entityEditor = queryParams.get("entityEditor");
 
-  const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
-  await provider.send("eth_requestAccounts", []);
-  const signer = provider.getSigner();
-  let isEditor = false;
-  if ((await signer.getAddress()) === _entityEditor) {
-    isEditor = true;
-    console.log(`You are the editor of the group: ${_entityID}`);
-  } else {
-    isEditor = false;
-    console.log(`You are not the editor of the group: ${_entityID}`);
-    alert(`You are not the editor of the group: ${_entityID}`);
-  }
-  console.log(`Are you the editor of the group: ${isEditor}`);
-}
+//   const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+//   await provider.send("eth_requestAccounts", []);
+//   const signer = provider.getSigner();
+//   let isEditor = false;
+//   if ((await signer.getAddress()) === _entityEditor) {
+//     isEditor = true;
+//     console.log(`You are the editor of the group: ${_entityID}`);
+//   } else {
+//     isEditor = false;
+//     console.log(`You are not the editor of the group: ${_entityID}`);
+//     alert(`You are not the editor of the group: ${_entityID}`);
+//   }
+//   console.log(`Are you the editor of the group: ${isEditor}`);
+// }
 
 async function addMemberToGroup() {
   const _memberCommitment = document.getElementById("memberCommitment").value;
@@ -99,7 +99,7 @@ const addMember = () => {
         />
         <div className="w3-rest"></div>
         <p></p>
-        <p>
+        {/* <p>
           <button
             type="button"
             onClick={checkEditor}
@@ -107,7 +107,7 @@ const addMember = () => {
           >
             Click here to Check if the editor is you.
           </button>
-        </p>
+        </p> */}
         <p>
           <button
             type="button"
