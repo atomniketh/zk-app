@@ -13,7 +13,7 @@ export const sidebar = (
           className="w3-bar-item w3-button w3-border-bottom w3-large"
           href="AllGroups"
         ><nobr>
-          <i className="w3-xlarge fa fa-duotone fa-comments"></i> 
+          <i className="w3-large fa fa-comments"></i> 
                     &nbsp;<b>zkCommunities</b>
                     </nobr>
         </a>
