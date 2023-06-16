@@ -9,6 +9,8 @@ import SemaphoreContractABI from "../abi/Semaphore.json";
 const semaphoreContractAddress = process.env.REACT_APP_SEMAPHORE;
 
 async function UpdateEditor() {
+  document.getElementById("box").style.display = "block";
+  document.getElementById("thisButton").disabled = true;
   const queryParams = new URLSearchParams(window.location.search);
   const _entityID = queryParams.get("entityID");
   const _newEditor = document.getElementById("newEditorAddress").value;
@@ -26,6 +28,9 @@ async function UpdateEditor() {
   const receipt = await tx.wait();
   console.log(`Transaction confirmed in block ${receipt.blockNumber}`);
   console.log(`Gas used: ${receipt.gasUsed.toString()}`);
+  document.getElementById("box").style.display = "none";
+  const newURL = "/AllGroups";
+  document.location.href = newURL;
 }
 
 function EditorComponent() {
@@ -40,7 +45,7 @@ function EditorComponent() {
       const currentAdmin = await semaphoreSubgraph.getGroup(entityCurrentID, {
         admin: true,
       });
-      console.log(`Current admin: ${currentAdmin.admin}`);
+      // console.log(`Current admin: ${currentAdmin.admin}`);
       setCurrentAdmin(currentAdmin.admin);
     }
     fetchEditor();
@@ -51,6 +56,12 @@ function EditorComponent() {
       {sidebar}
 
       <div className="w3-main" style={{ marginLeft: "250px" }}>
+      <div id="box" className="loading" style={{ display: "none" }}>
+          <span>
+            Loading...
+            <img src="https://i.gifer.com/ZZ5H.gif" alt="loading" />
+          </span>
+        </div>
         <h1>Update Editor</h1>
         <br />
         <div
@@ -77,6 +88,7 @@ function EditorComponent() {
         <p>
           <button
             type="button"
+            id="thisButton"
             onClick={UpdateEditor}
             className="w3-button w3-block w3-section w3-black w3-ripple w3-padding"
           >

@@ -5,18 +5,20 @@
 - [x] Send messages via OZ Relayer *
 - [x] Rewrite MyGroups ala GroupMessages for faster loading.
 - [x] Rewrite AllGroups ala GroupMessages for faster loading.
-- [ ] CreateIdentity - pass xmtp the group name
-- [ ] CreateIdentity - Redirect after "Request Access"
+- [x] CreateIdentity - pass xmtp the group name
+- [x] CreateIdentity - Redirect after "Request Access"
 - [x] Add Member - Clean Up buttons
-- [ ] Add Member - loading graphic when adding user
-- [ ] Add Member - Redirect to GroupMessages after adding member
+- [x] Add Member - loading graphic when adding user
+- [x] Add Member - Redirect to GroupMessages after adding member
 - [ ] Add Member - use OZ relayer
-- [ ] Update Editor - loading graphic when adding user
-- [ ] Update Editor - Redirect after changing editor to GroupList
+- [x] Update Editor - loading graphic when adding user
+- [x] Update Editor - Redirect after changing editor to GroupList
 - [ ] Update Editor - use OZ relayer
-- [ ] Update Group Name - loading graphic when adding user
-- [ ] Update Group Name - Redirect after changing editor to GroupList
+- [x] Update Group Name - loading graphic when adding user
+- [x] Update Group Name - Redirect after changing editor to GroupList
 - [ ] Update Group Name - use OZ relayer
+- [x] Send File - disable button on click
+- [x] Send Message - disable button on click
 - [ ] Add footer to Sidebar
 - [ ] When creating a group, instruct on XMTP use
 - [ ] zkMessages Page title and icon in Sidebar

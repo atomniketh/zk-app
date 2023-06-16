@@ -2,7 +2,7 @@
 import React from "react";
 // import { Link } from "react-router-dom";
 import { ethers } from "ethers";
-import { sidebar } from './Sidebar';
+import { sidebar } from "./Sidebar";
 import SemaphoreContractABI from "../abi/Semaphore.json";
 import { SemaphoreEthers } from "@semaphore-protocol/data";
 
@@ -31,9 +31,12 @@ const semaphoreContractAddress = process.env.REACT_APP_SEMAPHORE;
 // }
 
 async function addMemberToGroup() {
+  document.getElementById("box").style.display = "block";
+  document.getElementById("thisButton").disabled = true;
   const _memberCommitment = document.getElementById("memberCommitment").value;
   const queryParams = new URLSearchParams(window.location.search);
   const _entityID = queryParams.get("entityID");
+  const groupName = queryParams.get("entityName");
   const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
   await provider.send("eth_requestAccounts", []);
   const signer = provider.getSigner();
@@ -43,7 +46,7 @@ async function addMemberToGroup() {
     signer
   );
 
-  const allMembers = await semaphoreEthers.getGroupMembers(_entityID)
+  const allMembers = await semaphoreEthers.getGroupMembers(_entityID);
   //console.log("Members: ", allMembers, " in ", _entityID);
   let memberExists = false;
   for (let key in allMembers) {
@@ -54,16 +57,20 @@ async function addMemberToGroup() {
   }
 
   if (memberExists) {
-    console.log("No need to add. This member already exists.")
+    console.log("No need to add. This member already exists.");
   } else {
-    console.log(`Adding membercommitment ${_memberCommitment} to ${_entityID}`);
+    // console.log(`Adding membercommitment ${_memberCommitment} to ${_entityID}`);
     const tx = await contract.addMember(_entityID, _memberCommitment);
-    console.log("Success!");
+    // console.log("Success!");
     console.log(`Transaction hash: https://goerli.etherscan.io/tx/${tx.hash}`);
     document.getElementById("memberCommitment").value = "";
     const receipt = await tx.wait();
     console.log(`Transaction confirmed in block ${receipt.blockNumber}`);
     console.log(`Gas used: ${receipt.gasUsed.toString()}`);
+    document.getElementById("box").style.display = "none";
+    const newURL =
+      "/GroupMessages?entityID=" + _entityID + "&entityName=" + groupName;
+    document.location.href = newURL;
   }
 }
 
@@ -71,35 +78,39 @@ const addMember = () => {
   const queryParams = new URLSearchParams(window.location.search);
   const groupName = queryParams.get("entityName");
   return (
-        <div className="w3-container"
-                    style={{ marginLeft: "0", paddingLeft: "0" }}
-                    >
-          { sidebar }            
+    <div className="w3-container" style={{ marginLeft: "0", paddingLeft: "0" }}>
+      {sidebar}
 
-          <div className="w3-main" style={{ marginLeft: "250px" }}>
-      <h1>Add Member to {groupName} Group</h1>
-      <br />
+      <div className="w3-main" style={{ marginLeft: "250px" }}>
+        <div id="box" className="loading" style={{ display: "none" }}>
+          <span>
+            Loading...
+            <img src="https://i.gifer.com/ZZ5H.gif" alt="loading" />
+          </span>
+        </div>
+        <h1>Add Member to {groupName} Group</h1>
+        <br />
 
-      <div
-        id="addMemberForm"
-        className="w3-container w3-card-4 w3-light-grey w3-text-black w3-margin"
-      >
-      <h2>Add Member: </h2>
-        {/* <input type="hidden" id="entityID" name="entityID" value={queryParams.get("entityID")} /> */}
-        <p></p>
-        <label htmlFor="memberCommitment">Commitment:</label> &nbsp;
-        {/* <div className="w3-col" style={{ width: `${50}px` }}>
+        <div
+          id="addMemberForm"
+          className="w3-container w3-card-4 w3-light-grey w3-text-black w3-margin"
+        >
+          <h2>Add Member: </h2>
+          {/* <input type="hidden" id="entityID" name="entityID" value={queryParams.get("entityID")} /> */}
+          <p></p>
+          <label htmlFor="memberCommitment">Commitment:</label> &nbsp;
+          {/* <div className="w3-col" style={{ width: `${50}px` }}>
           <i className="w3-xxlarge fa fa-pencil"></i>
         </div> */}
-        <input
-          type="text"
-          id="memberCommitment"
-          name="memberCommitment"
-          size="90"
-        />
-        <div className="w3-rest"></div>
-        <p></p>
-        {/* <p>
+          <input
+            type="text"
+            id="memberCommitment"
+            name="memberCommitment"
+            size="90"
+          />
+          <div className="w3-rest"></div>
+          <p></p>
+          {/* <p>
           <button
             type="button"
             onClick={checkEditor}
@@ -108,17 +119,18 @@ const addMember = () => {
             Click here to Check if the editor is you.
           </button>
         </p> */}
-        <p>
-          <button
-            type="button"
-            onClick={addMemberToGroup}
-            className="w3-button w3-block w3-section w3-black w3-ripple w3-padding"
-          >
-            Click here to Add User to Group.
-          </button>
-        </p>
+          <p>
+            <button
+              type="button"
+              id="thisButton"
+              onClick={addMemberToGroup}
+              className="w3-button w3-block w3-section w3-black w3-ripple w3-padding"
+            >
+              Click here to Add User to Group.
+            </button>
+          </p>
+        </div>
       </div>
-    </div>
     </div>
   );
 };

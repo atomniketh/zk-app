@@ -31,25 +31,26 @@ function CreateIdentity() {
   if (localStorage.getItem(groupToJoin) === null) {
     console.log(`Identity is null`);
   } else {
-    console.log(
-      `Identity is stored as: ${localStorage.getItem(groupToJoin)}`
-    );
+    // console.log(
+    //   `Identity is stored as: ${localStorage.getItem(groupToJoin)}`
+    // );
   }
 
   // const groupToJoinValue = localStorage.getItem(groupToJoin);
   const signMessage = async () => {
+    document.getElementById("thisButton").disabled = true;
     const messageToSign = "zkCommunities Group " + _entityID;
     const signedData = await signer.signMessage(messageToSign);
     setSignedMessage(signedData);
     localStorage.setItem("signedData" + _entityID, signedData);
-    console.log(`Signed Data: ${signedData}`);
-    console.log(`signedMessage is now: ${signedMessage}`);
+    // console.log(`Signed Data: ${signedData}`);
+    // console.log(`signedMessage is now: ${signedMessage}`);
     const { commitment } = new Identity(signedData);
     const identityInfo = commitment;
     localStorage.setItem(groupToJoin, identityInfo.toString());
-    console.log(
-      `Identity now in local storage is: ${localStorage.getItem(groupToJoin)}`
-    );
+    // console.log(
+    //   `Identity now in local storage is: ${localStorage.getItem(groupToJoin)}`
+    // );
 
     const wallet = Wallet.createRandom();
     const xmtp = await Client.create(wallet, { env: "production" });
@@ -61,14 +62,17 @@ function CreateIdentity() {
     // const messages = await conversation.messages();
     // *************************************************************
 
-    await conversation.send(`${identityInfo} wants to join ${_entityID}`);
+    await conversation.send(`${identityInfo} wants to join ${_entityName}`);
 
     // ************* This can be removed after testing *************
     // Listen for new messages in the conversation
-    for await (const message of await conversation.streamMessages()) {
-      console.log(`[${message.senderAddress}]: ${message.content}`);
-    }
+    // for await (const message of await conversation.streamMessages()) {
+    //   console.log(`[${message.senderAddress}]: ${message.content}`);
+    // }
     // *************************************************************
+    console.log(`Message sent to ${_entityCurrentEditor}`);
+    const newURL = "/AllGroups";
+    document.location.href = newURL;
   };
 
   return (
@@ -92,6 +96,7 @@ function CreateIdentity() {
             <div className="w3-rest">
               <i className="w3-xxlarge fa fa-pencil"></i>&nbsp;&nbsp;
               <button
+                id="thisButton"
                 className="w3-button w3-block w3-section w3-black w3-ripple w3-padding"
                 onClick={signMessage}
               >
@@ -102,7 +107,7 @@ function CreateIdentity() {
           </div>
         ) : (
           <div className="w3-center">
-            <button className="w3-button w3-block w3-section w3-black w3-ripple w3-padding">
+            <button id="thisButton" className="w3-button w3-block w3-section w3-black w3-ripple w3-padding" onClick={signMessage}>
               Request Access
             </button>
           </div>

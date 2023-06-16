@@ -8,6 +8,8 @@ import SemaphoreCommunitiesABI from "../abi/SemaphoreCommunities.json";
 const semaphoreCommunitiesAddress = process.env.REACT_APP_WBCONTRACT;
 
 async function updateGroupName() {
+  document.getElementById("box").style.display = "block";
+  document.getElementById("thisButton").disabled = true;
   const queryParams = new URLSearchParams(window.location.search);
   const _index = queryParams.get("index");
   const _entityID = queryParams.get("entityID");
@@ -36,6 +38,9 @@ async function updateGroupName() {
   // const receipt = await tx.wait();
   // console.log(`Transaction confirmed in block ${receipt.blockNumber}`);
   //   console.log(`Gas used: ${receipt.gasUsed.toString()}`);
+  document.getElementById("box").style.display = "none";
+  const newURL = "/AllGroups";
+  document.location.href = newURL;
 }
 
 const UpdateGroupName = () => {
@@ -47,6 +52,12 @@ const UpdateGroupName = () => {
       {sidebar}
 
       <div className="w3-main" style={{ marginLeft: "250px" }}>
+        <div id="box" className="loading" style={{ display: "none" }}>
+          <span>
+            Loading...
+            <img src="https://i.gifer.com/ZZ5H.gif" alt="loading" />
+          </span>
+        </div>
         <h1>Update Group Name</h1>
 
         <div
@@ -57,12 +68,11 @@ const UpdateGroupName = () => {
             <i className="w3-xxlarge fa fa-pencil"></i>
           </div> */}
           <div className="w3-rest">
-          <h2>
-          
-          <div id="groupName" name="groupName">
-          Current Name:{" "}{entityNameCurrent}
-          </div>
-        </h2>
+            <h2>
+              <div id="groupName" name="groupName">
+                Current Name: {entityNameCurrent}
+              </div>
+            </h2>
             <p></p>
             <label htmlFor="newGroupName">New Group Name:</label> &nbsp;
             <input
@@ -76,6 +86,7 @@ const UpdateGroupName = () => {
           <p>
             <button
               type="button"
+              id="thisButton"
               onClick={updateGroupName}
               className="w3-button w3-block w3-section w3-black w3-ripple w3-padding"
             >

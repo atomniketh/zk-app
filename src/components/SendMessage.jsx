@@ -19,6 +19,7 @@ const semaphoreContractAddress = process.env.REACT_APP_SEMAPHORE;
 
 const submitMessage = async () => {
   document.getElementById("box").style.display = "block";
+  document.getElementById("thisButton").disabled = true;
   const queryParams = new URLSearchParams(window.location.search);
   const _entityID = parseInt(queryParams.get("entityID"), 10);
   const _entityIDStr = queryParams.get("entityID");
@@ -62,7 +63,7 @@ const submitMessage = async () => {
   // **************************************************************
   // **************** Convert CID to Big Number ***************
   // requires CID from ipfs-http-client, multihash and ethers
-  console.log("Origin CID: ", CID.parse(theCID).toString());
+  // console.log("Origin CID: ", CID.parse(theCID).toString());
   const tmpArray = multihash.fromB58String(CID.parse(theCID).toString());
   const b58decoded = multihash.decode(tmpArray).digest;
   const tmpHexStr = utils.hexlify(b58decoded);
@@ -285,7 +286,7 @@ const sendMessage = () => {
       {sidebar}
 
       <div className="w3-main" style={{ marginLeft: "250px" }}>
-        <div id="box" className="loading" style={{display: "none"}}>
+        <div id="box" className="loading" style={{ display: "none" }}>
           <span>
             Loading...
             <img src="https://i.gifer.com/ZZ5H.gif" alt="loading" />
@@ -318,6 +319,7 @@ const sendMessage = () => {
           </div>
           <button
             onClick={submitMessage}
+            id="thisButton"
             className="w3-button w3-block w3-section w3-black w3-ripple w3-padding"
           >
             Submit Message

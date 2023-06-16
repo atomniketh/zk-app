@@ -17,9 +17,9 @@ const semaphoreContractAddress = process.env.REACT_APP_SEMAPHORE;
 // const provider = new ethers.providers.Web3Provider(window.ethereum);
 // const signer = provider.getSigner();
 
-
 const submitFile = async (event) => {
   document.getElementById("box").style.display = "block";
+  document.getElementById("thisButton").disabled = true;
   event.preventDefault();
   var input = document.getElementById("leakFile");
   // console.log("File Name: " + input.files.length);
@@ -47,20 +47,20 @@ const submitFile = async (event) => {
   });
   // const version = await client.version();
   // console.log("IPFS Node Version:", version.version);
-  console.log("Input Name: " + input.files.item(0).name);
+  // console.log("Input Name: " + input.files.item(0).name);
 
   const fileDetails = {
-      path: input.files.item(0).name,
-      content: input.files.item(0),
-      type: "application/file"
-    };
+    path: input.files.item(0).name,
+    content: input.files.item(0),
+    type: "application/file",
+  };
 
-    const options = {
-      wrapWithDirectory: false,
-      progress: (prog) => console.log(`received: ${prog}`),
-    };
-    const fileAdd = await client.add(fileDetails, options);
-    const theCID = fileAdd.cid.toString();
+  const options = {
+    wrapWithDirectory: false,
+    // progress: (prog) => console.log(`received: ${prog}`),
+  };
+  const fileAdd = await client.add(fileDetails, options);
+  const theCID = fileAdd.cid.toString();
   //    await client.pin.add(file.cid).then((res) => {});
 
   // **************************************************************
@@ -109,7 +109,6 @@ const submitFile = async (event) => {
   // console.log(`Verified Proof: ${vProof}`);
 
   if (vProof) {
-
     // ********** via Relayer **********
     var response = "";
     const strBigIntRoot = thisIdsGroupMerkleProof.root.toString();
@@ -142,7 +141,6 @@ const submitFile = async (event) => {
       console.log("Some error occurred, please try again!");
     }
     // ********** via Relayer **********
-
   } else {
     console.log("Proof was not verified. Cannot send message.");
   }
@@ -157,7 +155,7 @@ const sendFile = () => {
       {sidebar}
 
       <div className="w3-main" style={{ marginLeft: "250px" }}>
-      <div id="box" className="loading" style={{display: "none"}}>
+        <div id="box" className="loading" style={{ display: "none" }}>
           <span>
             Loading...
             <img src="https://i.gifer.com/ZZ5H.gif" alt="loading" />
@@ -192,11 +190,12 @@ const sendFile = () => {
                 accept=".jpg, .png, .gif, .heic, .jpeg, .zip, .mp3, .mov, .avi, .wav, .wma, .wmv, .csv, .txt, .doc, .docx, .pdf, .xls, .xlsx, .ppt, .pptx"
                 id="leakFile"
                 name="leakFile"
-                />
+              />
             </div>{" "}
           </div>
           <button
             onClick={submitFile}
+            id="thisButton"
             className="w3-button w3-block w3-section w3-black w3-ripple w3-padding"
           >
             Send File
