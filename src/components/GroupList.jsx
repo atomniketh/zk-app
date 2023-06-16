@@ -187,7 +187,7 @@ function GroupList() {
                               >
                                 Add Member
                               </a>{" "}
-                              | Remove Member{" "}
+                              {/* | Remove Member{" "} */}
                             </td>
                           ) : (
                             <>

@@ -26,7 +26,8 @@
 - [x] Modals for displaying until page loads (AllGroups.jsx) if needed
 - [x] Modals for displaying until Transactions complete on all pages
 - [ ] Only allow Admin to see "Administration"
-whsprz
+- [ ] Create a default home page
+
 ## Later
 
 - [ ] Add Remove Member from Group functionality (should users be able to remove selves?)

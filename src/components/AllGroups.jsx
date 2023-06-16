@@ -165,11 +165,11 @@ function AllGroups() {
                                                         >
                                                             Add Member
                                                         </a>{" "}
-                                                        | Remove Member{" "} |{" "}
+                                                        {/* | Remove Member{" "} |{" "}
 
                                                          <a href='nothing' onClick={() => navigator.clipboard.writeText(`/CreateIdentity?entityID=${item.idEntity.toString()}&entityName=${item.entityName.toString()}&entityEditor=${item.entityEditor.toString()}`)}>
                                                              Invite Link
-                                                         </a>{" "}
+                                                         </a>{" "} */}
                                                     </td>
                                                 ) : (
                                                     <><td style={{ verticalAlign: 'middle' }}>
