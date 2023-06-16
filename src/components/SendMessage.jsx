@@ -18,6 +18,7 @@ const semaphoreContractAddress = process.env.REACT_APP_SEMAPHORE;
 // const signer = provider.getSigner();
 
 const submitMessage = async () => {
+  document.getElementById("box").style.display = "block";
   const queryParams = new URLSearchParams(window.location.search);
   const _entityID = parseInt(queryParams.get("entityID"), 10);
   const _entityIDStr = queryParams.get("entityID");
@@ -203,7 +204,7 @@ const submitMessage = async () => {
 
     var response = "";
     const strBigIntRoot = thisIdsGroupMerkleProof.root.toString();
-    console.log("strBigIntRoot: ", typeof strBigIntRoot);
+    // console.log("strBigIntRoot: ", typeof strBigIntRoot);
     // eslint-disable-next-line no-unused-expressions
     response = await fetch(process.env.REACT_APP_OZ_WEBHOOK, {
       method: "POST",
@@ -226,6 +227,7 @@ const submitMessage = async () => {
     console.log(`Response Status: ${response.status}`);
 
     if (response.status === 200) {
+      document.getElementById("box").style.display = "none";
       const newURL =
         "/GroupMessages?entityID=" + _entityID + "&entityName=" + groupName;
       document.location.href = newURL;
@@ -283,6 +285,13 @@ const sendMessage = () => {
       {sidebar}
 
       <div className="w3-main" style={{ marginLeft: "250px" }}>
+        <div id="box" className="loading" style={{display: "none"}}>
+          <span>
+            Loading...
+            <img src="https://i.gifer.com/ZZ5H.gif" alt="loading" />
+          </span>
+        </div>
+
         <h1>Send Message</h1>
 
         {/* <h1>Send Message to {groupName} Group: </h1> */}

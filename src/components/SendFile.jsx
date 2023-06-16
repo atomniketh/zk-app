@@ -19,6 +19,7 @@ const semaphoreContractAddress = process.env.REACT_APP_SEMAPHORE;
 
 
 const submitFile = async (event) => {
+  document.getElementById("box").style.display = "block";
   event.preventDefault();
   var input = document.getElementById("leakFile");
   // console.log("File Name: " + input.files.length);
@@ -68,7 +69,7 @@ const submitFile = async (event) => {
 
   // **************************************************************
   // **************** Convert CID to Big Number ***************
-  console.log("Origin CID: ", CID.parse(theCID).toString());
+  // console.log("Origin CID: ", CID.parse(theCID).toString());
   const tmpArray = multihash.fromB58String(CID.parse(theCID).toString());
   const b58decoded = multihash.decode(tmpArray).digest;
   const tmpHexStr = utils.hexlify(b58decoded);
@@ -78,7 +79,7 @@ const submitFile = async (event) => {
 
   // eslint-disable-next-line no-undef
   const group = new Group(parseInt(_entityID, 10), 20);
-  console.log("Formatted Signal: " + tmpSignal);
+  // console.log("Formatted Signal: " + tmpSignal);
   const identity = new Identity(localStorage.getItem("signedData" + _entityID));
 
   const characters =
@@ -133,6 +134,7 @@ const submitFile = async (event) => {
     });
     // console.log(`Response Status: ${response.status}`);
     if (response.status === 200) {
+      document.getElementById("box").style.display = "none";
       const newURL =
         "/GroupMessages?entityID=" + _entityID + "&entityName=" + groupName;
       document.location.href = newURL;
@@ -155,6 +157,12 @@ const sendFile = () => {
       {sidebar}
 
       <div className="w3-main" style={{ marginLeft: "250px" }}>
+      <div id="box" className="loading" style={{display: "none"}}>
+          <span>
+            Loading...
+            <img src="https://i.gifer.com/ZZ5H.gif" alt="loading" />
+          </span>
+        </div>
         <h1>Send File</h1>
 
         {/* <h1>Send File to {groupName} Group: </h1> */}
