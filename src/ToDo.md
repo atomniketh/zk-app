@@ -5,7 +5,8 @@
 - [x] Send messages via OZ Relayer *
 - [x] Rewrite MyGroups ala GroupMessages for faster loading.
 - [x] Rewrite AllGroups ala GroupMessages for faster loading.
-- [ ] Redirect after "Request Access" on CreateIdentity
+- [ ] CreateIdentity - pass xmtp the group name
+- [ ] CreateIdentity - Redirect after "Request Access"
 - [x] Add Member - Clean Up buttons
 - [ ] Add Member - loading graphic when adding user
 - [ ] Add Member - Redirect to GroupMessages after adding member
