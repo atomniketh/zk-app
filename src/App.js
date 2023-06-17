@@ -7,7 +7,7 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-// import Messages from "./components/Messages";
+import Home from "./components/Home";
 import AllGroups from "./components/AllGroups";
 import CreateGroup from "./components/CreateGroup";
 import UpdateGroupName from "./components/UpdateGroupName";
@@ -33,8 +33,8 @@ function App() {
           with exact path "/", in component props 
           we passes the imported component */}
           {/* <Route path="/" element={<Home />} /> */}
-          <Route index element={<GroupList />} />
-          <Route path="*" element={<AllGroups />} />
+          <Route index element={<Home />} />
+          <Route path="*" element={<Home />} />
           {/* <Route path="/Messages" element={<Messages />} /> */}
           <Route path="/AllGroups" element={<AllGroups />} />
           <Route path="/CreateGroup" element={<CreateGroup />} />
