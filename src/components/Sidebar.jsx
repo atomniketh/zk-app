@@ -11,7 +11,7 @@ export const sidebar = (
       <div id="nav01" className="w3-bar-block">
         <a
           className="w3-bar-item w3-button w3-border-bottom w3-large"
-          href="AllGroups"
+          href="Home"
         ><nobr>
           <i className="w3-large fa fa-comments"></i> 
                     &nbsp;<b>zkCommunities</b>
@@ -31,6 +31,7 @@ export const sidebar = (
         </a>
 
         <div id="theFooter" className="footer">
+          <a href="about.jsx">About</a>{" "}|{" "}
           <a href="mailto:atomnik.eth@icloud.com?subject=zkComms%20Feedback">
             Send Feedback
           </a>
