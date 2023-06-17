@@ -26,7 +26,8 @@
 - [x] Modals for displaying until page loads (AllGroups.jsx) if needed
 - [x] Modals for displaying until Transactions complete on all pages
 - [ ] Only allow Admin to see "Administration"
-- [ ] Create a default home page
+- [x] Create a default home page
+- [ ] Create an About page
 
 ## Later
 
