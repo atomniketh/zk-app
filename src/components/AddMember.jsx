@@ -59,6 +59,9 @@ async function addMemberToGroup() {
   if (memberExists) {
     console.log("No need to add. This member already exists.");
     document.getElementById("box").style.display = "none";
+    const newURL =
+    "/GroupMessages?entityID=" + _entityID + "&entityName=" + groupName;
+  document.location.href = newURL;
   } else {
     // console.log(`Adding membercommitment ${_memberCommitment} to ${_entityID}`);
     const tx = await contract.addMember(_entityID, _memberCommitment);
