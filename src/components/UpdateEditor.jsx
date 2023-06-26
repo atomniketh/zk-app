@@ -38,7 +38,9 @@ function EditorComponent() {
 
   useEffect(() => {
     async function fetchEditor() {
-      const semaphoreSubgraph = new SemaphoreSubgraph(process.env.REACT_APP_NETWORK);
+      const semaphoreSubgraph = new SemaphoreSubgraph(
+        process.env.REACT_APP_NETWORK
+      );
       const queryParams = new URLSearchParams(window.location.search);
       const entityCurrentID = queryParams.get("entityID");
       // eslint-disable-next-line no-const-assign, @typescript-eslint/no-shadow
@@ -56,7 +58,7 @@ function EditorComponent() {
       {sidebar}
 
       <div className="w3-main" style={{ marginLeft: "250px" }}>
-      <div id="box" className="loading" style={{ display: "none" }}>
+        <div id="box" className="loading" style={{ display: "none" }}>
           <span>
             Loading...
             <img src="https://i.gifer.com/ZZ5H.gif" alt="loading" />
@@ -68,7 +70,7 @@ function EditorComponent() {
           id="updateEditorForm"
           className="w3-container w3-card-4 w3-light-grey w3-text-black w3-margin"
         >
-        <h2 className="w3-center">Current Editor Address: {currentAdmin} </h2>
+          <h2 className="w3-center">Current Editor Address: {currentAdmin} </h2>
 
           {/* <div className="w3-col" style={{ width: `${50}px` }}>
             <i className="w3-xxlarge fa fa-pencil"></i>

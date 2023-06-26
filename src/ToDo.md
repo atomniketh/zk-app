@@ -28,6 +28,7 @@
 - [ ] Only allow Admin to see "Administration"
 - [x] Create a default home page
 - [ ] Create an About page
+- [x] Add Goerli network check to Sidebar
 
 ## Later
 

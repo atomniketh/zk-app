@@ -1,5 +1,29 @@
 import React from "react";
 import "font-awesome/css/font-awesome.min.css";
+import { ethers } from "ethers";
+
+async function checkNetwork() {
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const currentChainId = await provider.getNetwork().then(network => network.chainId);
+  // console.log(currentChainId);
+  // eslint-disable-next-line eqeqeq
+  if (currentChainId == "5") {
+    // console.log("Already connected to the Goerli network.");
+  } else {
+    try {
+      const result = await window.ethereum.request({
+        method: 'wallet_switchEthereumChain',
+        params: [{chainId: '0x5'}]
+      });
+      console.log("Switched to Goerli.", result);
+    } catch (err) {
+      console.error("Could not switch to Goerli.", err);
+    }
+  }
+  
+}
+checkNetwork();
+
 
 export const sidebar = (
   <>
@@ -14,7 +38,7 @@ export const sidebar = (
           href="Home"
         ><nobr>
           <i className="w3-large fa fa-comments"></i> 
-                    &nbsp;<b>zkCommunities</b>
+                    &nbsp;<b>zkComms</b>
                     </nobr>
         </a>
         <a className="w3-bar-item w3-button" href="AllGroups">
