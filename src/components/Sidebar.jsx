@@ -51,12 +51,11 @@ export const sidebar = (
         <a className="w3-bar-item w3-button" href="CreateGroup">
           Create Group
         </a>
-        <a className="w3-bar-item w3-button" href="Administration">
-          Administration
+        <a className="w3-bar-item w3-button" href="About">
+          About
         </a>
 
         <div id="theFooter" className="footer">
-          <a href="about.jsx">About</a>{" "}|{" "}
           <a href="mailto:atomnik.eth@icloud.com?subject=zkComms%20Feedback">
             Send Feedback
           </a>

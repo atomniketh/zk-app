@@ -9,6 +9,7 @@ import {
   Navigate,
 } from "react-router-dom";
 import Home from "./components/Home";
+import About from "./components/About";
 import AllGroups from "./components/AllGroups";
 import CreateGroup from "./components/CreateGroup";
 import UpdateGroupName from "./components/UpdateGroupName";
@@ -37,6 +38,7 @@ function App() {
           {/* <Route path="/" element={<Home />} /> */}
           <Route index element={<Home />} />
           <Route path="*" element={<Home />} />
+          <Route path="/About" element={<About />} />
           {/* <Route path="/Messages" element={<Messages />} /> */}
           <Route path="/AllGroups" element={<AllGroups />} />
           <Route path="/CreateGroup" element={<CreateGroup />} />
