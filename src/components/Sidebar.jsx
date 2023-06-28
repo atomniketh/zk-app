@@ -38,7 +38,8 @@ export const sidebar = (
           href="Home"
         ><nobr>
           <i className="w3-large fa fa-comments"></i> 
-                    &nbsp;<b>zkComms</b>
+                    &nbsp;
+                    <b>StealthComms</b>
                     </nobr>
         </a>
         <a className="w3-bar-item w3-button" href="AllGroups">
