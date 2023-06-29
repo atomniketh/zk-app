@@ -1715,3 +1715,35 @@ a {
   background-color: #f5f5f5;
   padding: 0px;
 }
+
+.link-button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  text-decoration: underline;
+  display: inline;
+  margin: 0;
+  padding: 0;
+}
+
+.linkCopied {
+  font-family: "Arial Black", "Arial Bold", Gadget, sans-serif;
+  text-transform: uppercase;
+  width: 150px;
+  text-align: center;
+  line-height: 50px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  margin: auto;
+  transform: translateY(-50%);
+  background-color: grey;
+  border-radius: 10px;
+}
+
+.linkCopied span {
+  position: relative;
+  z-index: 999;
+  color: #fff;
+}
