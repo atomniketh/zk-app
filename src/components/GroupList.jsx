@@ -77,6 +77,7 @@ function GroupList() {
       const myGroups = [];
       for (let i = 0; i < allGroupsInfo.length; i++) {
         let groupToJoin = `group${allGroups[i].idEntity.toString()}`;
+        // console.log(localStorage.getItem(groupToJoin));
         const foundGroups = allGroupsInfo.filter((groupInfo) => {
           return groupInfo.allGroupMembers.some((member) =>
             member.includes(localStorage.getItem(groupToJoin))

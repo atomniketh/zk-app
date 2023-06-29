@@ -38,6 +38,7 @@ function CreateIdentity() {
 
   // const groupToJoinValue = localStorage.getItem(groupToJoin);
   const signMessage = async () => {
+    await provider.send("eth_requestAccounts", []);
     document.getElementById("thisButton").disabled = true;
     const messageToSign = "zkCommunities Group " + _entityID;
     const signedData = await signer.signMessage(messageToSign);
@@ -111,6 +112,7 @@ function CreateIdentity() {
               >
                 Request Access
               </button>
+              {/* {localStorage.getItem(groupToJoin)} */}
             </div>
           )}
           <p></p>

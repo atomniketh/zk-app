@@ -11,7 +11,7 @@ const groupIDNum = queryParams.get("entityID");
 const groupName = queryParams.get("entityName");
 
 async function msgGroupAdmin() {
-  const adminAddress = await semaphoreEthers.getGroupAdmin(groupIDNum);
+  const adminAddress = await semaphoreEthers.getGroupAdmin(groupIDNum.toString());
 //   console.log("Admin Address: ", adminAddress);
   const msgtoAdmin = document.getElementById("msgForAdmin").value;
 //   console.log("Message to Admin: ", msgtoAdmin);
