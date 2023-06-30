@@ -56,7 +56,7 @@ export const sidebar = (
         </a>
 
         <div id="theFooter" className="footer">
-          <a href="mailto:atomnik.eth@icloud.com?subject=zkComms%20Feedback">
+          <a href="MessageDev">
             Send Feedback
           </a>
         </div>

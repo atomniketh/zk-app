@@ -28,7 +28,7 @@ async function createGroup() {
   const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
   await provider.send("eth_requestAccounts", []);
   const signer = provider.getSigner();
-  const userAccount = await signer.getAddress();
+
   const contract = new ethers.Contract(
     semaphoreCommunitiesAddress,
     SemaphoreCommunitiesABI.abi,
@@ -57,6 +57,7 @@ async function createGroup() {
 }
 
 const CreateGroup = () => (
+
   useEffect(() => {
     document.getElementById("box").style.display = "none";
     // eslint-disable-next-line no-sequences
@@ -82,7 +83,7 @@ const CreateGroup = () => (
               XMTP
             </a>
             . That is where you will receive anonymous messages from users
-            requesting access to your group. Also, make sure your wallet has some Goerli testETH. You can get some here: <a href="https://fauceth.komputing.org/" target="_blank" rel="noreferrer">Goerli Faucet</a>. Your wallet address is {{userAccount}}
+            requesting access to your group. Also, make sure your wallet has some Goerli testETH. You can get some here: <a href="https://fauceth.komputing.org/" target="_blank" rel="noreferrer">Goerli Faucet</a>.
           </p>
         </div>
 

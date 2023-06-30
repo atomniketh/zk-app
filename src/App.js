@@ -18,6 +18,7 @@ import UpdateVerifierContract from "./components/UpdateVerifierContract";
 import CreateIdentity from "./components/CreateIdentity";
 import AddMember from "./components/AddMember";
 import SendMessage from "./components/SendMessage";
+import MessageDev from "./components/MessageDev";
 import SendFile from "./components/SendFile";
 import MessageAdmin from "./components/MessageAdmin";
 import Administration from "./components/Administration";
@@ -53,6 +54,7 @@ function App() {
           <Route path="/SendMessage" element={<SendMessage />} />
           <Route path="/SendFile" element={<SendFile />} />
           <Route path="/MessageAdmin" element={<MessageAdmin />} />
+          <Route path="/MessageDev" element={<MessageDev />} />
           <Route path="/Administration" element={<Administration />} />
           <Route path="/GroupMessages" element={<GroupMessages />} />
           <Route path="/GroupList" element={<GroupList />} />
