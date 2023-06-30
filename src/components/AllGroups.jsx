@@ -208,11 +208,7 @@ function AllGroups() {
                               }
                             >
                               Copy Invite Link
-                            </button>
-
-                            {/* <a href='javascript:void(0)' onClick={() => navigator.clipboard.writeText(domainURL + `/CreateIdentity?entityID=${item.idEntity.toString()}&entityName=${item.entityName.toString()}&entityEditor=${item.entityEditor.toString()}`)}>
-                                                             Copy Invite Link
-                                                         </a> */}{" "}
+                            </button>{" "}
                           </td>
                         ) : (
                           <>
