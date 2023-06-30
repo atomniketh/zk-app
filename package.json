@@ -42,7 +42,7 @@
   "scripts": {
     "preinstall": "npx npm-force-resolutions",
     "start": "GENERATE_SOURCEMAP=false craco start",
-    "build": "craco build",
+    "build": "craco build && cp build/index.html build/200.html",
     "test": "craco test",
     "eject": "react-scripts eject"
   },
