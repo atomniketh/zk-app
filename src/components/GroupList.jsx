@@ -99,6 +99,9 @@ function GroupList() {
 }, []);
 
   let tmpGroupAdmin = [];
+  const { protocol, hostname, port } = window.location;
+  const domainURL = `${protocol}//${hostname}${port ? ":" + port : ""}`;
+  const [tooltipVisible, setTooltipVisible] = useState(false);
 
   return (
     <>
@@ -111,7 +114,11 @@ function GroupList() {
           <div className="w3-container">
             <h1>My Groups</h1>
             <br />
-            
+            {tooltipVisible && (
+      <div className="linkCopied">
+        Link copied to clipboard
+      </div>
+    )}
             <table className="w3-table-all">
               <tbody>
                 <tr>
@@ -188,7 +195,25 @@ function GroupList() {
                               >
                                 Add Member
                               </a>{" "}
-                              {/* | Remove Member{" "} */}
+                            {/* | Remove Member{" "} |{" "} */}|{" "}
+                            <button
+                              type="button"
+                              className="link-button"
+                             
+                              onClick={() => {
+                                setTooltipVisible(true);
+                                navigator.clipboard.writeText(
+                                  domainURL +
+                                    `/CreateIdentity?entityID=${item.idEntity.toString()}&entityName=${item.entityName.toString()}&entityEditor=${item.entityEditor.toString()}`
+                                );
+                                setTimeout(() => {
+                                    setTooltipVisible(false);
+                                  }, 1500);
+                            } 
+                              }
+                            >
+                              Copy Invite Link
+                            </button>{" "}
                             </td>
                           ) : (
                             <>
