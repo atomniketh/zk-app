@@ -12,11 +12,12 @@ function HomeScreen() {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
+          flexDirection: "column",
           height: "100vh",
         }}
       >
         <h1>Zero Knowledge Messaging</h1>
-        <p></p>
+        <p>This alpha version only works on desktop browsers with <a href="https://metamask.io/download/" target="_blank" rel="noreferrer">MetaMask</a> installed.</p>
       </div>
     </div>
   );
