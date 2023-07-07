@@ -12,7 +12,7 @@ const groupName = queryParams.get("entityName");
 
 async function msgGroupAdmin() {
   const adminAddress = await semaphoreEthers.getGroupAdmin(
-    groupIDNum.toString()
+    groupIDNum
   );
   //   console.log("Admin Address: ", adminAddress);
   const msgtoAdmin = document.getElementById("msgForAdmin").value;
@@ -28,9 +28,8 @@ async function msgGroupAdmin() {
 
   await conversation.send(`A member of ${groupName} says: ${msgtoAdmin}`);
   document.getElementById("msgForAdmin").value = "";
-
-  const newURL =
-    "/GroupMessages?entityID=" + groupIDNum + "&entityName=" + groupName;
+  const newURL = "/AllGroups";
+  // const newURL = "/GroupMessages?entityID=" + groupIDNum + "&entityName=" + groupName;
   document.location.href = newURL;
 }
 
