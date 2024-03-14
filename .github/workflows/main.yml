@@ -1,0 +1,73 @@
+  - name: solidity-metrics-action
+  # You may pin to the exact commit or the version.
+  # uses: tintinweb/solidity-metrics-action@bd657bf46874a02df889d5d402afcd803d5d31a4
+  uses: tintinweb/solidity-metrics-action@v1
+  with:
+    # The path of the project to analyze, relative to the repo root.
+    target: # optional, default is **/*.sol
+
+  - name: JS & TS Solidity Unit Tests Action
+  # You may pin to the exact commit or the version.
+  # uses: EthereumRemix/ts-sol-test@03ee935c61469700321715549a619de824eb5bbd
+  uses: EthereumRemix/ts-sol-test@v1.4.0
+  with:
+    # Path to file or directory containing all test files
+    test-path: 
+    # Path to file or directory containing all solidity smart contracts
+    contract-path: 
+    # set compiler version (e.g: 0.6.1, 0.7.1 etc)
+    compiler-version: # optional
+    # set evm version (e.g: istanbul, berlin etc)
+    evm-version: # optional
+    # set optimize (e.g: true, false)
+    optimize: # optional, default is false
+    # set optimizer runs (e.g: 200)
+    optimizer-runs: # optional, default is 0
+    # set node url (e.g: https://mainnet.infura.io/v3/your-api-key)
+    node-url: # optional
+    # set block number (e.g: 123456)
+    block-number: # optional, default is latest
+    # set hard fork (e.g: istanbul, berlin etc. See full list of hard forks here: https://github.com/ethereumjs/ethereumjs-monorepo/tree/master/packages/common/src/hardforks)
+    hard-fork: # optional
+
+- name: slither-action
+  # You may pin to the exact commit or the version.
+  # uses: crytic/slither-action@f786340110aca42f68f332c234ac33f03f48306f
+  uses: crytic/slither-action@v0.3.1
+  with:
+    # The version of solc to use. Should be autodetected, but may be specified manually.
+    solc-version: # optional
+    # The version of node to use.
+    node-version: # optional
+    # The path of the project that Slither should analyze, relative to the repo root.
+    target: # optional, default is .
+    # If provided, the path of the SARIF file to produce, relative to the repo root.
+    sarif: # optional
+    # Extra arguments to pass to Slither.
+    slither-args: # optional
+    # The path to the Slither configuration file. By default, `./slither.config.json` is used if present.
+    slither-config: # optional
+    # The version of slither-analyzer to use. By default, the latest release in PyPI is used.
+    slither-version: # optional
+    # Whether to ignore the compilation step when running crytic-compile and Slither.
+    ignore-compile: # optional
+    # Cause the action to fail if Slither finds any findings of this severity or higher. By default it will fail if any finding is found
+    fail-on: # optional, default is all
+    # 
+    internal-github-workspace: # optional, default is ${{ toJSON(github.workspace) }}
+
+- name: Hardhat Solidity
+  # You may pin to the exact commit or the version.
+  # uses: amine7777/hardhat-action@6d4d1e7c02ea3920b9c1d45939c66c2379c42e1f
+  uses: amine7777/hardhat-action@v1
+  with:
+    # Command to pass to hardhart
+    command: # default is --help
+    # Path to another directory in the repository, where hardhat command will be issued from.
+    Useful in those cases where hardhat config is not in git repository root.
+    working_dir: # optional, default is ${{ github.repository }}
+          
+          
+
+          
+          
